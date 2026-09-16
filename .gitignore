@@ -1,0 +1,15 @@
+# Local research inputs; do not publish automatically.
+source_material/
+reference/
+
+# Generated MATLAB output.
+results/
+*.asv
+*.fig
+*.mat
+
+# Operating-system and MATLAB metadata.
+.DS_Store
+slprj/
+codegen/
+
