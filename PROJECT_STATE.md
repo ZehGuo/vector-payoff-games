@@ -1,42 +1,28 @@
 # Project state
 
-## Current objective
+## 当前阶段
 
-Complete Phase 0: establish a reliable paper–equation–code–experiment–figure inventory before refactoring.
+2026-09-17：Phase 0 事实审计完成，停在作者审阅边界。用户要求短暂暂停后已授权继续；未进入 MATLAB 重构。此状态文件与本次审计一同作本地提交；提交标识由 Git 日志记录，不在自身提交内循环引用。
 
-## Status
+## 已完成
 
-- New clean workspace created.
-- Source papers and legacy MATLAB material copied locally.
-- Old GitHub snapshot copied locally.
-- Previous prototype copied as a local-only reference snapshot.
-- Mathematical and figure audit not yet started.
+- 阅读两论文、原始 MATLAB、旧 GitHub 快照、上一版原型，视觉检查全部论文图。
+- audit/AUDIT.md：数学—代码—参数对应、执行依赖、缺陷、科研冲突与原型遗漏。
+- audit/FIGURE_MANIFEST.md：29幅论文图及非图/补充实验，全部有研究问题、比较、来源、运行状态和后续处置。
+- audit/evidence/：136个文件哈希、ZIP一致性、65/65 legacy脚本分类、独立代数/数值核查及最终完整性检查。136个输入全部未变，无漏项。
+- DECISIONS.md / OPEN_QUESTIONS.md：决定来源、影响以及作者问题、证据、选项和推荐。
+- 只新增审计/证据并更新记忆；原始材料和原型未改，无重构、subagent、远程推送或发布。
 
-## Authoritative inputs
+## 主要结论
 
-See `PROJECT_BRIEF.md` and the local paths under `source_material/` and `reference/`.
+必须补回独立变换轨迹比较、cube/prism各面对应、nonweak/all/weak三联图、budget参数区域变化、激励前后收益及代价。论文T4.3(b)参数导致给定初值静止；T5.1图注与legacy动力学产生不同性质；INC-ω旧budget图漏omega项。
 
-## Confirmed decisions
+## 验证限制
 
-- The new public repository is separate from the Jobhunting project.
-- The previous prototype is evidence, not the implementation baseline.
-- Important comparison figures must be inventoried before designing repository abstractions.
-- Exact graphical or parameter equality with the papers is not required.
-- Mathematical behavior and research conclusions must remain traceable.
-- Initial audit uses one main agent and no subagents.
+MATLAB R2025b已安装且用户已打开，但没有已连接工具；外部CLI启动许可未获批准，未绕过。没有干净MATLAB会话/SDP求解成功证据。NumPy代数与有限网格核查不等于MATLAB复现或连续时间证明；不阻碍Phase0事实审计验收。
 
-## Known risks from the previous attempt
+## 下一步 / 阻碍
 
-- Important comparison figures were omitted.
-- Figures did not explain the research clearly enough for a personal website.
-- API and tests were developed before experimental coverage was established.
-- Passing tests was treated too strongly as a completion signal.
+等待作者审阅，不自动开始Phase1。Q1确认T4.3(b)参数；Q2确认T5.1动力学/参数；Q3澄清Chapter6结论限定。这些不阻碍记录事实，但影响后续认可的公开实验与结论。其余缺源图按brief允许的新参数保留比较；网站终选留后续。
 
-## Next action
-
-Read all authoritative inputs and create `audit/AUDIT.md` and `audit/FIGURE_MANIFEST.md`. Stop for review after completing those files.
-
-## Open decisions
-
-Populate after the audit identifies decisions that require the research author's judgment.
-
+审阅通过后，优先固定实验版本、补齐核心比较与最小可运行证据，再考虑MATLAB结构。尚未设计公共API或最终网站图。

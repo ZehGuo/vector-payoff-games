@@ -1,0 +1,394 @@
+{
+  "method": "Independent NumPy algebra; fixed-step RK4 h=0.001 vs 0.0005; sampled rates/traps tolerance 1e-7; not MATLAB execution or continuous-time proof.",
+  "ch4_paper_strong": {
+    "initial_rhs": [
+      0,
+      0
+    ],
+    "terminal": [
+      0.0,
+      0.0
+    ],
+    "terminal_step_halving_error": 0.0,
+    "minimum_rates": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0
+      ]
+    ],
+    "minimum_per_agent_best_rate": [
+      0.0,
+      0.0
+    ],
+    "trap_witnesses": [
+      null,
+      null
+    ]
+  },
+  "ch4_legacy_strong": {
+    "initial_rhs": [
+      15.0,
+      0.0
+    ],
+    "terminal": [
+      7.287774451642779,
+      -0.42379873201191837
+    ],
+    "terminal_step_halving_error": 2.7662745222256646e-07,
+    "minimum_rates": [
+      [
+        4.2557970509785064e-07,
+        0.0016596791618415355
+      ],
+      [
+        0.0026497619708830693,
+        0.001996546108949928
+      ]
+    ],
+    "minimum_per_agent_best_rate": [
+      0.0016596791618415355,
+      0.0026497619708830693
+    ],
+    "trap_witnesses": [
+      null,
+      null
+    ]
+  },
+  "ch4_weak": {
+    "initial_rhs": [
+      8.0,
+      -6.0
+    ],
+    "terminal": [
+      3.20722505629235,
+      1.41469034643052
+    ],
+    "terminal_step_halving_error": 2.829683154459417e-09,
+    "minimum_rates": [
+      [
+        -5.027357232896598,
+        0.0027656533255948895
+      ],
+      [
+        -118.61196255227213,
+        0.0021533683847809767
+      ]
+    ],
+    "minimum_per_agent_best_rate": [
+      0.0027656533255948895,
+      0.0021533683847809767
+    ],
+    "trap_witnesses": [
+      null,
+      null
+    ]
+  },
+  "ch4_nonweak_assumed_normalized_sensitivity": {
+    "initial_rhs": [
+      -31.0,
+      -12.0
+    ],
+    "terminal": [
+      2.000109800815676,
+      1.9995579008664208
+    ],
+    "terminal_step_halving_error": 2.806381793618584e-10,
+    "minimum_rates": [
+      [
+        -39.879710124327865,
+        -180.2322456252925
+      ],
+      [
+        1.737330904794467e-05,
+        -0.45968697013977633
+      ]
+    ],
+    "minimum_per_agent_best_rate": [
+      -39.879710124327865,
+      1.737330904794467e-05
+    ],
+    "trap_witnesses": [
+      {
+        "t1": 0.468,
+        "t2": 0.47000000000000003,
+        "earlier_minus_later": [
+          2.2908784615083277e-05,
+          0.17654602824921994
+        ]
+      },
+      null
+    ]
+  },
+  "trap_legacy": {
+    "initial_rhs": [
+      -9.947999999999999,
+      0.0
+    ],
+    "terminal": [
+      13.34638850169161,
+      -6.67693193532106
+    ],
+    "terminal_step_halving_error": 3.3938540866529365e-10,
+    "minimum_rates": [
+      [
+        0.9636838077976083,
+        2.6529050162103016
+      ],
+      [
+        -85.39397024427183,
+        -11.644242279904557
+      ]
+    ],
+    "minimum_per_agent_best_rate": [
+      2.6529050162103016,
+      0.029604256374395566
+    ],
+    "trap_witnesses": [
+      null,
+      {
+        "t1": 0.032,
+        "t2": 1.556,
+        "earlier_minus_later": [
+          0.021876142015457845,
+          0.004989248621654951
+        ]
+      }
+    ],
+    "agent2_change_at_2_75": [
+      -1.113229485684542,
+      -0.6936173336742968
+    ]
+  },
+  "trap_caption": {
+    "initial_rhs": [
+      -9.947999999999999,
+      0.0
+    ],
+    "terminal": [
+      13.374605295955872,
+      -6.711837625387249
+    ],
+    "terminal_step_halving_error": 1.2195924270486103e-09,
+    "minimum_rates": [
+      [
+        2.67539877331202,
+        8.723554896549262
+      ],
+      [
+        -85.39397024427183,
+        -9.947651952282296
+      ]
+    ],
+    "minimum_per_agent_best_rate": [
+      8.723554896549262,
+      -5.726665978615177
+    ],
+    "trap_witnesses": [
+      null,
+      {
+        "t1": 0.366,
+        "t2": 0.368,
+        "earlier_minus_later": [
+          0.040781676866913585,
+          1.0004535624830169e-05
+        ]
+      }
+    ],
+    "agent2_change_at_2_75": [
+      -3.3105429055505056,
+      0.21531092094426185
+    ]
+  },
+  "budget_sigma_hessian_roots": [
+    0.40965915119238583,
+    0.5265853902923303
+  ],
+  "incentive_thesis": {
+    "initial_rhs": [
+      -2.3519999999999985,
+      8.407
+    ],
+    "terminal": [
+      13.23988709305467,
+      -9.111197551468653
+    ],
+    "terminal_step_halving_error": 2.6645352591003757e-14,
+    "minimum_rates": [
+      [
+        0.0719242351160673,
+        2.9450659445450222
+      ],
+      [
+        0.16782321527082353,
+        0.17264799042322893
+      ]
+    ],
+    "minimum_per_agent_best_rate": [
+      2.9450659445450222,
+      0.17264799042322893
+    ],
+    "trap_witnesses": [
+      null,
+      null
+    ],
+    "target": [
+      12.858078866148249,
+      -9.058543257984608
+    ],
+    "det_social_hessian": 1739.91,
+    "legacy_sensitivity": [
+      [
+        1.0,
+        0.16799999999999998
+      ],
+      [
+        1.0,
+        0.6824999999999999
+      ]
+    ],
+    "true_budget_minmax": [
+      -186.8301812589974,
+      0.0
+    ],
+    "plotted_budget_minmax": [
+      -186.8301812589974,
+      0.0
+    ],
+    "max_budget_plot_error": 0.0
+  },
+  "incentive_supplement": {
+    "initial_rhs": [
+      0.0,
+      531.5
+    ],
+    "terminal": [
+      21.0,
+      -16.51304347826093
+    ],
+    "terminal_step_halving_error": 6.039613253960852e-14,
+    "minimum_rates": [
+      [
+        5.364288723364547e-10,
+        -112146.5
+      ],
+      [
+        2.908056841006738e-24,
+        2.0508116943782157e-11
+      ]
+    ],
+    "minimum_per_agent_best_rate": [
+      5.364288723364547e-10,
+      2.0508116943782157e-11
+    ],
+    "trap_witnesses": [
+      null,
+      null
+    ],
+    "target": [
+      20.583333333333332,
+      -15.20408163265306
+    ],
+    "det_social_hessian": 735.0000000000006,
+    "legacy_sensitivity": [
+      [
+        1.0,
+        10.25
+      ],
+      [
+        1.0,
+        14.375
+      ]
+    ],
+    "true_budget_minmax": [
+      -12874.075387523571,
+      0.0
+    ],
+    "plotted_budget_minmax": [
+      -15031.101323251345,
+      0.0
+    ],
+    "max_budget_plot_error": 2157.0259357277737
+  },
+  "extension_eta0": [
+    -2.5,
+    -13.25
+  ],
+  "extension_certificate": [
+    {
+      "branch": [
+        1,
+        1
+      ],
+      "transformed_matrix": [
+        [
+          -1.0,
+          -5.0
+        ],
+        [
+          0.5,
+          -10.0
+        ]
+      ],
+      "max_decay_eigenvalue": -42.27604281492861,
+      "min_positive_eigenvalue": 2.244081191279308
+    },
+    {
+      "branch": [
+        1,
+        2
+      ],
+      "transformed_matrix": [
+        [
+          -1.0,
+          -0.5
+        ],
+        [
+          1.0,
+          -1.0
+        ]
+      ],
+      "max_decay_eigenvalue": -20.621042946906787,
+      "min_positive_eigenvalue": 8.912986961663897
+    },
+    {
+      "branch": [
+        2,
+        1
+      ],
+      "transformed_matrix": [
+        [
+          -1.0,
+          -10.0
+        ],
+        [
+          0.5,
+          -10.0
+        ]
+      ],
+      "max_decay_eigenvalue": -17.29339446897292,
+      "min_positive_eigenvalue": 2.73331565225619
+    },
+    {
+      "branch": [
+        2,
+        2
+      ],
+      "transformed_matrix": [
+        [
+          -1.0,
+          -1.0
+        ],
+        [
+          1.0,
+          -1.0
+        ]
+      ],
+      "max_decay_eigenvalue": -12.66906600203395,
+      "min_positive_eigenvalue": 7.051077007970995
+    }
+  ]
+}
