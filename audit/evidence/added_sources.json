@@ -1,0 +1,10 @@
+[
+  {
+    "path": "source_material/papers/root.pdf",
+    "bytes": 605010,
+    "sha256": "2fc8e6b7a28ef56a9c3a9f4454bbee53fea584bd60ac1ac8e824b558fc71b47b",
+    "title": "Noncooperative Dynamical Systems With Vector-valued Payoff Functions to Achieve Weak Pareto Improvement",
+    "pages": 7,
+    "provenance": "ACC paper supplied and identified by author after Phase 0 commit; do not infer a final published version from filename."
+  }
+]

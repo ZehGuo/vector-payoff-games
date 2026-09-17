@@ -1,4 +1,7 @@
-"""Phase 0 independent algebra/trajectory checks. Does not execute or modify MATLAB.
+"""HISTORICAL Phase 0 independent algebra/trajectory checks.
+WARNING: Chapter 4 paper payoff labels were transcribed incorrectly.
+Do not use the ch4 paper/weak checks as paper evidence or regenerate the
+reviewed JSON without preserving its review_status. See ../AUTHOR_REVIEW.md. Does not execute or modify MATLAB.
 Run using Python with NumPy. Outputs finite-grid evidence, not theorem proofs.
 Matrices below transcribed from the cited PDFs / legacy source, not prototype calls.
 """
@@ -34,7 +37,7 @@ def summarize(A,b,alpha,x0,end,rule='distance'):
         witnesses.append(witness)
     return {'initial_rhs':rhs(np.array(x0),A,b,alpha,rule).tolist(),'terminal':X[-1].tolist(),'terminal_step_halving_error':float(np.max(np.abs(X[-1]-Xfine[-1]))),'minimum_rates':rates.min(axis=0).tolist(),'minimum_per_agent_best_rate':rates.max(axis=2).min(axis=0).tolist(),'trap_witnesses':witnesses},X
 
-out={'method':'Independent NumPy algebra; fixed-step RK4 h=0.001 vs 0.0005; sampled rates/traps tolerance 1e-7; not MATLAB execution or continuous-time proof.'}
+out={'review_status': 'Historical transcription: Chapter 4 paper labels invalid; see ../AUTHOR_REVIEW.md', 'method':'Independent NumPy algebra; fixed-step RK4 h=0.001 vs 0.0005; sampled rates/traps tolerance 1e-7; not MATLAB execution or continuous-time proof.'}
 A=np.array([[[-2,1],[1,-3]],[[-4,-4],[-4,-12]],[[-7,1],[1,-2]],[[-3,-1],[-1,-2]]],float)
 for name,b,x0 in [('ch4_paper_strong',[[0,-1.25],[-30,1],[55.5,-5],[24.5,0]],[0,0]),('ch4_legacy_strong',[[15,-1.25],[30,-1],[55.5,-5],[24.5,0]],[0,0]),('ch4_weak',[[5,12],[30,0],[-20,0],[20,0]],[0,3])]:
  out[name],_=summarize(A,np.array(b),np.array([[1,.5],[1,1]]),x0,5)

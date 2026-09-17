@@ -1,0 +1,27 @@
+{
+  "original_source_files": 136,
+  "added_source_files": 1,
+  "total_source_files": 137,
+  "hash_mismatches": [],
+  "figure_count": 32,
+  "unique_figure_count": 32,
+  "implementation_tasks": [
+    "M0",
+    "S1",
+    "P1",
+    "I1",
+    "X1",
+    "T1",
+    "S2",
+    "R1"
+  ],
+  "implementation_status": "All pending; documentation/planning only.",
+  "excluded_os_metadata": [
+    {
+      "path": "source_material/.DS_Store",
+      "reason": "Finder metadata, not research source; left unchanged.",
+      "sha256": "a42f71701403263a31692baef6752f6347ea0b17860de07dbe529c17470b9eef"
+    }
+  ],
+  "unlisted_research_files": []
+}

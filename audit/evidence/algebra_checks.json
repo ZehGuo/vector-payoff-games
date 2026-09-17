@@ -390,5 +390,15 @@
       "max_decay_eigenvalue": -12.66906600203395,
       "min_positive_eigenvalue": 7.051077007970995
     }
-  ]
+  ],
+  "review_status": {
+    "date": "2026-09-17",
+    "withdrawn_as_paper_evidence": [
+      "ch4_paper_strong",
+      "ch4_nonweak_assumed_normalized_sensitivity",
+      "ch4_weak"
+    ],
+    "reason": "Thesis Chapter 4 payoff superscript(agent)/subscript(objective) order was transcribed incorrectly. These numerical arrays are historical agent transcriptions, not reliable paper-reproduction evidence. Legacy-only calculations remain calculations of named source arrays. See audit/AUTHOR_REVIEW.md.",
+    "trap_decision": "Author directs use of actual simulation parameters; caption discrepancy is a provenance issue, not rejection of the research claim."
+  }
 }

@@ -65,3 +65,15 @@ Create:
 - Store durable conclusions in this repository rather than relying on chat history.
 - Update `PROJECT_STATE.md` after each accepted phase or material discovery.
 
+
+## Author review and next-session scope (2026-09-17)
+
+The author has reviewed Phase 0. This session is authorized to correct the audit and define an actionable implementation plan, not to implement MATLAB yet. See `audit/AUTHOR_REVIEW.md` and `IMPLEMENTATION_PLAN.md` for the controlling review record and task cards.
+
+- Added reference: `source_material/papers/root.pdf`, identified by the author as the ACC paper.
+- Correct the earlier Q1 payoff-index/gradient transcription; distinguish full gradients, own-gradients and the selected pseudo-gradient dynamics. Do not inherit the withdrawn calculation as ground truth.
+- Use actual simulation parameters for the trap example; possible caption transcription errors do not invalidate the research content.
+- Explain incentive feasibility conditionally: some settings cannot meet the requirements; satisfying the theorem conditions provides the stated guarantees.
+- Reconstruct missing cases with documented new parameters when needed. Figure 3.5 is high priority; Figure 3.7 remains required but less urgent. Exact original figures are not required.
+- Preserve all five two-agent cases, including the unstable case and eigenvector reasoning. A concise website explanation may connect them to the scope and limitations of the coordinate-transformation method.
+- Existing proposed figure groups are accepted as the planning scope; additional presentation choices can be reviewed later. Other sessions will implement the task cards; no public release is authorized here.
