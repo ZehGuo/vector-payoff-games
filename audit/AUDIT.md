@@ -1,8 +1,8 @@
 # Phase 0 事实审计
 
-审计日期：2026-09-17。范围以 `../PROJECT_BRIEF.md` 为准。本阶段完成事实、冲突与覆盖审计；**没有重构 MATLAB，也没有声称完成论文数值复现**。作者审阅后的纠正与执行决定见下方更新；本轮只定义后续任务。
+审计日期：2026-09-17。范围以 `../PROJECT_BRIEF.md` 为准。Phase 0完成事实、冲突与覆盖审计；后续M0只增加符号/RHS静态契约，**没有重构 MATLAB，也没有声称完成论文数值复现**。作者审阅后的纠正与执行决定见下方更新。
 
-> 作者审阅后修订：旧提交 2ab0d68 的 Q1 梯度转录有上下标错误，相关论文数值结论撤回；当前状态与优先级以 [AUTHOR_REVIEW.md](AUTHOR_REVIEW.md) 和 [IMPLEMENTATION_PLAN.md](../IMPLEMENTATION_PLAN.md) 为准。Q2采用实际仿真参数，Q3采用有条件的可实现性解释。新增 ACC 论文已单独登记。
+> 作者审阅后修订：旧提交 2ab0d68 的 Q1 梯度转录有上下标错误，相关论文数值结论撤回；M0已完成重核，最新记号/RHS基线见[implementation/M0.md](implementation/M0.md)，状态与优先级见[IMPLEMENTATION_PLAN.md](../IMPLEMENTATION_PLAN.md)。Q2采用实际仿真参数，Q3采用有条件的可实现性解释。新增 ACC 论文已单独登记。
 
 ## 1. 证据与阅读范围
 
@@ -35,7 +35,7 @@ T Chapter 2：对每个 agent 选择 simplex 权重 wi，组成加权 own-gradie
 
 ### 2.2 两 agent 标量状态的分段动力学
 
-T (3.8)、E (27)：令 `gij=∂Jij/∂xi`，自身曲率 `aii<0`，BR 是 `gij=0`，有符号距离 `dij=gij/aii=xi-BRij(x−i)`。当 gi1、gi2 同号时选 `|dij|` 最小的目标并令 `fi=αij gij`；异号或任一个为零则 fi=0。BR 之间的 strip 是该 agent 的静止区域，两 agent strip 的交集为 Nash 集。自身贡献 `gij fi≥0`，但总收益导数还含他人的作用。
+T (3.8)、E (27)：令 `gij=∂Jij/∂xi`，自身曲率 `aii<0`，BR 是 `gij=0`，有符号距离 `dij=gij/aii=xi-BRij(x−i)`。当 gi1、gi2 严格同号时选 `|dij|` 最小的目标并令 `fi=αij gij`；异号时 fi=0。own-gradient为零的闭域边界在纸面active/inactive记号间可能重叠，但最近BR选到零项与legacy直接返回零给出相同向量场值。BR 之间的 strip 是该 agent 的静止区域，两 agent strip 的交集为 Nash 集。自身贡献 `gij fi≥0`，但总收益导数还含他人的作用。M0后的统一上下标、边界及规则契约见[implementation/M0.md](implementation/M0.md)。
 
 T 的 tie 使用第一目标 `<=`；E (27) 两个严格比较漏掉 active tie。审计数值核查采用 T tie 规则。注意 α 改变速度；当两个候选在切换线上给出不同速度时，边界数值处理也需要明确，不能将单次 ODE 求解当成一般不连续系统的证明。
 
@@ -100,11 +100,11 @@ TOP-P paper：agent1 三组 own-blocks `[-1,0,.5;0,-1,0]`、`[-1,0,.5;0,-2,0]`�
 
 ### PAR（T4.3；作者审阅后更正）
 
-**撤回原来的 paper-all 梯度/静止作为已确认论文缺陷的结论。** T p55 的收益按视觉顺序为 `J_1^1, J_1^2, J_2^1, J_2^2`，上标是agent，下标是objective；旧审计误按 `(11,12,21,22)` 数组排列，混淆了中间两项。详见 AUTHOR_REVIEW.md 的逐式更正与尚待解决的字面公式—仿真对应。三组 PAR 的纸面转录均须重核，不能仅修正一个 JSON 数值。
+**撤回原来的 paper-all 梯度/静止作为已确认论文缺陷的结论。** T p55 的收益按视觉顺序为 `J_1^1, J_1^2, J_2^1, J_2^2`，上标是agent，下标是objective；旧审计误按 `(11,12,21,22)` 数组排列，混淆了中间两项。M0已重排三组纸面参数并逐项计算初值，详见[implementation/M0.md](implementation/M0.md)。纸面(b)字面RHS为(0,0)，legacy-all为(15,0)；差异来自中间两项的对象归属和额外线性项变化，不作为已确认论文缺陷。
 
 legacy-all 代码版仍可独立描述：A按agent/objective顺序为 `{[-2,1;1,-3],[-4,-4;-4,-12],[-7,1;1,-2],[-3,-1;-1,-2]}`，b=`[15,-1.25];[30,-1];[55.5,-5];[24.5,0]`，x0=(0,0)，alpha=[1,.5;1,1]，t<=5。它的数值结果只支持此代码配置，不是纸面对应已核实。
 
-legacy-weak 使用同A，b=`[5,12];[30,0];[-20,0];[20,0]`，x0=(0,3)。nonweak 的原审计数组不再视为正确论文转录。后续任务先区分 full gradient / own-gradient / pseudo-gradient，再建立纸面符号、源代码变量、控制坐标的一一映射，最后验证三种收益性质。作者要求保留研究内容，图形及参数不必相同。
+legacy-weak 使用同A，b=`[5,12];[30,0];[-20,0];[20,0]`，x0=(0,3)，初值RHS为(8,-6)；它不是正确上下标重排后的paper-weak，后者初值RHS为`(0,-36 alpha_1^2)`。nonweak 的原审计数组也不再视为正确论文转录。后续P1按M0契约分别标注paper/legacy并验证三种收益性质；作者要求保留研究内容，图形及参数不必相同。
 
 ### TRAP / BUD（T5.1、T5.4）
 
@@ -164,7 +164,7 @@ helper 的两类 RHS 已见 §2.2；`testfun4` 是正向 η；`testfun3_3` 只�
 
 | ID | 证据与判断 | 影响/处置 |
 |---|---|---|
-| C1（撤回并重核） | 旧审计误读上下标，own-gradient数值错误；作者指出实际pseudo-gradient不会停止 | 不再作为已确认论文缺陷或作者选参数的阻碍；转为执行任务M0，见AUTHOR_REVIEW |
+| C1（M0已核查） | 旧审计误读上下标；纸面(b)RHS(0,0)，legacy-all因中间项归属和线性项版本不同为(15,0) | 不作为已确认论文缺陷；P1保留paper/legacy双版本与provenance限制，见implementation/M0.md |
 | C2（作者已决定） | 图注可能记录笔误；实际仿真版本为重建依据 | 用legacy仿真参数及实际分支规则，记录与论文的对应，不推断研究结论错误 |
 | C3 | TOP-C/TOP-P 符号不同；cube 固定 M 违背加权方程 | 分离 paper/legacy 版本，后续修正 cube 算法；无需现在重构 |
 | C4 | E η0 印刷错误、b 非控制方向差异 | η0 可直接代数纠正；b 若只画动力学等价，若画收益须明确版本 |
@@ -215,4 +215,4 @@ MATLAB R2025b 安装存在，用户已打开。当前工具无已连接 MATLAB �
 | prototype 遗漏明确 | §6 与 manifest 对照列 |
 | 测试不替代科研完整性 | §6–7 的分层证据与运行限制 |
 
-初次Phase0范围的136个文件和29图检查保存在 evidence/final_integrity_check.json。作者审阅修订后原136文件仍未变，另增ACC论文共137个来源、32图，见 evidence/review_integrity_check.json；65个legacy分类仍齐全。作者已确认 C2/C10 的处置；C1 改为 agent 的符号与仿真对应核查任务，不要求作者现在选择。其他缺图可按 brief 允许的“新参数但保留数学比较”规划，不据此省略实验。Phase 1 建议先冻结经审阅的实验登记与纸面/legacy参数版本，再修复最小可运行实验和结果证据；具体公共 API、MATLAB 结构、网站终选均未设计。参见 `../OPEN_QUESTIONS.md`、`../DECISIONS.md`。本次只提交审计与记忆，停在阶段审阅边界。
+初次Phase0范围的136个文件和29图检查保存在 evidence/final_integrity_check.json。作者审阅修订后原136文件仍未变，另增ACC论文共137个来源、32图，见 evidence/review_integrity_check.json；65个legacy分类仍齐全。作者已确认 C2/C10 的处置；C1已由M0收敛为Fig4.3精确来源的非阻塞问题。其他缺图可按 brief 允许的“新参数但保留数学比较”规划，不据此省略实验。具体公共 API、MATLAB 结构、网站终选均未设计。参见 `../OPEN_QUESTIONS.md`、`../DECISIONS.md`。

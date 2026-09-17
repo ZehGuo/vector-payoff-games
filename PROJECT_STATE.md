@@ -2,25 +2,25 @@
 
 ## 当前阶段
 
-2026-09-17：Phase0后作者审阅修订与后续实施计划已完成。未开始MATLAB重构。初次审计提交为2ab0d68，其Q1错误已明确撤回；最新依据是audit/AUTHOR_REVIEW.md与IMPLEMENTATION_PLAN.md。
+2026-09-17：M0符号与动力学契约已完成静态核查，未开始MATLAB重构。初次审计提交2ab0d68的Q1错误继续保持撤回；Q1的新基线为audit/implementation/M0.md。
 
 ## 最新完成
 
-- 阅读新增ACC参考source_material/papers/root.pdf（7页3图），记录来源指纹及图/定理对应。
-- 纠正T4.3上下标转录：旧own-gradient计算不正确，历史JSON和脚本已标记受影响范围。Q1转为M0技术核查，不再作为已确认论文缺陷或作者选参数阻碍。
-- 作者决定已记录：Q2用实际仿真参数；Q3按条件化可实现性/定理保证叙述；允许AI补足case，3.5优先、3.7必做较后；原图组认可，五case可简要展示。
-- 完成M0、S1、P1、I1、X1、T1、S2、R1八个任务卡，含输入、产物、验收、依赖、优先级与可复制交接指令。所有实施状态为待执行。
-- 原始136个文件未变，另增作者提供的ACC PDF，共137个来源文件；论文图清单共32幅（旧29＋ACC3）。
+- 建立 `J_j^i` 上标agent/下标objective与MATLAB agent-first变量、控制坐标的完整对应，区分完整gradient、own-gradient、pseudo-gradient和总收益导数。
+- 核清最近BR与scaled-gradient规则：`alpha_1^i|A_ii^{i1}|=alpha_2^i|A_ii^{i2}|`时全局排序等价；inactive、zero-boundary和tie行为分别记录。
+- 重算T4.3三组纸面初值。纸面视觉顺序`J_1^1,J_1^2,J_2^1,J_2^2`必须先按上下标重排；legacy两脚本把中间两项按旧代码顺序归属。T4.3(b)纸面字面RHS为(0,0)，`test6_4_1`实际RHS为(15,0)；纸面(c)为`(0,-36 alpha_1^2)`，`test10_1` legacy版为(8,-6)。
+- trap实际helper在初值RHS为(-9.948,0)，但其agent 1缩放不满足全局规则等价条件，后续必须标作scaled-gradient版本。
+- 原始137个来源文件均未修改；没有MATLAB运行证据。Fig4.3各子图的精确绘图参数版本仍无法唯一确定，只作为最小provenance问题。
 
 ## 下一session
 
-先执行IMPLEMENTATION_PLAN.md的M0，确认记法和实际分支规则；再优先S1五case。Q1纸面与实际仿真的剩余对应问题如无法立即唯一确定，记录最小差异，不阻塞其他独立模块。不得拿旧转录JSON作真值。
+按IMPLEMENTATION_PLAN.md继续S1五case。S1使用M0的符号/分支契约；Q1剩余的Fig4.3精确来源问题留给P1作纸面/legacy双版本标注，不阻塞S1。不得拿旧转录JSON作真值。
 
 ## 保持的边界
 
 不要求参数/画法复刻；须保留主要数学内容及case区别。原型和旧case代码是参考而非基线。缺原图脚本可自主构造并记录。有限网格/测试通过不等于定理证明或内容完整。网站尚未发布，当前不设计公共API、不自动创建session、不使用subagent。
 
-MATLAB已安装且用户已打开；先前无可用工具连接，外部CLI许可未获批准。本轮没有再尝试启动，也没有新增MATLAB运行成功声明。后续如需运行须如实记录环境和授权状态。
+先前记录称MATLAB已安装且用户已打开，但本轮shell中没有`matlab`或`octave`入口；未启动MATLAB，也没有新增运行成功声明。后续如需运行须如实记录环境、入口和授权状态。
 
 ## 当前阻碍
 
