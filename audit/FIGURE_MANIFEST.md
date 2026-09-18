@@ -11,11 +11,11 @@
 | ID / 位置 | 科研问题、轴/曲线/区域与比较 | 参数/来源、脚本、当前状态 | P 覆盖 | 重要性；网站；处置 |
 |---|---|---|---|---|
 | T2.1 p20(26)，3幅 | x1-x2，两组 BR strips 与紫色 Nash；比较 compact连通内部、pinched内部不连通、unbounded且不连通 | 示意，无唯一数值；L2023案例相关但非确认同图 | 无完整三型比较 | 核心概念；候选；重绘三型总览，不声称原参数 |
-| T2.2 p20(26)，Example2.8 | 权重 simplex乘积方形 vs Nash像；彩色顶点/边，比较满射与双射 | 几何示意，未给可唯一复算参数，未找到脚本 | 无 | 核心；候选；与T2.3/4组合解释为何点云不够 |
-| T2.3 p21(27)，Example2.9 | 三维x1,x2,x3实体，6面分2+4；权重cube的面/边对应Nash边界 | TOP-C；L acc2024/cube/test4,4_1,4_2；源码有但固定M缺陷且符号异于paper | 只有点云、legacy符号 | 核心；候选；重建实体及全部6面对应，权重域并排；不能只留一张3D散点 |
-| T2.4 p22(28)，Example2.10 | 三维状态实体，5面分2+3；triangular-prism权重域到Nash曲面/边界 | TOP-P；L acc2024/triangular prism/test6,7,7_1；源码有，agent2首系数不同 | 只有点云 | 核心；候选；保留5面，与cube比较状态维数相同但权重域不同 |
-| T2.5 p23(29)，Example2.11 | x1/x2产量，BR与紫色Nash；利润目标 vs 环境目标使均衡由点扩展成集合 | J11=(100−2(x1+x2))x1−5x1²；J21同式x2且成本4x2²；J12=150−3x1²，J22=140−2.5x2²；轴约0–20；无脚本 | 无 | 支撑应用；强候选；按纸面公式重建，作为概念入口而非额外理论结论 |
-| T2.6 p23(29) | x1-x2曲线BR与非二次Nash几何；比较线性BR限制与一般非二次形状 | 无完整函数/数值，无脚本 | 无 | 边界；非首选；保留概念说明，可重绘示意，不伪造数值复现 |
+| T2.2 p20(26)，Example2.8 | 权重 simplex乘积方形 vs Nash像；彩色顶点/边，比较满射与双射 | T1以T2.3/4两个有明确参数的微分同胚例实现面/边/顶点对应，并在报告中区分onto与one-to-one | 已补概念和对应表 | 核心；T1完成；与T2.3/4组合解释为何点云不足 |
+| T2.3 p21(27)，Example2.9 | 三维x1,x2,x3实体，6面分2+4；权重cube的面/边对应Nash边界 | T1采用paper TOP-C，6面/12边/8顶点并列；同时加权M/b，未继承legacy固定M，MATLAB通过 | 已补完整对应和诊断 | 核心；T1完成；见`T1_cube_face_correspondence.png` |
+| T2.4 p22(28)，Example2.10 | 三维状态实体，5面分2+3；triangular-prism权重域到Nash曲面/边界 | T1采用paper TOP-P，5面/9边/6顶点并列；paper/legacy首系数分版，MATLAB通过 | 已补完整对应和诊断 | 核心；T1完成；见`T1_prism_face_correspondence.png` |
+| T2.5 p23(29)，Example2.11 | x1/x2产量，BR与紫色Nash；利润目标 vs 环境目标使均衡由点扩展成集合 | T1严格按四个纸面公式生成weighted Nash image及四条BR；明确不是集中式社会Pareto集 | 已补可运行入口 | 支撑应用；T1完成；见`T1_production_pollution.png` |
+| T2.6 p23(29) | x1-x2曲线BR与非二次Nash几何；比较线性BR限制与一般非二次形状 | 原文无完整函数/数值；T1只生成带水印说明的概念示意，不作数值复现 | 已补示意身份 | 边界；T1完成；见`T1_nonquadratic_schematic.png` |
 
 ## 2. Thesis Chapter 3：稳定性与适用范围
 

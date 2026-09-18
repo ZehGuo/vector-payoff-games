@@ -2,9 +2,16 @@
 
 ## 当前阶段
 
-2026-09-18：X1坍缩变换与稳定性已完成实现、三张证据图、独立核查及MATLAB R2025b batch复跑。原轨迹`x(t)`、逐点像`eta(x(t))`与从`eta(x0)`独立积分的变换轨迹均已分开保存；论文给定证书先验算通过，无需求新证书。I1、P1与S1此前亦已完成。
+2026-09-18：T1参数域、面映射与应用入口已完成实现、四张图及MATLAB R2025b batch复跑。cube的6面/12边/8顶点和triangular prism的5面/9边/6顶点均以相同颜色/标签在权重域与Nash像中对应；每个加权问题同时加权`M`与`b`。X1、I1、P1与S1此前亦已完成。
 
-## 最新完成
+## T1最新完成
+
+- 采用Chapter 2 Examples 2.9/2.10的paper字面own-gradient blocks：cube使用paper的`-.6/-.5`，prism使用agent 2首系数`-1`；legacy符号另存，不混入运行参数。cube旧脚本固定`M`的缺陷没有继承。
+- 对每个权重解`M(w)x+b(w)=0`。MATLAB采样得到cube/prism最小`rcond`分别`.221483942414/.24`、最小Jacobian绝对行列式`100/13.65`、最大方程残差`2.67e-15/1.80e-15`。论文Examples 2.9/2.10给出的微分同胚结论负责全局双射身份；有限采样只作实现诊断，不替代证明。
+- 生产/污染图严格使用Example 2.11四个公式，紫色区域标为weighted Nash image，未计算或命名集中式社会Pareto集。非二次图明确标为无来源参数的概念示意。
+- 只登记论文给出的controlled-coordinate derivative blocks，不从own rows补齐完整Hessian或虚构社会福利。参数、版本、运行证据和限制见`audit/implementation/T1.md`。
+
+## 此前完成（X1）
 
 - X1按论文(50)–(51)自含补足缺失`testfun3`；原系统与变换系统各自用RK4积分，`eta(x(t))`只作逐点映射，未用插值或映射代替独立解。
 - 原空间紫色Nash域及八个周围域到象限子集、四半轴和原点的对应已直接标注；另图显示四条秩一纤维各自坍缩到一个轴点。首个`D^(0,1)`区段在MATLAB为`[.047,.174]`，两轨迹从此分离。轴上逆像保持未定义/集合值，不调用旧`testfun3_3`任选一点。
@@ -14,14 +21,14 @@
 
 ## 下一session
 
-按IMPLEMENTATION_PLAN.md进入T1参数域、面映射和应用入口。X1、I1、P1与S1均已停止，不顺带开展S2或R1。
+按IMPLEMENTATION_PLAN.md进入S2退化与noncompact案例。T1、X1、I1、P1与S1均已停止，不顺带开展R1。
 
 ## 保持的边界
 
 不要求参数/画法复刻；须保留主要数学内容及case区别。原型和旧case代码是参考而非基线。缺原图脚本可自主构造并记录。有限网格/测试通过不等于定理证明或内容完整。网站尚未发布，当前不设计公共API、不自动创建session、不使用subagent。
 
-MATLAB不在shell的`PATH`中，但已定位并成功调用`/Applications/MATLAB_R2025b.app/bin/matlab`。X1、I1、P1与S1均运行通过。X1三张、I1四张、S1两张提交图均为MATLAB实际输出；X1的独立Python核查不是MATLAB证据或定理证明，P1 trap的逐时弱性质仍是有限网格证据。
+MATLAB不在shell的`PATH`中，但已定位并成功调用`/Applications/MATLAB_R2025b.app/bin/matlab`。T1、X1、I1、P1与S1均运行通过。T1四张、X1三张、I1四张、S1两张提交图均为MATLAB实际输出；T1的有限权重网格只检查实现，不替代Chapter 2的微分同胚结论；X1的独立Python核查不是MATLAB证据或定理证明，P1 trap的逐时弱性质仍是有限网格证据。
 
 ## 当前阻碍
 
-没有必须现在询问作者的问题。X1、I1、P1与S1均无运行环境待办。OPEN_QUESTIONS.md保存后期执行待办及X1最小纸面差异。每个后续session只做对应任务、更新记忆并本地提交后停止。
+没有必须现在询问作者的问题。T1、X1、I1、P1与S1均无运行环境待办。OPEN_QUESTIONS.md保存后期执行待办及X1最小纸面差异。每个后续session只做对应任务、更新记忆并本地提交后停止。
