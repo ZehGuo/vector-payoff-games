@@ -1,6 +1,6 @@
 # 后续 session 执行计划
 
-版本：2026-09-18；M0、S1、P1已完成各自记录的实现与独立核查，MATLAB运行仍待可调用环境；其余任务未实施。长期范围见 PROJECT_BRIEF.md，最新符号/分支契约见 audit/implementation/M0.md，完整图目录见 audit/FIGURE_MANIFEST.md。**旧提交2ab0d68的Q1计算不可作为正确基线。**
+版本：2026-09-18；M0、S1、P1已完成各自记录的实现与独立核查；P1已通过MATLAB R2025b复跑，S1的MATLAB复跑仍待执行；其余任务未实施。长期范围见 PROJECT_BRIEF.md，最新符号/分支契约见 audit/implementation/M0.md，完整图目录见 audit/FIGURE_MANIFEST.md。**旧提交2ab0d68的Q1计算不可作为正确基线。**
 
 ## 1. 要重建的问题
 
@@ -20,7 +20,7 @@
 |---|---|---|---|---|
 | M0 符号与动力学契约 | 首先 | 正确agent/objective映射、RHS选择规则、Q1对应核查 | 无 | 已完成（静态核查；见audit/implementation/M0.md） |
 | S1 两agent五case | 高；作者特别强调3.5 | 3.5五case完整比较与eigenvector证据 | M0公共约定；不必等Q1整项关闭 | 已完成（代数/独立图通过；MATLAB待环境复跑，见S1.md） |
-| P1 收益性质与trap | 高 | nonweak/all/weak三组、独立trap图 | M0；Q1限制Fig4.3纸面/legacy来源标签 | 已完成（前三组精确代数；trap实际规则有限采样；MATLAB待环境复跑，见P1.md） |
+| P1 收益性质与trap | 高 | nonweak/all/weak三组、独立trap图 | M0；Q1限制Fig4.3纸面/legacy来源标签 | 已完成（前三组精确代数；trap实际规则有限采样；MATLAB R2025b复跑通过，见P1.md） |
 | I1 激励与预算 | 高 | 设计几何、sigma/omega、激励前后收益及预算 | M0；可复用P1诊断 | 待执行 |
 | X1 变换与稳定性 | 高 | 原/像/独立轨迹与Lyapunov、适用边界 | M0；S1提供case解释 | 待执行 |
 | T1 拓扑与应用 | 中 | cube/prism全部面对应、生产环境例 | agent/objective记法确认即可 | 待执行 |

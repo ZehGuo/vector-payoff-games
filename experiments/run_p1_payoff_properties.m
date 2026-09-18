@@ -211,7 +211,7 @@ end
 function phasePanel(r)
 plot(r.x(:,1),r.x(:,2),'k-','LineWidth',2); hold on; scatter(r.x(1,1),r.x(1,2),45,'k','filled');
 g=r.game; xl=[min(r.x(:,1)),max(r.x(:,1))]; yl=[min(r.x(:,2)),max(r.x(:,2))];
-pad=max([range(xl),range(yl),1]); xl=xl+[-.35,.35]*pad; yl=yl+[-.35,.35]*pad;
+pad=max([xl(2)-xl(1),yl(2)-yl(1),1]); xl=xl+[-.35,.35]*pad; yl=yl+[-.35,.35]*pad;
 xx=linspace(xl(1),xl(2),90); yy=linspace(yl(1),yl(2),90); [X,Y]=meshgrid(xx,yy);
 GM=zeros(size(X)); OM=zeros(size(X));
 for q=1:numel(X)
@@ -233,7 +233,7 @@ for agent=1:2
     end
 end
 xlim(xl); ylim(yl); axis square; grid on; xlabel('x^1'); ylabel('x^2');
-text(xl(1)+.03*range(xl),yl(2)-.08*range(yl),sprintf('rule: %s',g.rule),'FontSize',8);
+text(xl(1)+.03*(xl(2)-xl(1)),yl(2)-.08*(yl(2)-yl(1)),sprintf('rule: %s',g.rule),'FontSize',8);
 end
 
 function labels=payoffLabels(), labels={'J_1^1','J_2^1','J_1^2','J_2^2'}; end
