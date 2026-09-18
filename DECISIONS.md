@@ -37,6 +37,7 @@
 | D19 | S1不用legacy文件名认case；采用满足Remark3.9斜率序的五套新参数，并用统一own curvature `-1`与unit alpha隔离几何差异 | 作者允许自构参数；T Remark3.9；M0规则等价条件 | S1 Case1–5 | case身份由斜率、20个分支矩阵、域与Nash几何共同给出 | 作者范围＋直接计算 |
 | D20 | 四稳定例必须四分支全`det>0`且Hurwitz；不稳定例保留四分支全`det<0`，并以正特征值ray位于selected active cone内作直接见证 | T Theorem3.10及Case5证明段 | S1 branch diagnostics | 多初值轨迹只作插图，不能代替稳定性依据；不外推mixed-det | 论文条件＋独立代数 |
 | D21 | Case1/3保留无实特征向量的顺/逆时针旋转；Case2/4显式标0/1/2-transitive域；坐标变换只作后续分析工具，不改变Case5真实不稳定性 | T Lemma3.6、Remarks3.7–3.8；作者Q5 | S1、后续X1 | X1不得把映射像的收敛写成原系统自动稳定 | 论文＋作者要求 |
+| D25 | S1提交图以MATLAB R2025b实际输出为准；独立Python渲染移至ignored results且不得覆盖MATLAB证据 | 作者要求完成MATLAB运行；本机实际batch执行 | S1 figures/runtime record | 后续图区分MATLAB产物与独立核查，不能以替代渲染冒充MATLAB运行 | 作者要求＋运行证据 |
 
 ## P1实施更新
 

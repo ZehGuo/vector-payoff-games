@@ -25,7 +25,7 @@
 | T3.2 p35(41) | x1-x2，regular Nash外围8域，比较各域流向/跨域转移 | Assumption3；caption case编号疑错；无专门对应脚本 | 无 | 支撑；非首选；重绘，与T3.4对照 |
 | T3.3 p36(42) | 二维局部状态/eigenvector图，acute/obtuse及边界穿越 | 局部线性系统几何，无唯一数值脚本 | 无 | 支撑；非首选；文档保留，可与E3合并但标不同论证角色 |
 | T3.4 p42(48) | x1-x2，pinched Nash与外围10域；比较秩退化情形 | Assumption4；caption case指代疑错，无独立入口 | 无 | 支撑；非首选；与T3.2并列保留 |
-| T3.5 p44(50)，a–e | 五张x1-x2向量场、BR、Nash；比较四类stable场与unstable场 | S1已用新参数完成：`experiments/run_s1_five_cases.m`；独立5例/20分支核查、总览及eigenvector/域转移图见`audit/implementation/S1.md`。L ifac2023仍仅是候选参考；当前shell未执行MATLAB | 已有完整五例、参数/判据表及不稳定active-cone见证 | 核心、高优先S1；**实现完成，MATLAB待环境复跑**；五例全部保留；网站可用紧凑总览/附图解释不稳定例和变换适用边界 |
+| T3.5 p44(50)，a–e | 五张x1-x2向量场、BR、Nash；比较四类stable场与unstable场 | S1已用新参数完成：`experiments/run_s1_five_cases.m`；MATLAB R2025b与独立5例/20分支核查、总览及eigenvector/域转移图见`audit/implementation/S1.md`。L ifac2023仍仅是候选参考 | 已有MATLAB完整五例、参数/判据表及不稳定active-cone见证 | 核心、高优先S1；**实现与运行验收完成**；五例全部保留；网站可用紧凑总览/附图解释不稳定例和变换适用边界 |
 | T3.6 p45(51)，a–e | 同上五类，但pinched/秩零几何；与T3.5比较 | L cdc2023为候选参考，原图对应未确认；正文c/e指代需依据数学case判定 | 无 | 核心；组合候选；保留全部五例及与Assumption3差异 |
 | T3.7 p45(51)，a–c | 三张非紧Nash集及向量场，展示compact结论边界 | 未找到对应三套矩阵/脚本；不能从图像唯一推回 | 无 | 核心边界；候选；作者确认必做、优先级较后S2；可用明确标注的新参数表达主要构型，不以缺源省略 |
 | T3.8 p46(52)，a/b | (a)高维状态的曲面Nash；(b)更多目标下多边形Nash，说明二维双目标方法不能直接推广 | r1=2 或 s1=3 的示意；无完整参数脚本 | 无 | 边界；非首选；保留讨论性插图，非当前动力学复现承诺；与Chapter2高维参数化区别说明 |

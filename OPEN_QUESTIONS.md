@@ -30,7 +30,7 @@
 ## Q4 — 缺原图脚本与case重建（S1/S2）
 
 - S1状态：**已关闭五case重建部分**。本地case脚本仅作候选参考；S1采用新参数，已按Remark3.9斜率序、全部分支矩阵、eigenstructure、active cone与Nash几何确认Case1–5身份。
-- 运行环境待办：`experiments/run_s1_five_cases.m`尚未在MATLAB执行，因为当前shell无`matlab`/`octave`入口；独立公式核查已通过。这是复跑待办，不是case身份疑问。
+- 运行状态：已定位`/Applications/MATLAB_R2025b.app/bin/matlab`并以R2025b Update 7干净批处理执行；两张图、两张CSV及MAT均生成并核查。无S1复跑待办。
 - S2剩余问题：3.6与3.7仍无已确认原图入口，尤其3.7三种noncompact构型仍需后续自构。
 - 为什么重要：必须覆盖不同case及主要数学内容，不以缺源省略。
 - 当前证据：作者授权AI补足，不要求原图一致；3.5优先，3.7必做但较后。

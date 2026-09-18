@@ -17,8 +17,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT_JSON = ROOT / "audit" / "evidence" / "s1_checks.json"
-OUT_CSV = ROOT / "audit" / "implementation" / "s1_branch_diagnostics.csv"
-FIG_DIR = ROOT / "audit" / "implementation" / "figures"
+OUT_CSV = ROOT / "audit" / "evidence" / "s1_independent_branch_diagnostics.csv"
+FIG_DIR = ROOT / "results" / "s1" / "independent"
 
 CASES = [
     dict(case=1, label="stable-CW", s1=(0.8, 0.3), s2=(-0.6, -0.2), stable=True,

@@ -20,8 +20,9 @@ if ~exist(outputDir, 'dir')
 end
 
 cases = defineCases();
-report = struct([]);
-for k = 1:numel(cases)
+report = diagnoseCase(cases(1));
+validateCase(cases(1), report(1));
+for k = 2:numel(cases)
     report(k) = diagnoseCase(cases(k));
     validateCase(cases(k), report(k));
 end
@@ -227,7 +228,7 @@ tf = h1(1)*h1(2) <= 1e-10 && h2(1)*h2(2) <= 1e-10;
 end
 
 function [startAngle,endAngle,span] = selectedCone(game,xStar,pair)
-theta = linspace(0,2*pi,7201);
+theta = linspace(0,2*pi,1441);
 theta(end) = [];
 inside = false(size(theta));
 for k = 1:numel(theta)
@@ -298,7 +299,7 @@ end
 end
 
 function plotOverview(cases,report,path)
-fig = figure('Color','w','Position',[60,60,1450,850]);
+fig = figure('Color','w','Visible','off','Position',[60,60,1450,850]);
 for k = 1:5
     ax = subplot(2,3,k,'Parent',fig);
     hold(ax,'on'); axis(ax,'equal'); box(ax,'on'); grid(ax,'on');
@@ -309,7 +310,7 @@ for k = 1:5
     hi = max(allPoints,[],2)+1.0;
     if k == 5, hi = hi+0.8; end
     xlim(ax,[lo(1),hi(1)]); ylim(ax,[lo(2),hi(2)]);
-    [X,Y] = meshgrid(linspace(lo(1),hi(1),18),linspace(lo(2),hi(2),18));
+    [X,Y] = meshgrid(linspace(lo(1),hi(1),14),linspace(lo(2),hi(2),14));
     U = zeros(size(X)); V = U;
     for q = 1:numel(X)
         f = pseudoGradient(cases(k),[X(q);Y(q)]);
@@ -328,10 +329,10 @@ for k = 1:5
     end
     center = mean(vertices,2);
     radius = max(vecnorm(vertices-center,2,1))+0.75;
-    initialAngles = linspace(0,2*pi,9); initialAngles(end)=[];
+    initialAngles = linspace(0,2*pi,6); initialAngles(end)=[];
     for q = 1:numel(initialAngles)
         x0 = center + radius*[cos(initialAngles(q));sin(initialAngles(q))];
-        [~,traj] = simulateFixedStep(cases(k),x0,6,0.01);
+        [~,traj] = simulateFixedStep(cases(k),x0,4,0.03);
         plot(ax,traj(:,1),traj(:,2),'k-','LineWidth',0.9);
         plot(ax,traj(1,1),traj(1,2),'ko','MarkerSize',2.5,'MarkerFaceColor','k');
     end
@@ -342,7 +343,7 @@ for k = 1:5
         xStar = report(k).vertices(:,2);
         if branchAt(cases(k),xStar+1e-4*v) ~= 12, v=-v; end
         x0 = xStar+0.06*v/norm(v);
-        [~,traj] = simulateFixedStep(cases(k),x0,3,0.004);
+        [~,traj] = simulateFixedStep(cases(k),x0,2.2,0.015);
         plot(ax,traj(:,1),traj(:,2),'-','Color',[0.85,0.05,0.05],'LineWidth',2.4);
     end
     title(ax,sprintf('Case %d: %s',k,cases(k).label),'Interpreter','none');
@@ -354,7 +355,7 @@ text(ax,0,0.92,{'Common construction','red: agent 1 BRs','blue: agent 2 BRs', ..
     'Case identity is certified by slopes, branch matrices,','eigenstructure and active-cone transitions - not endpoints.'}, ...
     'VerticalAlignment','top','FontSize',11);
 try
-    exportgraphics(fig,path,'Resolution',180);
+    exportgraphics(fig,path,'Resolution',120);
 catch
     print(fig,path,'-dpng','-r180');
 end
@@ -367,7 +368,7 @@ titles = {'0-transitive: larger eigenvalue ray inside', ...
     '2-transitive: smaller eigenvalue ray separates exits', ...
     '1-transitive: complex pair, clockwise exit', ...
     'unstable: positive eigenvalue ray remains active'};
-fig = figure('Color','w','Position',[80,80,1300,780]);
+fig = figure('Color','w','Visible','off','Position',[80,80,1300,780]);
 for q = 1:4
     k=examples(q,1); j1=examples(q,2); j2=examples(q,3);
     b=report(k).branches(j1,j2);
@@ -402,7 +403,7 @@ for q = 1:4
     xlabel(ax,'x^1-x_*^1'); ylabel(ax,'x^2-x_*^2');
 end
 try
-    exportgraphics(fig,path,'Resolution',180);
+    exportgraphics(fig,path,'Resolution',120);
 catch
     print(fig,path,'-dpng','-r180');
 end

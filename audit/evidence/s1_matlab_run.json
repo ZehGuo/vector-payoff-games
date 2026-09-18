@@ -1,0 +1,30 @@
+{
+  "date": "2026-09-18",
+  "status": "pass",
+  "executable": "/Applications/MATLAB_R2025b.app/bin/matlab",
+  "matlab_version": "25.2.0.3360999 (R2025b) Update 7",
+  "architecture": "maci64",
+  "mode": "clean batch process",
+  "command": "cd(repo); addpath('experiments'); report=run_s1_five_cases(fullfile(pwd,'results','s1')); assert(numel(report)==5)",
+  "case_count": 5,
+  "branch_count": 20,
+  "outputs": {
+    "audit/implementation/s1_case_summary.csv": "e50d6db2d199d17321c62d1fb2b0105c1fed3823e11ec4ced54b088c2a19746b",
+    "audit/implementation/s1_branch_diagnostics.csv": "893572cf4267fbfe1726c41888b23a73c65fe3826a18f70c20609e8f4440e39a",
+    "audit/implementation/figures/S1_five_case_overview.png": "3918653ce2ae426ff8eab4b7df6f0b1b1e7a96cb75169b14902dbf22da437ca4",
+    "audit/implementation/figures/S1_eigenvectors_transitions.png": "3cf4d971bcbc9eb6c8749b5e9d3fb77146191350c9e845c0d11240c4a6f3dcac",
+    "results/s1/s1_report.mat": "3d1cbce05a8762eeaad455d890a02b6d6cf0342630bcdabeeb7a6b6cddde6af7"
+  },
+  "checks": [
+    "A fresh empty temporary output directory received all five expected files from the final MATLAB run.",
+    "MATLAB returned five case reports and wrote all expected outputs.",
+    "Both MATLAB PNG files were visually inspected after the successful run.",
+    "MATLAB and independent diagnostics agree on all 20 determinants, eigenvalues, transition labels, and cone angles; the maximum cone-angle difference is 0.225 degree.",
+    "Cases 1-4 have four positive branch determinants; Case 5 has four negative branch determinants and two positive-eigenvalue active-cone witnesses."
+  ],
+  "run_notes": [
+    "The first MATLAB attempt exposed a subscripted-assignment error from empty structure preallocation.",
+    "The report allocation was corrected, and the entire entry was rerun from the beginning before acceptance.",
+    "MATLAB emitted a nonfatal warning that /Users/lei/Documents/MATLAB was inaccessible; the repository output directory remained writable and all requested files were produced."
+  ]
+}
