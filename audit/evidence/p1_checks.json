@@ -1,0 +1,469 @@
+{
+  "cases": [
+    {
+      "A": [
+        [
+          [
+            -1,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            -1,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            -1
+          ]
+        ],
+        [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            -1
+          ]
+        ]
+      ],
+      "alpha": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "b": [
+        [
+          2,
+          5
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          -7,
+          -1
+        ],
+        [
+          -6,
+          1
+        ]
+      ],
+      "c": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "min_externality": [
+        -10.0,
+        -12.0,
+        -14.0,
+        -12.0
+      ],
+      "min_gamma_metric": -12.0,
+      "min_omega_metric": -6.0,
+      "min_own_contribution": [
+        0.00018159971904993988,
+        0.027133387715391845,
+        0.027133387715391845,
+        0.00018159971904993988
+      ],
+      "min_total_rate": [
+        -6.0,
+        -4.0,
+        -6.0,
+        -8.0
+      ],
+      "min_weak_margin_by_agent": [
+        -4.0,
+        -6.0
+      ],
+      "name": "nonweak",
+      "rule": "nearest-BR",
+      "source": "new P1 construction; not a literal Fig. 4.3 transcription",
+      "t_final": 5.0,
+      "x0": [
+        0,
+        3
+      ]
+    },
+    {
+      "A": [
+        [
+          [
+            -1,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            -1,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            -1
+          ]
+        ],
+        [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            -1
+          ]
+        ]
+      ],
+      "alpha": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "b": [
+        [
+          2,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          0,
+          -1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "c": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "min_externality": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "min_gamma_metric": 0.0,
+      "min_omega_metric": 0.00018159971904993988,
+      "min_own_contribution": [
+        0.00018159971904993988,
+        0.027133387715391845,
+        0.027133387715391845,
+        0.00018159971904993988
+      ],
+      "min_total_rate": [
+        0.00018159971904993988,
+        0.027133387715391845,
+        0.027133387715391845,
+        0.00018159971904993988
+      ],
+      "min_weak_margin_by_agent": [
+        0.027133387715391845,
+        0.027133387715391845
+      ],
+      "name": "all-payoff-nondecreasing",
+      "rule": "nearest-BR",
+      "source": "new P1 construction; not a literal Fig. 4.3 transcription",
+      "t_final": 5.0,
+      "x0": [
+        0,
+        3
+      ]
+    },
+    {
+      "A": [
+        [
+          [
+            -1,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            -1,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            -1
+          ]
+        ],
+        [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            -1
+          ]
+        ]
+      ],
+      "alpha": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "b": [
+        [
+          2,
+          3
+        ],
+        [
+          4,
+          -4
+        ],
+        [
+          5,
+          -1
+        ],
+        [
+          -3,
+          1
+        ]
+      ],
+      "c": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "min_externality": [
+        -6.0,
+        0.0539035759926838,
+        0.06737946999085476,
+        -6.0
+      ],
+      "min_gamma_metric": 0.0539035759926838,
+      "min_omega_metric": 0.08103696370807564,
+      "min_own_contribution": [
+        0.00018159971904993988,
+        0.027133387715391845,
+        0.027133387715391845,
+        0.00018159971904993988
+      ],
+      "min_total_rate": [
+        -2.2499997726469583,
+        0.08103696370807564,
+        0.0945128577062466,
+        -2.2499997726469583
+      ],
+      "min_weak_margin_by_agent": [
+        0.08103696370807564,
+        0.0945128577062466
+      ],
+      "name": "weak-not-all",
+      "rule": "nearest-BR",
+      "source": "new P1 construction; not a literal Fig. 4.3 transcription",
+      "t_final": 5.0,
+      "x0": [
+        0,
+        3
+      ]
+    },
+    {
+      "A": [
+        [
+          [
+            -2,
+            1
+          ],
+          [
+            1,
+            -3
+          ]
+        ],
+        [
+          [
+            -2,
+            -1
+          ],
+          [
+            -1,
+            -10
+          ]
+        ],
+        [
+          [
+            -4,
+            1
+          ],
+          [
+            1,
+            -4
+          ]
+        ],
+        [
+          [
+            -5,
+            -1
+          ],
+          [
+            -1,
+            -2
+          ]
+        ]
+      ],
+      "alpha": [
+        1,
+        1.2,
+        1,
+        2
+      ],
+      "b": [
+        [
+          5,
+          -5
+        ],
+        [
+          20,
+          124
+        ],
+        [
+          90,
+          0
+        ],
+        [
+          72,
+          0
+        ]
+      ],
+      "c": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "min_externality": [
+        0.0,
+        0.0,
+        -85.49457826990945,
+        -12.67228131131111
+      ],
+      "min_gamma_metric": -12.67228131131111,
+      "min_omega_metric": 0.029604256374395566,
+      "min_own_contribution": [
+        0.5394239628448962,
+        0.0003012794182733463,
+        0.0,
+        -0.0
+      ],
+      "min_total_rate": [
+        0.9636838077976082,
+        2.6529050162103016,
+        -85.39397024427183,
+        -11.644242279904557
+      ],
+      "min_weak_margin_by_agent": [
+        2.6529050162103016,
+        0.029604256374395566
+      ],
+      "name": "weak-Pareto-trap",
+      "rule": "scaled-own-gradient",
+      "source": "actual legacy trap.m arrays and scaled-own-gradient helper; the executable's zero constants are retained",
+      "t_final": 4.0,
+      "trap_witness": {
+        "delta": [
+          -0.315616294941492,
+          -0.31504110217269954
+        ],
+        "indices": [
+          20,
+          1819
+        ],
+        "minimum_drop": 0.31504110217269954,
+        "payoff_t1": [
+          666.14516705395,
+          563.8418879271504
+        ],
+        "payoff_t2": [
+          665.8295507590085,
+          563.5268468249777
+        ],
+        "t1": 0.02,
+        "t2": 1.819
+      },
+      "x0": [
+        18.5,
+        -8.71
+      ]
+    }
+  ],
+  "exact_certificates": {
+    "all_total": "own >= 0",
+    "nonweak_total": "[4z^2-10z,4z^2-8z,4z^2-10z,4z^2-12z] < 0 for z in (0,1]",
+    "own": "[4z^2,4z+4z^2,4z+4z^2,4z^2]",
+    "state": "z=exp(-t); x1=2(1-z), x2=1+2z, f=(2z,-2z)",
+    "weak_total": "[4z^2-6z,4z^2+12z,4z^2+14z,4z^2-6z]; one positive objective per agent"
+  },
+  "gamma": "externality >= 0; weak metric is min_i max_j externality, all metric is min_ij externality",
+  "omega": "total payoff rate >= 0 with the analogous weak/all metrics",
+  "payoff_order": [
+    "J_1^1",
+    "J_2^1",
+    "J_1^2",
+    "J_2^2"
+  ],
+  "status": "pass",
+  "verification_levels": {
+    "three_property_games": "exact trajectory and exact rate-sign algebra, plus sampled plots",
+    "trap": "actual legacy parameters/rule; fixed-step RK4 and finite grid, not continuous-time proof"
+  }
+}

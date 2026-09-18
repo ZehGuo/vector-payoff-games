@@ -37,3 +37,11 @@
 | D19 | S1不用legacy文件名认case；采用满足Remark3.9斜率序的五套新参数，并用统一own curvature `-1`与unit alpha隔离几何差异 | 作者允许自构参数；T Remark3.9；M0规则等价条件 | S1 Case1–5 | case身份由斜率、20个分支矩阵、域与Nash几何共同给出 | 作者范围＋直接计算 |
 | D20 | 四稳定例必须四分支全`det>0`且Hurwitz；不稳定例保留四分支全`det<0`，并以正特征值ray位于selected active cone内作直接见证 | T Theorem3.10及Case5证明段 | S1 branch diagnostics | 多初值轨迹只作插图，不能代替稳定性依据；不外推mixed-det | 论文条件＋独立代数 |
 | D21 | Case1/3保留无实特征向量的顺/逆时针旋转；Case2/4显式标0/1/2-transitive域；坐标变换只作后续分析工具，不改变Case5真实不稳定性 | T Lemma3.6、Remarks3.7–3.8；作者Q5 | S1、后续X1 | X1不得把映射像的收敛写成原系统自动稳定 | 论文＋作者要求 |
+
+## P1实施更新
+
+| ID | 决定内容 | 依据 | 相关论文/代码/实验 | 后续影响 | 来源 |
+|---|---|---|---|---|---|
+| D22 | 三种收益性质使用同一可解析自身动力学、仅改变线性外部性的新参数族；不声称精确复现Fig4.3，也不复用撤回的Q1转录 | 作者允许参数/图不同；M0 provenance限制；T(4.3)–(4.6) | P1 nonweak/all/weak | 可用精确`z=e^{-t}`公式隔离own、externality、total及Gamma/Omega | 作者范围＋直接代数 |
+| D23 | nonweak必须保留独立四负导数组；weak组每agent一正一负；all组四项非负，trap不承担前三组任何身份 | P1任务卡验收 | P1三组＋trap | 后续展示不可合并nonweak与trap | 作者任务卡＋直接证据 |
+| D24 | trap忠实采用实际legacy `A/b/x0/alpha`与scaled rule；使用内部`0.020<1.819`见证，不追随caption的首尾时刻；有限网格弱margin不称连续证明 | AUTHOR_REVIEW Q2；G helper；ACC Definition3 | P1 trap | I1可复用诊断，但若需定理保证必须另证连续条件 | 作者决定＋实际源码＋数值核查 |
