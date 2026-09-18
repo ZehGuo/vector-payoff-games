@@ -26,8 +26,8 @@
 | T3.3 p36(42) | 二维局部状态/eigenvector图，acute/obtuse及边界穿越 | 局部线性系统几何，无唯一数值脚本 | 无 | 支撑；非首选；文档保留，可与E3合并但标不同论证角色 |
 | T3.4 p42(48) | x1-x2，pinched Nash与外围10域；比较秩退化情形 | Assumption4；caption case指代疑错，无独立入口 | 无 | 支撑；非首选；与T3.2并列保留 |
 | T3.5 p44(50)，a–e | 五张x1-x2向量场、BR、Nash；比较四类stable场与unstable场 | S1已用新参数完成：`experiments/run_s1_five_cases.m`；MATLAB R2025b与独立5例/20分支核查、总览及eigenvector/域转移图见`audit/implementation/S1.md`。L ifac2023仍仅是候选参考 | 已有MATLAB完整五例、参数/判据表及不稳定active-cone见证 | 核心、高优先S1；**实现与运行验收完成**；五例全部保留；网站可用紧凑总览/附图解释不稳定例和变换适用边界 |
-| T3.6 p45(51)，a–e | 同上五类，但pinched/秩零几何；与T3.5比较 | L cdc2023为候选参考，原图对应未确认；正文c/e指代需依据数学case判定 | 无 | 核心；组合候选；保留全部五例及与Assumption3差异 |
-| T3.7 p45(51)，a–c | 三张非紧Nash集及向量场，展示compact结论边界 | 未找到对应三套矩阵/脚本；不能从图像唯一推回 | 无 | 核心边界；候选；作者确认必做、优先级较后S2；可用明确标注的新参数表达主要构型，不以缺源省略 |
+| T3.6 p45(51)，a–e | 同上五类，但pinched/秩零几何；与T3.5比较 | S2用新截距构造Assumption4秩零Nash点，复用S1已认证斜率身份；20分支与Theorem3.11核查，MATLAB通过。L cdc2023仍仅候选，正文c/e矛盾不靠文件名解决 | 已补五例总览、参数/判据、代表轨迹与完整分支CSV | 核心；S2完成；见`S2_rank_degenerate_five_cases.png`，保留全部五例及与Assumption3差异 |
+| T3.7 p45(51)，a–c | 三张非紧Nash集及向量场，展示compact结论边界 | S2新构造one-saddle funnel、three-saddle funnel与opposite-wing；均Assumption1成立且det mixed，按Proposition3.1确认noncompact，MATLAB通过 | 已补三构型、参数/假设/轨迹及独立核查 | 核心边界；S2完成；见`S2_noncompact_three_configurations.png`；finite window不作紧性证明 |
 | T3.8 p46(52)，a/b | (a)高维状态的曲面Nash；(b)更多目标下多边形Nash，说明二维双目标方法不能直接推广 | r1=2 或 s1=3 的示意；无完整参数脚本 | 无 | 边界；非首选；保留讨论性插图，非当前动力学复现承诺；与Chapter2高维参数化区别说明 |
 
 ## 3. Thesis Chapter 4：外部性与收益性质
@@ -65,7 +65,7 @@
 | ID | 问题与比较、参数/轴 | 来源/状态、P覆盖 | 处置及重要性/网站 |
 |---|---|---|---|
 | N-TOPO | T2.8/2.9/2.10/2.11 的参数化/生产例及正文秩条件 | 已分别登记T2.2–5，避免把正文例漏掉或重复计数 | 随对应图保留 |
-| N-FIELD | T3.5/6的10个case、T3.7的3个noncompact形状 | 原始10个场图入口；后3个缺源；不算仅2个实验 | 分case登记参数/假设，覆盖全部科研比较 |
+| N-FIELD | T3.5/6的10个case、T3.7的3个noncompact形状 | S1/S2已用来源明确的新参数完成10个case和3个noncompact构型；原始精确入口仍未确认但不再是实施待办 | 已分case登记参数/假设并覆盖全部科研比较；S1/S2均MATLAB通过 |
 | N-LMI | E数值稳定性：四分支严格正性/衰减 vs原始LMI约束 | X1独立核查和MATLAB均通过：最弱衰减裕量`12.6690660020`、正性裕量`2.2440811913`；`U/W`逐元素非负；旧YALMIP脚本无需执行 | 核心计算证据已完成；`x1_certificate_margins.csv`为新报告，不伪称原论文表 |
 | S-INC | ω>0补充激励：社会Pareto集、初值区域、原/改轨迹、原/改收益、预算 | I1保留不同游戏身份并完成；完整budget末值`-12874.075388`，旧漏omega式为`-15031.101323` | 已完成且不充当omega单因素比较，见`I1_INC_omega.png`；网站非首选 |
 | S-CDC | hJ 与倍乘J的探索性payoff曲线比较，横轴t | L cdc2024/test6_4_2；依赖工作区；P无；无已确认论文图号 | 归档并说明目的/限制，不升级为正式激励结论；不提议公开此原始图 |

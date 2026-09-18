@@ -2,7 +2,14 @@
 
 ## 当前阶段
 
-2026-09-18：T1参数域、面映射与应用入口已完成实现、四张图及MATLAB R2025b batch复跑。cube的6面/12边/8顶点和triangular prism的5面/9边/6顶点均以相同颜色/标签在权重域与Nash像中对应；每个加权问题同时加权`M`与`b`。X1、I1、P1与S1此前亦已完成。
+2026-09-18：S2秩退化与noncompact补充已完成实现、两张图及MATLAB R2025b clean-batch复跑。Assumption 4下五个case均由分支determinant与Theorem 3.11确认；三种noncompact构型由Assumption 1下mixed determinant signs及Proposition 3.1确认，不使用有限绘图窗口证明紧性。T1、X1、I1、P1与S1此前亦已完成。
+
+## S2最新完成
+
+- 五例共享显式二次收益族、nearest-BR规则及秩零Nash点`(0,0)`；D1–D4四分支全`det>0`，D5四分支全`det<0`，保留顺/逆时针、实特征向量混合转移及saddle区别。
+- 三个非紧例均满足general position但违反Assumption 2；四分支determinant为混合符号，故按Proposition 3.1全局确认noncompact。recession-angle采样只描述构型，不作为证明。
+- `cdc2023`仅作候选参考；正文`(c)/(e)`不一致没有用文件名猜测解决。参数、BR、Nash集合、代表轨迹、假设边界和32分支诊断见`audit/implementation/S2.md`。
+- MATLAB R2025b Update 7最终从新建空目录生成两张PNG、四张CSV及MAT；独立标准库核查器复算8例/32分支。首次结构体初始化错误已修复后从头复跑。
 
 ## T1最新完成
 
@@ -21,14 +28,14 @@
 
 ## 下一session
 
-按IMPLEMENTATION_PLAN.md进入S2退化与noncompact案例。T1、X1、I1、P1与S1均已停止，不顺带开展R1。
+按IMPLEMENTATION_PLAN.md进入R1整合与展示评审。T1、X1、I1、P1、S1与S2均已停止。
 
 ## 保持的边界
 
 不要求参数/画法复刻；须保留主要数学内容及case区别。原型和旧case代码是参考而非基线。缺原图脚本可自主构造并记录。有限网格/测试通过不等于定理证明或内容完整。网站尚未发布，当前不设计公共API、不自动创建session、不使用subagent。
 
-MATLAB不在shell的`PATH`中，但已定位并成功调用`/Applications/MATLAB_R2025b.app/bin/matlab`。T1、X1、I1、P1与S1均运行通过。T1四张、X1三张、I1四张、S1两张提交图均为MATLAB实际输出；T1的有限权重网格只检查实现，不替代Chapter 2的微分同胚结论；X1的独立Python核查不是MATLAB证据或定理证明，P1 trap的逐时弱性质仍是有限网格证据。
+MATLAB不在shell的`PATH`中，但已定位并成功调用`/Applications/MATLAB_R2025b.app/bin/matlab`。T1、X1、I1、P1、S1与S2均运行通过。T1四张、X1三张、I1四张、S1两张、S2两张提交图均为MATLAB实际输出；T1的有限权重网格只检查实现，不替代Chapter 2的微分同胚结论；S2的finite-window图与recession采样不替代Proposition 3.1的noncompact证明；X1的独立Python核查不是MATLAB证据或定理证明，P1 trap的逐时弱性质仍是有限网格证据。
 
 ## 当前阻碍
 
-没有必须现在询问作者的问题。T1、X1、I1、P1与S1均无运行环境待办。OPEN_QUESTIONS.md保存后期执行待办及X1最小纸面差异。每个后续session只做对应任务、更新记忆并本地提交后停止。
+没有必须现在询问作者的问题。T1、X1、I1、P1、S1与S2均无运行环境待办。OPEN_QUESTIONS.md保存R1展示选择及X1最小纸面差异。每个后续session只做对应任务、更新记忆并本地提交后停止。

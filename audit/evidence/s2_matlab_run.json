@@ -1,0 +1,29 @@
+{
+  "status": "pass",
+  "date": "2026-09-18",
+  "entry": "experiments/run_s2_degenerate_noncompact.m",
+  "execution": "clean batch in a newly created /private/tmp output directory",
+  "matlab": {
+    "version": "25.2.0.3360999 (R2025b) Update 7",
+    "architecture": "MACI64",
+    "executable": "/Applications/MATLAB_R2025b.app/bin/matlab"
+  },
+  "counts": {
+    "rank_degenerate_games": 5,
+    "noncompact_games": 3,
+    "branch_records": 32
+  },
+  "outputs": {
+    "audit/implementation/figures/S2_rank_degenerate_five_cases.png": "3a8935856798ca7e335bc286c251fca000f29343c1509d4276ee58356d715720",
+    "audit/implementation/figures/S2_noncompact_three_configurations.png": "9b069948e7ccd4f55c515e17944290178ed828f07e1758bf29d0df74a89b658f",
+    "audit/implementation/s2_case_summary.csv": "287f8429e87bc11c0203a733f1065f1cf0b92b7bccdb8593ca166f77f7f36f7a",
+    "audit/implementation/s2_branch_diagnostics.csv": "0cad8a0f9d72802b8d7b2b9e52d3bcd0a4bf9e05552ca26f641e9dd9d6f40fc8",
+    "audit/implementation/s2_noncompact_summary.csv": "388c47ae46912504008e4d9dcd2fca7697b5e35a7791d3e2f81e70ad272f2f9e",
+    "audit/implementation/s2_trajectory_summary.csv": "07de2b20956eeeadd86d91005fb389346fbe40ca8977591c234fac08739de758"
+  },
+  "notes": [
+    "The first clean run exposed a MATLAB structure-array initialization error; the entry was fixed and rerun from a new empty output directory.",
+    "The committed PNG and CSV files are copied from the final MATLAB clean-batch directory.",
+    "The independent verifier is audit/evidence/verify_s2.py and does not establish MATLAB provenance."
+  ]
+}

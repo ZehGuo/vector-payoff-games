@@ -28,16 +28,16 @@
 - 后续若需要正式套用定理，应另构造/证明`N_x0`包含或使用非零`Q`改变区域；这属于新任务，不是I1漏项。
 - 是否阻碍当前阶段：否。
 
-## Q4 — 缺原图脚本与case重建（S1/S2）
+## Q4 — 缺原图脚本与case重建（S1/S2已关闭）
 
 - S1状态：**已关闭五case重建部分**。本地case脚本仅作候选参考；S1采用新参数，已按Remark3.9斜率序、全部分支矩阵、eigenstructure、active cone与Nash几何确认Case1–5身份。
 - 运行状态：已定位`/Applications/MATLAB_R2025b.app/bin/matlab`并以R2025b Update 7干净批处理执行；两张图、两张CSV及MAT均生成并核查。无S1复跑待办。
-- S2剩余问题：3.6与3.7仍无已确认原图入口，尤其3.7三种noncompact构型仍需后续自构。
+- S2状态：**已关闭**。3.6五例使用新截距形成Assumption 4秩零Nash点，并按20个分支determinant与Theorem3.11确认四稳定/一不稳定；3.7使用三组新参数表达one-saddle funnel、three-saddle funnel与opposite-wing三类主要noncompact构型。
 - 为什么重要：必须覆盖不同case及主要数学内容，不以缺源省略。
 - 当前证据：作者授权AI补足，不要求原图一致；3.5优先，3.7必做但较后。
 - 可选方案：核查后复用参考参数；自行构造满足对应条件的新参数。
-- 推荐：以斜率、eigenvector/域转移、Nash几何验证case身份；S1先完成五case，S2补退化和非紧例。
-- 是否阻碍当前阶段：否；S1已完成，S2继续按授权自构，无需等待原图代码。
+- 证据边界：`cdc2023`仍只作候选参考；正文`(c)/(e)`指代不一致不靠文件名解决。noncompact由Assumption1下mixed determinant signs及Proposition3.1确认，finite-window图和recession角采样只作展示。
+- 是否阻碍当前阶段：否；S1/S2均完成且MATLAB R2025b与独立核查通过，原图参数provenance未恢复但不影响授权的新构造交付。
 
 ## Q5 — 五case在网站的具体呈现（R1）
 

@@ -72,3 +72,11 @@
 | D34 | T1采用Examples 2.9/2.10的paper字面own-gradient blocks，paper/legacy符号分别登记；所有权重同时作用于`M`与`b` | T p21–22视觉公式；legacy cube固定`M`而prism加权两者 | T1 cube/prism | 不继承cube固定矩阵缺陷；后续不得把legacy符号图标成paper参数 | 论文＋源码核查＋作者任务 |
 | D35 | cube与prism分别按6/5个面、12/9条边、8/6个顶点成对着色和编号；满射是覆盖已定义Nash像，双射另要求权重唯一 | T Example2.8正文及Examples2.9/2.10微分同胚结论 | T1两张面对应图与CSV | 有限网格/Jacobian只作实现诊断；全局双射身份引用论文条件，不由点云冒充证明 | 论文＋MATLAB运行 |
 | D36 | Chapter 2仅给own-gradient blocks时不补齐完整收益Hessian；Example2.11紫色区域只称weighted Nash image，非二次图只称示意 | T p21–23；任务卡边界 | T1应用图/非二次图 | 不把own-row几何补齐当原始社会福利，不把集中式社会Pareto集称Nash | 论文＋作者要求 |
+
+## S2实施更新
+
+| ID | 决定内容 | 依据 | 相关论文/代码/实验 | 后续影响 | 来源 |
+|---|---|---|---|---|---|
+| D37 | Fig3.6五例复用S1已认证斜率身份并改截距，使agent 1两条BR在Nash点`(0,0)`秩零；不按`cdc2023`文件名或正文`(c)/(e)`矛盾猜测原图对应 | Assumption4、Theorem3.11、AUTHOR_REVIEW Q4 | S2 D1–D5 | case身份继续由四分支det/eigenstructure与定理条件给出；轨迹只作代表 | 作者授权＋论文＋独立/MATLAB核查 |
+| D38 | Fig3.7用三组满足general position但mixed determinant signs的新参数表达主要noncompact构型 | Proposition3.1、Assumption2、Fig3.7 | S2 N1–N3 | noncompact由充要条件确认；有限窗口与recession角采样不得写成紧性证明 | 论文＋作者授权＋直接计算 |
+| D39 | mixed-det非紧例不套用Theorem3.11的全正/全负结论；单个saddle分支或有限轨迹不升级为全局稳定性判定 | Theorem3.11前件、任务卡边界 | S2 noncompact图/报告 | R1须将“定理不适用”与“系统已证不稳定”分开 | 论文＋任务卡 |

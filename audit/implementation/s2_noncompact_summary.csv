@@ -1,0 +1,4 @@
+case,label,p1,p2,q1,q2,c1,c2,d1,d2,det11,det12,det21,det22,assumption1,assumption2,theorem311_applies,mixed_sign_certificate,recession_angle_sample_deg
+N1,one-saddle-branch funnel,0.4,1.6,0.5,1,-1,1,-1,1,0.8,0.6,0.2,-0.6,1,0,0,1,26
+N2,three-saddle-branch funnel,0.6,1.4,0.8,2,-2,1,1,-2,0.52,-0.2,-0.12,-1.8,1,0,0,1,40.7
+N3,opposite-wing geometry,-0.8,0.8,-0.7,1.8,-1,1,1,-1,0.44,2.44,1.56,-0.44,1,0,0,1,19.2
