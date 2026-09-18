@@ -22,6 +22,9 @@
     "full_active_grid_points_outside_assumed_sign_map": 1876,
     "tie_rule_passed": true,
     "axis_lyapunov_continuity_jump": 0.0,
+    "axis_inverse_representative_returned": false,
+    "local_image_subsets_plotted_instead_of_full_quadrants": true,
+    "rank_one_fibers_plotted_to_axis_points": true,
     "image_V_positive_steps_above_1e-8": 0,
     "independent_V_positive_steps_above_1e-8": 0
   },
@@ -38,11 +41,12 @@
     "new_certificate_needed": false
   },
   "sha256": {
-    "entry": "35fef4135dd0a55e21eac26b9714050cc954de30bccde5b6265ef80f20785cac",
+    "entry": "8077b188d3123b0559e111e81a42cadf539551559040feee100033d85105c005",
     "independent_checker": "119aae5784fcf136d2a2c699fd1af33799c0092b75cd8bdb9ab2538ea3b16329",
-    "domain_map_png": "846e07a7e574cf1e1a7e85e6ab4ce50252703e0e79d7304008a37c31fee42c91",
-    "report_mat": "604b30f5b317d0460c442f3de91f336b8658ab570e33e67ea2b2173249fd74cc",
+    "domain_map_png": "a9791f93f8ef066b0c1c78b7e9eb19e8229324ed41517e438dc76c3e2a647918",
+    "fiber_collapse_png": "6f80cc93c7d9c34a33b3dd76fc829fcd191d768380a8ad93810c1654456a9d25",
+    "report_mat": "d2349bb00ebfbf7f9cb3f009bd49bd59ece011e0bd7443a78e796ea13b8cf93a",
     "trajectories_csv": "5d5194d82b337b3be4464840832bce14bed6330efef0d7da69c1664a061a0101",
-    "trajectories_lyapunov_png": "31c6306bf1285427818cd467779e1d48ab5850c3b187db8cc1a958bcd6ae38d1"
+    "trajectories_lyapunov_png": "302bf5d304937bb30459f7a12a10c9e42f00c694b885ddf4744af63192ef9c68"
   }
 }
