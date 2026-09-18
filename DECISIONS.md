@@ -46,3 +46,11 @@
 | D22 | 三种收益性质使用同一可解析自身动力学、仅改变线性外部性的新参数族；不声称精确复现Fig4.3，也不复用撤回的Q1转录 | 作者允许参数/图不同；M0 provenance限制；T(4.3)–(4.6) | P1 nonweak/all/weak | 可用精确`z=e^{-t}`公式隔离own、externality、total及Gamma/Omega | 作者范围＋直接代数 |
 | D23 | nonweak必须保留独立四负导数组；weak组每agent一正一负；all组四项非负，trap不承担前三组任何身份 | P1任务卡验收 | P1三组＋trap | 后续展示不可合并nonweak与trap | 作者任务卡＋直接证据 |
 | D24 | trap忠实采用实际legacy `A/b/x0/alpha`与scaled rule；使用内部`0.020<1.819`见证，不追随caption的首尾时刻；有限网格弱margin不称连续证明 | AUTHOR_REVIEW Q2；G helper；ACC Definition3 | P1 trap | I1可复用诊断，但若需定理保证必须另证连续条件 | 作者决定＋实际源码＋数值核查 |
+
+## I1实施更新
+
+| ID | 决定内容 | 依据 | 相关论文/代码/实验 | 后续影响 | 来源 |
+|---|---|---|---|---|---|
+| D26 | I1统一使用含`omega`的完整`J_sum^omega`预算恒等式；`test5_3`漏项只作错误对照，不作为预算定义 | T(5.18)-(5.24)、ACC(23)-(27)、直接代数 | INC-0、INC-omega | 后续任何budget图必须逐时检查完整identity和`p(x0)=0` | 论文＋源码审查＋独立核查 |
+| D27 | omega单因素解释使用同一INC-0游戏固定`eta/x0/sigma/zeta/target`比较`0`与`.25`；INC-omega仍为不同游戏补充 | T Fig5.3、ACC Fig2及任务卡 | I1 omega图 | 不得再用test3/test5跨游戏差异冒充omega单因素作用 | 任务卡＋控制变量构造 |
+| D28 | INC-0的`omega=0`不引用要求正`lambda`的Lemma；INC-omega虽通过锚定/凹性/general-position/det等代数项，但未证明完整`N_x0`包含 | AUTHOR_REVIEW Q3、Theorem5.4/ACC Theorem2 | I1条件表 | 数值轨迹与理论保证分层；强包含失败不写成普遍不可实现 | 作者解释＋论文条件＋数值核查 |

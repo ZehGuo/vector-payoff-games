@@ -1,6 +1,6 @@
 # 后续 session 执行计划
 
-版本：2026-09-18；M0、S1、P1已完成各自记录的实现与独立核查；P1已通过MATLAB R2025b复跑，S1的MATLAB复跑仍待执行；其余任务未实施。长期范围见 PROJECT_BRIEF.md，最新符号/分支契约见 audit/implementation/M0.md，完整图目录见 audit/FIGURE_MANIFEST.md。**旧提交2ab0d68的Q1计算不可作为正确基线。**
+版本：2026-09-18；M0、S1、P1、I1已完成各自记录的实现与独立核查；S1、P1、I1均已通过MATLAB R2025b复跑；其余任务未实施。长期范围见 PROJECT_BRIEF.md，最新符号/分支契约见 audit/implementation/M0.md，完整图目录见 audit/FIGURE_MANIFEST.md。**旧提交2ab0d68的Q1计算不可作为正确基线。**
 
 ## 1. 要重建的问题
 
@@ -21,13 +21,13 @@
 | M0 符号与动力学契约 | 首先 | 正确agent/objective映射、RHS选择规则、Q1对应核查 | 无 | 已完成（静态核查；见audit/implementation/M0.md） |
 | S1 两agent五case | 高；作者特别强调3.5 | 3.5五case完整比较与eigenvector证据 | M0公共约定；不必等Q1整项关闭 | 已完成（MATLAB R2025b＋独立核查通过，见S1.md） |
 | P1 收益性质与trap | 高 | nonweak/all/weak三组、独立trap图 | M0；Q1限制Fig4.3纸面/legacy来源标签 | 已完成（前三组精确代数；trap实际规则有限采样；MATLAB R2025b复跑通过，见P1.md） |
-| I1 激励与预算 | 高 | 设计几何、sigma/omega、激励前后收益及预算 | M0；可复用P1诊断 | 待执行 |
+| I1 激励与预算 | 高 | 设计几何、sigma/omega、激励前后收益及预算 | M0；可复用P1诊断 | 已完成（MATLAB R2025b＋独立核查通过；定理不变域包含未证明，见I1.md） |
 | X1 变换与稳定性 | 高 | 原/像/独立轨迹与Lyapunov、适用边界 | M0；S1提供case解释 | 待执行 |
 | T1 拓扑与应用 | 中 | cube/prism全部面对应、生产环境例 | agent/objective记法确认即可 | 待执行 |
 | S2 退化与非紧case | 中后；3.7必须保留 | 3.6五case及3.7非紧代表构型 | S1 | 待执行 |
 | R1 整合与展示评审 | 最后 | 全范围覆盖报告、简洁文档、候选图包 | 以上科研任务完成 | 待执行 |
 
-下一session推荐按 I1 → X1 → T1 → S2 → R1 逐项执行；S1、P1已完成并停止。依赖已列出，可调整顺序；这里不自动创建session，也不启用subagent。不同时在同一checkout运行多个改文件任务。
+下一session推荐按 X1 → T1 → S2 → R1 逐项执行；S1、P1、I1已完成并停止。依赖已列出，可调整顺序；这里不自动创建session，也不启用subagent。不同时在同一checkout运行多个改文件任务。
 
 每个任务统一交付：
 

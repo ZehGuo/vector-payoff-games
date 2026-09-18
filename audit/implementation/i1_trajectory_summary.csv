@@ -1,0 +1,3 @@
+experiment,original_terminal_x1,original_terminal_x2,incentivized_terminal_x1,incentivized_terminal_x2,target_x1,target_x2,aggregate_transfer_min,aggregate_transfer_final,omitted_omega_transfer_final
+INC-0,8.57144365395,-4.28575069813,12.8716797802,-9.05180987349,12.8580788661,-9.05854325798,-186.830181259,-67.3971319914,-67.3971319914
+INC-omega,8.57599527133,-4.29673927474,21,-16.5130434783,20.5833333333,-15.2040816327,-12874.0753875,-12874.0753875,-15031.1013233

@@ -1,0 +1,217 @@
+{
+  "payoff_order": [
+    "J_1^1",
+    "J_2^1",
+    "J_1^2",
+    "J_2^2"
+  ],
+  "rule": "nearest-BR",
+  "experiments": [
+    {
+      "name": "INC-0",
+      "target": [
+        12.858078866148249,
+        -9.058543257984608
+      ],
+      "x0": [
+        16.0,
+        -15.0
+      ],
+      "omega": [
+        0.0,
+        0.0
+      ],
+      "sigma": 0.05,
+      "zeta": [
+        0.3,
+        0.7
+      ],
+      "U_eigenvalues": [
+        -45.862322551231784,
+        -37.93767744876821
+      ],
+      "own_curvatures": [
+        -0.6719999999999999,
+        -4.0,
+        -1.3649999999999998,
+        -2.0
+      ],
+      "branch_determinants": [
+        0.9134527499999997,
+        1.3844999999999998,
+        5.554499999999998,
+        6.999999999999999
+      ],
+      "min_line_pair_determinant": 0.834,
+      "min_nonincident_line_residual": 2.3518997198382174,
+      "p_at_x0": [
+        0.0,
+        5.684341886080802e-14
+      ],
+      "target_stationarity_residual": [
+        0.0,
+        3.552713678800501e-15
+      ],
+      "budget_identity_max_error": 4.547473508864641e-13,
+      "aggregate_transfer_max": 0.0,
+      "aggregate_transfer_min": -186.8301812589978,
+      "aggregate_transfer_final": -67.397132050543,
+      "omitted_formula_final": -67.39713205054295,
+      "original_terminal": [
+        8.571443653946176,
+        -4.285750698132857
+      ],
+      "incentivized_terminal": [
+        12.871679780155587,
+        -9.05180987416413
+      ],
+      "target_distance_final": 0.015176406673151278,
+      "original_payoff_change_on_original_final": [
+        -3149.925133033998,
+        34.60261300958098,
+        2065.1407075548095,
+        25.122749551275888
+      ],
+      "original_payoff_change_on_incentivized_final": [
+        -1613.3938453139044,
+        58.93541529628601,
+        1728.7855169202307,
+        62.369652365012314
+      ],
+      "modified_payoff_change_final": [
+        14.398361866734959,
+        58.93541529628601,
+        33.59617768904832,
+        62.369652365012314
+      ],
+      "strong_domain_inclusion_grid_max": 1233.942430125789,
+      "strong_domain_inclusion_counterexample": [
+        10.550419690915941,
+        -2.650680635365755
+      ],
+      "validation_level": "omega=0 boundary: exact identities and sampled trajectory; positive-lambda theorem not invoked"
+    },
+    {
+      "name": "INC-omega",
+      "target": [
+        20.583333333333332,
+        -15.20408163265306
+      ],
+      "x0": [
+        21.0,
+        -35.0
+      ],
+      "omega": [
+        1.0,
+        4.0
+      ],
+      "sigma": 3.0,
+      "zeta": [
+        0.5,
+        0.5
+      ],
+      "U_eigenvalues": [
+        -30.0,
+        -24.5
+      ],
+      "own_curvatures": [
+        -41.0,
+        -4.0,
+        -28.75,
+        -2.0
+      ],
+      "branch_determinants": [
+        1174.75,
+        83.00000000000003,
+        119.00000000000003,
+        6.999999999999999
+      ],
+      "min_line_pair_determinant": 6.999999999999999,
+      "min_nonincident_line_residual": 5.116094029175276,
+      "p_at_x0": [
+        0.0,
+        0.0
+      ],
+      "target_stationarity_residual": [
+        1.1368683772161603e-13,
+        1.1368683772161603e-13
+      ],
+      "budget_identity_max_error": 1.4551915228366852e-11,
+      "aggregate_transfer_max": 0.0,
+      "aggregate_transfer_min": -12874.075387523566,
+      "aggregate_transfer_final": -12874.075387523559,
+      "omitted_formula_final": -15031.101323251336,
+      "original_terminal": [
+        8.57599527133062,
+        -4.29673927473734
+      ],
+      "incentivized_terminal": [
+        21.0,
+        -16.51304347826093
+      ],
+      "target_distance_final": 1.3736783554996683,
+      "original_payoff_change_on_original_final": [
+        29817.006258332985,
+        -7583.621582490654,
+        13704.490465749075,
+        -809.3032410879837
+      ],
+      "original_payoff_change_on_incentivized_final": [
+        18645.301323251362,
+        -4413.39916824195,
+        10724.363856332677,
+        564.0933081285439
+      ],
+      "modified_payoff_change_final": [
+        11582.681096408298,
+        -4413.39916824195,
+        4912.908695652175,
+        564.0933081285439
+      ],
+      "strong_domain_inclusion_grid_max": 70.17946877284703,
+      "strong_domain_inclusion_counterexample": [
+        19.571971112504475,
+        -34.97371732267331
+      ],
+      "validation_level": "algebraic theorem hypotheses checked; invariant-set inclusion not proved, sampled trajectory only"
+    }
+  ],
+  "sigma": {
+    "critical_sigma": [
+      0.409659151192385,
+      0.5265853902923313
+    ],
+    "regimes": [
+      {
+        "sigma": 0.35,
+        "eigenvalues": [
+          2.335786437626906,
+          5.164213562373096
+        ],
+        "classification": "interior ellipse"
+      },
+      {
+        "sigma": 0.47,
+        "eigenvalues": [
+          -2.4778066969018497,
+          1.5778066969018534
+        ],
+        "classification": "hyperbola/parabola regime"
+      },
+      {
+        "sigma": 0.56,
+        "eigenvalues": [
+          -6.284771871127976,
+          -0.9152281288720274
+        ],
+        "classification": "exterior ellipse"
+      }
+    ],
+    "acc_complement_sigmas": [
+      3,
+      0.551
+    ],
+    "interpretation": "ACC-style complement comparison uses the checked identity; it is not labeled as an exact ACC-parameter reproduction"
+  },
+  "theorem_boundary": "Theorem conditions imply their stated guarantees. Failure to prove the sufficient invariant-set inclusion is not an impossibility result."
+}
