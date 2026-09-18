@@ -19,7 +19,7 @@
 | 任务 | 优先级 | 核心产物 | 依赖 | 状态 |
 |---|---|---|---|---|
 | M0 符号与动力学契约 | 首先 | 正确agent/objective映射、RHS选择规则、Q1对应核查 | 无 | 已完成（静态核查；见audit/implementation/M0.md） |
-| S1 两agent五case | 高；作者特别强调3.5 | 3.5五case完整比较与eigenvector证据 | M0公共约定；不必等Q1整项关闭 | 待执行 |
+| S1 两agent五case | 高；作者特别强调3.5 | 3.5五case完整比较与eigenvector证据 | M0公共约定；不必等Q1整项关闭 | 已完成（代数/独立图通过；MATLAB待环境复跑，见S1.md） |
 | P1 收益性质与trap | 高 | nonweak/all/weak三组、独立trap图 | M0；Q1限制Fig4.3纸面/legacy来源标签 | 待执行 |
 | I1 激励与预算 | 高 | 设计几何、sigma/omega、激励前后收益及预算 | M0；可复用P1诊断 | 待执行 |
 | X1 变换与稳定性 | 高 | 原/像/独立轨迹与Lyapunov、适用边界 | M0；S1提供case解释 | 待执行 |
@@ -27,7 +27,7 @@
 | S2 退化与非紧case | 中后；3.7必须保留 | 3.6五case及3.7非紧代表构型 | S1 | 待执行 |
 | R1 整合与展示评审 | 最后 | 全范围覆盖报告、简洁文档、候选图包 | 以上科研任务完成 | 待执行 |
 
-下一session推荐按 S1 → P1 → I1 → X1 → T1 → S2 → R1 逐项执行。依赖已列出，可调整顺序；这里不自动创建session，也不启用subagent。不同时在同一checkout运行多个改文件任务。
+下一session推荐按 P1 → I1 → X1 → T1 → S2 → R1 逐项执行；S1已完成并停止。依赖已列出，可调整顺序；这里不自动创建session，也不启用subagent。不同时在同一checkout运行多个改文件任务。
 
 每个任务统一交付：
 

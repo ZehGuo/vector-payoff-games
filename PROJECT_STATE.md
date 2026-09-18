@@ -2,26 +2,25 @@
 
 ## 当前阶段
 
-2026-09-17：M0符号与动力学契约已完成静态核查，未开始MATLAB重构。初次审计提交2ab0d68的Q1错误继续保持撤回；Q1的新基线为audit/implementation/M0.md。
+2026-09-18：S1两agent五case已按新参数完成实现、独立代数核查与证据图；四例全分支`det>0`，一例全分支`det<0`并保留正特征值active-cone见证。MATLAB入口已写成，但当前shell仍无`matlab`/`octave`可执行入口，运行级验证待有环境时补做。
 
 ## 最新完成
 
-- 建立 `J_j^i` 上标agent/下标objective与MATLAB agent-first变量、控制坐标的完整对应，区分完整gradient、own-gradient、pseudo-gradient和总收益导数。
-- 核清最近BR与scaled-gradient规则：`alpha_1^i|A_ii^{i1}|=alpha_2^i|A_ii^{i2}|`时全局排序等价；inactive、zero-boundary和tie行为分别记录。
-- 重算T4.3三组纸面初值。纸面视觉顺序`J_1^1,J_1^2,J_2^1,J_2^2`必须先按上下标重排；legacy两脚本把中间两项按旧代码顺序归属。T4.3(b)纸面字面RHS为(0,0)，`test6_4_1`实际RHS为(15,0)；纸面(c)为`(0,-36 alpha_1^2)`，`test10_1` legacy版为(8,-6)。
-- trap实际helper在初值RHS为(-9.948,0)，但其agent 1缩放不满足全局规则等价条件，后续必须标作scaled-gradient版本。
-- 原始137个来源文件均未修改；没有MATLAB运行证据。Fig4.3各子图的精确绘图参数版本仍无法唯一确定，只作为最小provenance问题。
+- 新构造Remark3.9五种斜率序，统一使用own curvature `-1`、unit alpha与最近BR规则；完整`A/b`、Nash四顶点和20个分支诊断见`audit/implementation/S1.md`。
+- Case1/3分别给出顺/逆时针1-transitive构型；Case2给出0/2-transitive实特征向量构型；Case4在同一游戏内混合0/1/2；Case5保留四鞍分支及两条正特征值active-cone不稳定见证。
+- `experiments/run_s1_five_cases.m`可从干净MATLAB工作区生成总览、解释图、CSV与MAT；独立`verify_s1.py`已通过5例/20分支并生成两张已视觉检查PNG。
+- 原始137个来源文件、旧原型和legacy case均未修改；旧文件名没有被当作论文case身份。没有MATLAB运行成功声明。
 
 ## 下一session
 
-按IMPLEMENTATION_PLAN.md继续S1五case。S1使用M0的符号/分支契约；Q1剩余的Fig4.3精确来源问题留给P1作纸面/legacy双版本标注，不阻塞S1。不得拿旧转录JSON作真值。
+按IMPLEMENTATION_PLAN.md进入P1收益性质与trap；使用M0记号契约并保留Fig4.3纸面/legacy双版本来源标签。S1已停止，不顺带开展X1；坐标变换不会自动消除S1 Case5的不稳定性。
 
 ## 保持的边界
 
 不要求参数/画法复刻；须保留主要数学内容及case区别。原型和旧case代码是参考而非基线。缺原图脚本可自主构造并记录。有限网格/测试通过不等于定理证明或内容完整。网站尚未发布，当前不设计公共API、不自动创建session、不使用subagent。
 
-先前记录称MATLAB已安装且用户已打开，但本轮shell中没有`matlab`或`octave`入口；未启动MATLAB，也没有新增运行成功声明。后续如需运行须如实记录环境、入口和授权状态。
+先前记录称MATLAB已安装且用户已打开，但本轮shell中仍没有`matlab`或`octave`入口；S1未启动MATLAB，也没有运行成功声明。独立Python公式核查与图形渲染不能冒充MATLAB执行。
 
 ## 当前阻碍
 
-没有必须现在询问作者的问题。OPEN_QUESTIONS.md保存执行待办和后期选图事项。每个后续session完成任务、更新记忆并本地提交后停止；本轮只提交审阅修订和计划。
+没有必须现在询问作者的问题。S1唯一运行环境待办是有可调用MATLAB时做干净会话复跑；不影响五case的代数身份。OPEN_QUESTIONS.md保存P1及后期执行待办。每个后续session只做对应任务、更新记忆并本地提交后停止。

@@ -29,3 +29,11 @@
 | D16 | 冻结M0记号契约：`J_j^i`上标agent/下标objective；代码`Aij`为agent-first；pseudo-gradient必须注明选择规则 | T p26–31/p55视觉复核；ACC(7)；E(27)–(28)；legacy helpers | M0、S1/P1/I1/X1 | 后续参数表和图例统一按该契约；不得复用旧上下标转录 | 直接证据 |
 | D17 | T4.3纸面字面版与legacy实际版分开保存；实际非静止由中间两项对象归属及线性项版本差异解释 | 纸面视觉顺序须由`11,21,12,22`重排；legacy脚本直接使用代码`11,12,21,22`顺序；(b)另改`b` | Q1、P1 | 纸面(b)RHS(0,0)不标为已复现；legacy(b)RHS(15,0)可作来源明确的重建起点；(c)同样保留双版本 | 静态公式＋源码核查 |
 | D18 | 最近BR与scaled-gradient只在每agent缩放曲率匹配时视为全局等价；trap保留scaled规则标签 | `alpha_1^i|a_1^i|=alpha_2^i|a_2^i|`；trap agent1为2对2.4 | M0、P1 | 逐实验保存规则名和缩放；具体点同分支不冒充全局等价 | 公式推导＋源码核查 |
+
+## S1实施更新
+
+| ID | 决定内容 | 依据 | 相关论文/代码/实验 | 后续影响 | 来源 |
+|---|---|---|---|---|---|
+| D19 | S1不用legacy文件名认case；采用满足Remark3.9斜率序的五套新参数，并用统一own curvature `-1`与unit alpha隔离几何差异 | 作者允许自构参数；T Remark3.9；M0规则等价条件 | S1 Case1–5 | case身份由斜率、20个分支矩阵、域与Nash几何共同给出 | 作者范围＋直接计算 |
+| D20 | 四稳定例必须四分支全`det>0`且Hurwitz；不稳定例保留四分支全`det<0`，并以正特征值ray位于selected active cone内作直接见证 | T Theorem3.10及Case5证明段 | S1 branch diagnostics | 多初值轨迹只作插图，不能代替稳定性依据；不外推mixed-det | 论文条件＋独立代数 |
+| D21 | Case1/3保留无实特征向量的顺/逆时针旋转；Case2/4显式标0/1/2-transitive域；坐标变换只作后续分析工具，不改变Case5真实不稳定性 | T Lemma3.6、Remarks3.7–3.8；作者Q5 | S1、后续X1 | X1不得把映射像的收敛写成原系统自动稳定 | 论文＋作者要求 |

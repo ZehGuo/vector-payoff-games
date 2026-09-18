@@ -1,0 +1,1152 @@
+{
+  "assertions": [
+    "Cases 1-4 have det(A_j1j2)>0 for all four double-active branches.",
+    "Case 5 has det(A_j1j2)<0 for all four branches.",
+    "Case 5 has at least one positive-eigenvalue ray inside its selected active cone.",
+    "Every four-line arrangement is in general position (no axes, parallels, or triple intersections).",
+    "The two same-agent BR intersections are outside the Nash set (Assumption 3 geometry).",
+    "Complex branches are reported as rotations and are not assigned real eigenvectors."
+  ],
+  "branches": [
+    {
+      "case": 1,
+      "cone_angle_deg": 97.69999999999999,
+      "cone_start_deg": 51.35,
+      "determinant": 1.48,
+      "eigenrays_in_active_cone": [],
+      "eigenvalues": [
+        {
+          "imag": 0.6928203230275509,
+          "real": -1.0
+        },
+        {
+          "imag": -0.6928203230275509,
+          "real": -1.0
+        }
+      ],
+      "eigenvectors": [],
+      "j1": 1,
+      "j2": 1,
+      "matrix": [
+        [
+          -1.0,
+          0.8
+        ],
+        [
+          -0.6,
+          -1.0
+        ]
+      ],
+      "transition": "1-transitive clockwise",
+      "xstar": [
+        4.783783783783783,
+        5.72972972972973
+      ]
+    },
+    {
+      "case": 1,
+      "cone_angle_deg": 62.650000000000006,
+      "cone_start_deg": 168.7,
+      "determinant": 1.1600000000000001,
+      "eigenrays_in_active_cone": [],
+      "eigenvalues": [
+        {
+          "imag": 0.4,
+          "real": -1.0
+        },
+        {
+          "imag": -0.4,
+          "real": -1.0
+        }
+      ],
+      "eigenvectors": [],
+      "j1": 1,
+      "j2": 2,
+      "matrix": [
+        [
+          -1.0,
+          0.8
+        ],
+        [
+          -0.2,
+          -1.0
+        ]
+      ],
+      "transition": "1-transitive clockwise",
+      "xstar": [
+        4.448275862068965,
+        5.310344827586206
+      ]
+    },
+    {
+      "case": 1,
+      "cone_angle_deg": 104.27499999999999,
+      "cone_start_deg": 329.04999999999995,
+      "determinant": 1.18,
+      "eigenrays_in_active_cone": [],
+      "eigenvalues": [
+        {
+          "imag": 0.4242640687119285,
+          "real": -1.0
+        },
+        {
+          "imag": -0.4242640687119285,
+          "real": -1.0
+        }
+      ],
+      "eigenvectors": [],
+      "j1": 2,
+      "j2": 1,
+      "matrix": [
+        [
+          -1.0,
+          0.3
+        ],
+        [
+          -0.6,
+          -1.0
+        ]
+      ],
+      "transition": "1-transitive clockwise",
+      "xstar": [
+        4.898305084745762,
+        5.661016949152542
+      ]
+    },
+    {
+      "case": 1,
+      "cone_angle_deg": 95.37499999999999,
+      "cone_start_deg": 253.325,
+      "determinant": 1.06,
+      "eigenrays_in_active_cone": [],
+      "eigenvalues": [
+        {
+          "imag": 0.2449489742783178,
+          "real": -1.0
+        },
+        {
+          "imag": -0.2449489742783178,
+          "real": -1.0
+        }
+      ],
+      "eigenvectors": [],
+      "j1": 2,
+      "j2": 2,
+      "matrix": [
+        [
+          -1.0,
+          0.3
+        ],
+        [
+          -0.2,
+          -1.0
+        ]
+      ],
+      "transition": "1-transitive clockwise",
+      "xstar": [
+        4.773584905660377,
+        5.245283018867925
+      ]
+    },
+    {
+      "case": 2,
+      "cone_angle_deg": 20.375000000000004,
+      "cone_start_deg": 218.67499999999998,
+      "determinant": 0.52,
+      "eigenrays_in_active_cone": [
+        [
+          false,
+          true
+        ],
+        [
+          false,
+          false
+        ]
+      ],
+      "eigenvalues": [
+        {
+          "imag": 0.0,
+          "real": -0.3071796769724491
+        },
+        {
+          "imag": 0.0,
+          "real": -1.692820323027551
+        }
+      ],
+      "eigenvectors": [
+        [
+          0.6546536707079771,
+          0.7559289460184545
+        ],
+        [
+          0.6546536707079771,
+          -0.7559289460184545
+        ]
+      ],
+      "j1": 1,
+      "j2": 1,
+      "matrix": [
+        [
+          -1.0,
+          0.6
+        ],
+        [
+          0.8,
+          -1.0
+        ]
+      ],
+      "transition": "0-transitive",
+      "xstar": [
+        2.923076923076923,
+        2.5384615384615374
+      ]
+    },
+    {
+      "case": 2,
+      "cone_angle_deg": 132.275,
+      "cone_start_deg": 59.050000000000004,
+      "determinant": 0.88,
+      "eigenrays_in_active_cone": [
+        [
+          false,
+          false
+        ],
+        [
+          false,
+          true
+        ]
+      ],
+      "eigenvalues": [
+        {
+          "imag": 0.0,
+          "real": -0.6535898384862245
+        },
+        {
+          "imag": 0.0,
+          "real": -1.3464101615137753
+        }
+      ],
+      "eigenvectors": [
+        [
+          0.8660254037844386,
+          0.5
+        ],
+        [
+          0.8660254037844387,
+          -0.49999999999999994
+        ]
+      ],
+      "j1": 1,
+      "j2": 2,
+      "matrix": [
+        [
+          -1.0,
+          0.6
+        ],
+        [
+          0.2,
+          -1.0
+        ]
+      ],
+      "transition": "2-transitive",
+      "xstar": [
+        4.181818181818182,
+        4.636363636363637
+      ]
+    },
+    {
+      "case": 2,
+      "cone_angle_deg": 150.475,
+      "cone_start_deg": 248.2,
+      "determinant": 0.6799999999999999,
+      "eigenrays_in_active_cone": [
+        [
+          false,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "eigenvalues": [
+        {
+          "imag": 0.0,
+          "real": -0.4343145750507619
+        },
+        {
+          "imag": 0.0,
+          "real": -1.5656854249492382
+        }
+      ],
+      "eigenvectors": [
+        [
+          0.5773502691896257,
+          0.816496580927726
+        ],
+        [
+          0.5773502691896256,
+          -0.816496580927726
+        ]
+      ],
+      "j1": 2,
+      "j2": 1,
+      "matrix": [
+        [
+          -1.0,
+          0.4
+        ],
+        [
+          0.8,
+          -1.0
+        ]
+      ],
+      "transition": "2-transitive",
+      "xstar": [
+        3.9411764705882346,
+        3.352941176470587
+      ]
+    },
+    {
+      "case": 2,
+      "cone_angle_deg": 56.875,
+      "cone_start_deg": 11.325,
+      "determinant": 0.9199999999999999,
+      "eigenrays_in_active_cone": [
+        [
+          true,
+          false
+        ],
+        [
+          false,
+          false
+        ]
+      ],
+      "eigenvalues": [
+        {
+          "imag": 0.0,
+          "real": -0.7171572875253809
+        },
+        {
+          "imag": 0.0,
+          "real": -1.2828427124746191
+        }
+      ],
+      "eigenvectors": [
+        [
+          0.8164965809277259,
+          0.5773502691896258
+        ],
+        [
+          0.8164965809277259,
+          -0.5773502691896258
+        ]
+      ],
+      "j1": 2,
+      "j2": 2,
+      "matrix": [
+        [
+          -1.0,
+          0.4
+        ],
+        [
+          0.2,
+          -1.0
+        ]
+      ],
+      "transition": "0-transitive",
+      "xstar": [
+        4.478260869565217,
+        4.695652173913043
+      ]
+    },
+    {
+      "case": 3,
+      "cone_angle_deg": 68.025,
+      "cone_start_deg": 218.67499999999998,
+      "determinant": 1.24,
+      "eigenrays_in_active_cone": [],
+      "eigenvalues": [
+        {
+          "imag": 0.4898979485566356,
+          "real": -1.0
+        },
+        {
+          "imag": -0.4898979485566356,
+          "real": -1.0
+        }
+      ],
+      "eigenvectors": [],
+      "j1": 1,
+      "j2": 1,
+      "matrix": [
+        [
+          -1.0,
+          -0.3
+        ],
+        [
+          0.8,
+          -1.0
+        ]
+      ],
+      "transition": "1-transitive counterclockwise",
+      "xstar": [
+        5.435483870967742,
+        4.548387096774193
+      ]
+    },
+    {
+      "case": 3,
+      "cone_angle_deg": 99.87499999999999,
+      "cone_start_deg": 106.70000000000002,
+      "determinant": 1.15,
+      "eigenrays_in_active_cone": [],
+      "eigenvalues": [
+        {
+          "imag": 0.3872983346207417,
+          "real": -1.0
+        },
+        {
+          "imag": -0.3872983346207417,
+          "real": -1.0
+        }
+      ],
+      "eigenvectors": [],
+      "j1": 1,
+      "j2": 2,
+      "matrix": [
+        [
+          -1.0,
+          -0.3
+        ],
+        [
+          0.5,
+          -1.0
+        ]
+      ],
+      "transition": "1-transitive counterclockwise",
+      "xstar": [
+        5.391304347826088,
+        4.695652173913044
+      ]
+    },
+    {
+      "case": 3,
+      "cone_angle_deg": 93.675,
+      "cone_start_deg": 305.0,
+      "determinant": 1.56,
+      "eigenrays_in_active_cone": [],
+      "eigenvalues": [
+        {
+          "imag": 0.7483314773547882,
+          "real": -1.0
+        },
+        {
+          "imag": -0.7483314773547882,
+          "real": -1.0
+        }
+      ],
+      "eigenvectors": [],
+      "j1": 2,
+      "j2": 1,
+      "matrix": [
+        [
+          -1.0,
+          -0.7
+        ],
+        [
+          0.8,
+          -1.0
+        ]
+      ],
+      "transition": "1-transitive counterclockwise",
+      "xstar": [
+        5.8076923076923075,
+        4.846153846153845
+      ]
+    },
+    {
+      "case": 3,
+      "cone_angle_deg": 98.425,
+      "cone_start_deg": 26.575000000000003,
+      "determinant": 1.35,
+      "eigenrays_in_active_cone": [],
+      "eigenvalues": [
+        {
+          "imag": 0.5916079783099616,
+          "real": -1.0
+        },
+        {
+          "imag": -0.5916079783099616,
+          "real": -1.0
+        }
+      ],
+      "eigenvectors": [],
+      "j1": 2,
+      "j2": 2,
+      "matrix": [
+        [
+          -1.0,
+          -0.7
+        ],
+        [
+          0.5,
+          -1.0
+        ]
+      ],
+      "transition": "1-transitive counterclockwise",
+      "xstar": [
+        5.777777777777777,
+        4.888888888888888
+      ]
+    },
+    {
+      "case": 4,
+      "cone_angle_deg": 106.85000000000001,
+      "cone_start_deg": 51.35,
+      "determinant": 1.32,
+      "eigenrays_in_active_cone": [],
+      "eigenvalues": [
+        {
+          "imag": 0.5656854249492381,
+          "real": -1.0
+        },
+        {
+          "imag": -0.5656854249492381,
+          "real": -1.0
+        }
+      ],
+      "eigenvectors": [],
+      "j1": 1,
+      "j2": 1,
+      "matrix": [
+        [
+          -1.0,
+          0.8
+        ],
+        [
+          -0.4,
+          -1.0
+        ]
+      ],
+      "transition": "1-transitive clockwise",
+      "xstar": [
+        4.636363636363636,
+        5.545454545454545
+      ]
+    },
+    {
+      "case": 4,
+      "cone_angle_deg": 34.64999999999999,
+      "cone_start_deg": 196.7,
+      "determinant": 0.76,
+      "eigenrays_in_active_cone": [
+        [
+          false,
+          true
+        ],
+        [
+          false,
+          false
+        ]
+      ],
+      "eigenvalues": [
+        {
+          "imag": 0.0,
+          "real": -0.5101020514433644
+        },
+        {
+          "imag": 0.0,
+          "real": -1.4898979485566355
+        }
+      ],
+      "eigenvectors": [
+        [
+          0.8528028654224418,
+          0.5222329678670935
+        ],
+        [
+          0.8528028654224419,
+          -0.5222329678670934
+        ]
+      ],
+      "j1": 1,
+      "j2": 2,
+      "matrix": [
+        [
+          -1.0,
+          0.8
+        ],
+        [
+          0.3,
+          -1.0
+        ]
+      ],
+      "transition": "0-transitive",
+      "xstar": [
+        3.631578947368421,
+        4.289473684210526
+      ]
+    },
+    {
+      "case": 4,
+      "cone_angle_deg": 85.25000000000001,
+      "cone_start_deg": 338.2,
+      "determinant": 1.2,
+      "eigenrays_in_active_cone": [],
+      "eigenvalues": [
+        {
+          "imag": 0.4472135954999579,
+          "real": -1.0
+        },
+        {
+          "imag": -0.4472135954999579,
+          "real": -1.0
+        }
+      ],
+      "eigenvectors": [],
+      "j1": 2,
+      "j2": 1,
+      "matrix": [
+        [
+          -1.0,
+          0.5
+        ],
+        [
+          -0.4,
+          -1.0
+        ]
+      ],
+      "transition": "1-transitive clockwise",
+      "xstar": [
+        4.75,
+        5.500000000000001
+      ]
+    },
+    {
+      "case": 4,
+      "cone_angle_deg": 133.25,
+      "cone_start_deg": 243.45000000000002,
+      "determinant": 0.85,
+      "eigenrays_in_active_cone": [
+        [
+          false,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "eigenvalues": [
+        {
+          "imag": 0.0,
+          "real": -0.6127016653792583
+        },
+        {
+          "imag": 0.0,
+          "real": -1.3872983346207417
+        }
+      ],
+      "eigenvectors": [
+        [
+          0.7905694150420948,
+          0.6123724356957946
+        ],
+        [
+          0.7905694150420948,
+          -0.6123724356957946
+        ]
+      ],
+      "j1": 2,
+      "j2": 2,
+      "matrix": [
+        [
+          -1.0,
+          0.5
+        ],
+        [
+          0.3,
+          -1.0
+        ]
+      ],
+      "transition": "2-transitive",
+      "xstar": [
+        4.235294117647059,
+        4.470588235294118
+      ]
+    },
+    {
+      "case": 5,
+      "cone_angle_deg": 158.82500000000002,
+      "cone_start_deg": 63.449999999999996,
+      "determinant": -1.2000000000000002,
+      "eigenrays_in_active_cone": [
+        [
+          false,
+          false
+        ],
+        [
+          false,
+          true
+        ]
+      ],
+      "eigenvalues": [
+        {
+          "imag": 0.0,
+          "real": 0.48323969741913264
+        },
+        {
+          "imag": 0.0,
+          "real": -2.4832396974191324
+        }
+      ],
+      "eigenvectors": [
+        [
+          0.5956833971812706,
+          0.8032193289024988
+        ],
+        [
+          0.5956833971812706,
+          -0.8032193289024988
+        ]
+      ],
+      "j1": 1,
+      "j2": 1,
+      "matrix": [
+        [
+          -1.0,
+          1.1
+        ],
+        [
+          2.0,
+          -1.0
+        ]
+      ],
+      "transition": "saddle: stable eigenray / outward generic flow",
+      "xstar": [
+        7.749999999999999,
+        8.5
+      ]
+    },
+    {
+      "case": 5,
+      "cone_angle_deg": 15.725000000000001,
+      "cone_start_deg": 42.275,
+      "determinant": -0.7600000000000002,
+      "eigenrays_in_active_cone": [
+        [
+          true,
+          false
+        ],
+        [
+          false,
+          false
+        ]
+      ],
+      "eigenvalues": [
+        {
+          "imag": 0.0,
+          "real": 0.3266499161421601
+        },
+        {
+          "imag": 0.0,
+          "real": -2.32664991614216
+        }
+      ],
+      "eigenvectors": [
+        [
+          0.6382847385042254,
+          0.769800358919501
+        ],
+        [
+          0.6382847385042254,
+          -0.769800358919501
+        ]
+      ],
+      "j1": 1,
+      "j2": 2,
+      "matrix": [
+        [
+          -1.0,
+          1.1
+        ],
+        [
+          1.6,
+          -1.0
+        ]
+      ],
+      "transition": "unstable non-transitive eigenray",
+      "xstar": [
+        8.763157894736842,
+        9.421052631578947
+      ]
+    },
+    {
+      "case": 5,
+      "cone_angle_deg": 25.874999999999996,
+      "cone_start_deg": 217.57500000000002,
+      "determinant": -1.6,
+      "eigenrays_in_active_cone": [
+        [
+          false,
+          true
+        ],
+        [
+          false,
+          false
+        ]
+      ],
+      "eigenvalues": [
+        {
+          "imag": 0.0,
+          "real": 0.61245154965971
+        },
+        {
+          "imag": 0.0,
+          "real": -2.61245154965971
+        }
+      ],
+      "eigenvectors": [
+        [
+          0.6276459144608479,
+          0.7784989441615231
+        ],
+        [
+          0.6276459144608479,
+          -0.778498944161523
+        ]
+      ],
+      "j1": 2,
+      "j2": 1,
+      "matrix": [
+        [
+          -1.0,
+          1.3
+        ],
+        [
+          2.0,
+          -1.0
+        ]
+      ],
+      "transition": "unstable non-transitive eigenray",
+      "xstar": [
+        7.4375,
+        7.875000000000001
+      ]
+    },
+    {
+      "case": 5,
+      "cone_angle_deg": 159.575,
+      "cone_start_deg": 238.0,
+      "determinant": -1.08,
+      "eigenrays_in_active_cone": [
+        [
+          false,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "eigenvalues": [
+        {
+          "imag": 0.0,
+          "real": 0.4422205101855958
+        },
+        {
+          "imag": 0.0,
+          "real": -2.442220510185596
+        }
+      ],
+      "eigenvectors": [
+        [
+          0.6695340634119862,
+          0.7427813527082074
+        ],
+        [
+          0.6695340634119862,
+          -0.7427813527082074
+        ]
+      ],
+      "j1": 2,
+      "j2": 2,
+      "matrix": [
+        [
+          -1.0,
+          1.3
+        ],
+        [
+          1.6,
+          -1.0
+        ]
+      ],
+      "transition": "saddle: stable eigenray / outward generic flow",
+      "xstar": [
+        8.129629629629632,
+        8.407407407407408
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "c1": [
+        0.1999999999999993,
+        3.2
+      ],
+      "c2": [
+        8.6,
+        6.2
+      ],
+      "case": 1,
+      "determinant_range": [
+        1.06,
+        1.48
+      ],
+      "expected_stability": "stable",
+      "label": "stable-CW",
+      "s1": [
+        0.8,
+        0.3
+      ],
+      "s2": [
+        -0.6,
+        -0.2
+      ],
+      "slope_order": "s_1^1 > s_2^1 > 0 > s_2^2 > s_1^2",
+      "transition_counts": {
+        "0": 0,
+        "1": 4,
+        "2": 0,
+        "saddle": 0,
+        "unstable": 0
+      },
+      "vertices": [
+        [
+          4.783783783783783,
+          5.72972972972973
+        ],
+        [
+          4.448275862068965,
+          5.310344827586206
+        ],
+        [
+          4.898305084745762,
+          5.661016949152542
+        ],
+        [
+          4.773584905660377,
+          5.245283018867925
+        ]
+      ]
+    },
+    {
+      "c1": [
+        1.4000000000000004,
+        2.5999999999999996
+      ],
+      "c2": [
+        0.1999999999999993,
+        3.8
+      ],
+      "case": 2,
+      "determinant_range": [
+        0.52,
+        0.9199999999999999
+      ],
+      "expected_stability": "stable",
+      "label": "stable-real",
+      "s1": [
+        0.6,
+        0.4
+      ],
+      "s2": [
+        0.8,
+        0.2
+      ],
+      "slope_order": "s_1^2 > s_1^1 > s_2^1 > s_2^2 > 0",
+      "transition_counts": {
+        "0": 2,
+        "1": 0,
+        "2": 2,
+        "saddle": 0,
+        "unstable": 0
+      },
+      "vertices": [
+        [
+          2.923076923076923,
+          2.5384615384615374
+        ],
+        [
+          4.181818181818182,
+          4.636363636363637
+        ],
+        [
+          3.9411764705882346,
+          3.352941176470587
+        ],
+        [
+          4.478260869565217,
+          4.695652173913043
+        ]
+      ]
+    },
+    {
+      "c1": [
+        6.8,
+        9.2
+      ],
+      "c2": [
+        0.1999999999999993,
+        2.0
+      ],
+      "case": 3,
+      "determinant_range": [
+        1.15,
+        1.56
+      ],
+      "expected_stability": "stable",
+      "label": "stable-CCW",
+      "s1": [
+        -0.3,
+        -0.7
+      ],
+      "s2": [
+        0.8,
+        0.5
+      ],
+      "slope_order": "s_1^2 > s_2^2 > 0 > s_1^1 > s_2^1",
+      "transition_counts": {
+        "0": 0,
+        "1": 4,
+        "2": 0,
+        "saddle": 0,
+        "unstable": 0
+      },
+      "vertices": [
+        [
+          5.435483870967742,
+          4.548387096774193
+        ],
+        [
+          5.391304347826088,
+          4.695652173913044
+        ],
+        [
+          5.8076923076923075,
+          4.846153846153845
+        ],
+        [
+          5.777777777777777,
+          4.888888888888888
+        ]
+      ]
+    },
+    {
+      "c1": [
+        0.1999999999999993,
+        2.0
+      ],
+      "c2": [
+        7.4,
+        3.2
+      ],
+      "case": 4,
+      "determinant_range": [
+        0.76,
+        1.32
+      ],
+      "expected_stability": "stable",
+      "label": "stable-mixed",
+      "s1": [
+        0.8,
+        0.5
+      ],
+      "s2": [
+        -0.4,
+        0.3
+      ],
+      "slope_order": "s_1^1 > s_2^1 > s_2^2 > 0 > s_1^2",
+      "transition_counts": {
+        "0": 1,
+        "1": 2,
+        "2": 1,
+        "saddle": 0,
+        "unstable": 0
+      },
+      "vertices": [
+        [
+          4.636363636363636,
+          5.545454545454545
+        ],
+        [
+          3.631578947368421,
+          4.289473684210526
+        ],
+        [
+          4.75,
+          5.500000000000001
+        ],
+        [
+          4.235294117647059,
+          4.470588235294118
+        ]
+      ]
+    },
+    {
+      "c1": [
+        -1.6000000000000005,
+        -2.8000000000000007
+      ],
+      "c2": [
+        -7.0,
+        -4.600000000000001
+      ],
+      "case": 5,
+      "determinant_range": [
+        -1.6,
+        -0.7600000000000002
+      ],
+      "expected_stability": "unstable",
+      "label": "unstable-saddle",
+      "s1": [
+        1.1,
+        1.3
+      ],
+      "s2": [
+        2.0,
+        1.6
+      ],
+      "slope_order": "s_1^2 > s_2^2 > s_2^1 > s_1^1 > 0",
+      "transition_counts": {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "saddle": 2,
+        "unstable": 2
+      },
+      "vertices": [
+        [
+          7.749999999999999,
+          8.5
+        ],
+        [
+          8.763157894736842,
+          9.421052631578947
+        ],
+        [
+          7.4375,
+          7.875000000000001
+        ],
+        [
+          8.129629629629632,
+          8.407407407407408
+        ]
+      ]
+    }
+  ],
+  "source_contract": "thesis Lemma 3.6, Remarks 3.7-3.9, Theorem 3.10; M0 notation contract",
+  "status": "pass",
+  "verification_level": "independent formula arithmetic and fixed-step illustrative integration; not MATLAB execution"
+}
