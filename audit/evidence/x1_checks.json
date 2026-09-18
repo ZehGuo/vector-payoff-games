@@ -1,0 +1,224 @@
+{
+  "provenance": "independent NumPy/RK4 transcription of paper formulas; no MATLAB or previous prototype",
+  "U_entrywise_nonnegative": true,
+  "W_entrywise_nonnegative": true,
+  "certificate": {
+    "printed_T": [
+      [
+        6.2058,
+        -1.0547,
+        -2.5757,
+        0.1138
+      ],
+      [
+        -1.0547,
+        4.3862,
+        3.9895,
+        0.6236
+      ],
+      [
+        -2.5757,
+        3.9895,
+        6.2058,
+        -2.8365
+      ],
+      [
+        0.1138,
+        0.6236,
+        -2.8365,
+        4.3862
+      ]
+    ],
+    "branches": [
+      {
+        "j1": 1,
+        "j2": 1,
+        "Atilde": [
+          [
+            -1.0,
+            -5.0
+          ],
+          [
+            0.5,
+            -10.0
+          ]
+        ],
+        "P": [
+          [
+            17.563,
+            -7.9945
+          ],
+          [
+            -7.9945,
+            7.525199999999999
+          ]
+        ],
+        "decay_eigenvalues": [
+          -71.40345718507136,
+          -42.27604281492861
+        ],
+        "positivity_eigenvalues": [
+          2.244081191279308,
+          22.84411880872069
+        ],
+        "max_decay_eigenvalue": -42.27604281492861,
+        "min_positivity_eigenvalue": 2.244081191279308
+      },
+      {
+        "j1": 1,
+        "j2": 2,
+        "Atilde": [
+          [
+            -1.0,
+            -0.5
+          ],
+          [
+            1.0,
+            -1.0
+          ]
+        ],
+        "P": [
+          [
+            17.563,
+            2.0939
+          ],
+          [
+            2.0939,
+            10.019599999999999
+          ]
+        ],
+        "decay_eigenvalues": [
+          -32.45025705309321,
+          -20.621042946906787
+        ],
+        "positivity_eigenvalues": [
+          8.912986961663897,
+          18.669613038336102
+        ],
+        "max_decay_eigenvalue": -20.621042946906787,
+        "min_positivity_eigenvalue": 8.912986961663897
+      },
+      {
+        "j1": 2,
+        "j2": 1,
+        "Atilde": [
+          [
+            -1.0,
+            -10.0
+          ],
+          [
+            0.5,
+            -10.0
+          ]
+        ],
+        "P": [
+          [
+            7.2602,
+            -5.657500000000001
+          ],
+          [
+            -5.657500000000001,
+            7.525199999999999
+          ]
+        ],
+        "decay_eigenvalues": [
+          -40.23850553102705,
+          -17.29339446897292
+        ],
+        "positivity_eigenvalues": [
+          2.73331565225619,
+          12.05208434774381
+        ],
+        "max_decay_eigenvalue": -17.29339446897292,
+        "min_positivity_eigenvalue": 2.73331565225619
+      },
+      {
+        "j1": 2,
+        "j2": 2,
+        "Atilde": [
+          [
+            -1.0,
+            -1.0
+          ],
+          [
+            1.0,
+            -1.0
+          ]
+        ],
+        "P": [
+          [
+            7.2602,
+            0.21209999999999996
+          ],
+          [
+            0.21210000000000007,
+            10.019599999999999
+          ]
+        ],
+        "decay_eigenvalues": [
+          -21.890533997966045,
+          -12.66906600203395
+        ],
+        "positivity_eigenvalues": [
+          7.051077007970995,
+          10.228722992029004
+        ],
+        "max_decay_eigenvalue": -12.66906600203395,
+        "min_positivity_eigenvalue": 7.051077007970995
+      }
+    ],
+    "worst_decay_eigenvalue": -12.66906600203395,
+    "strict_decay_margin": 12.66906600203395,
+    "smallest_positivity_eigenvalue": 2.244081191279308,
+    "strict_positivity_margin": 2.244081191279308,
+    "new_certificate_needed": false
+  },
+  "eta0": {
+    "computed": [
+      -2.5,
+      -13.25
+    ],
+    "printed": [
+      -2.5,
+      -13.5
+    ],
+    "residual": 0.25
+  },
+  "integration": {
+    "dt": 0.0002,
+    "t_final": 5.0,
+    "original_integrated": true,
+    "transformed_integrated_independently": true,
+    "image_is_pointwise_map": true,
+    "interpolation_used": false,
+    "first_separation_time": 0.046200000000000005,
+    "max_separation": 5.531927068736832,
+    "first_one_active_segment": [
+      0.046200000000000005,
+      0.17400000000000002
+    ],
+    "mapped_segment_endpoints": [
+      [
+        0.0,
+        -8.367174347566309
+      ],
+      [
+        0.0,
+        -2.331043997031523
+      ]
+    ],
+    "mapped_segment_norms": [
+      8.367174347566309,
+      2.331043997031523
+    ]
+  },
+  "branch_consistency": {
+    "points_checked": 39,
+    "max_chain_rule_residual": 0.0
+  },
+  "boundaries": {
+    "active_distance_tie_selects_objective_1": true,
+    "transformed_axis_rule": "nonpositive selects objective 1",
+    "inverse_on_axes": "not returned because preimage is non-unique"
+  }
+}

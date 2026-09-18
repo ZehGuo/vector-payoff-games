@@ -1,0 +1,48 @@
+{
+  "task": "X1",
+  "date": "2026-09-18",
+  "command": "/Applications/MATLAB_R2025b.app/bin/matlab -batch \"addpath('experiments'); report=run_x1_transformation_stability; assert(report.certificate.passes && report.imageVPositiveSteps==0 && report.independentVPositiveSteps==0);\"",
+  "matlab": {
+    "version": "R2025b Update 7",
+    "release_number": "25.2.0.3360999",
+    "architecture": "maci64",
+    "exit_code": 0
+  },
+  "solver": {
+    "method": "fixed-step classical RK4",
+    "dt": 0.001,
+    "t_final": 5.0,
+    "original_and_transformed_integrated_separately": true,
+    "interpolation_used_as_transformed_solution": false
+  },
+  "checks": {
+    "certificate_passed_before_integration": true,
+    "branch_points_checked": 3505,
+    "branch_chain_rule_max_residual": 0.0,
+    "full_active_grid_points_outside_assumed_sign_map": 1876,
+    "tie_rule_passed": true,
+    "axis_lyapunov_continuity_jump": 0.0,
+    "image_V_positive_steps_above_1e-8": 0,
+    "independent_V_positive_steps_above_1e-8": 0
+  },
+  "results": {
+    "eta0_computed": [-2.5, -13.25],
+    "eta0_printed": [-2.5, -13.5],
+    "first_separation_time": 0.047,
+    "max_separation": 5.52670244815,
+    "first_one_active_segment": [0.047, 0.174],
+    "segment_branch": [0, 1],
+    "segment_image_endpoints": [[0.0, -8.30050405306], [0.0, -2.33104401505]],
+    "strict_decay_margin": 12.66906600203395,
+    "strict_positivity_margin": 2.244081191279308,
+    "new_certificate_needed": false
+  },
+  "sha256": {
+    "entry": "35fef4135dd0a55e21eac26b9714050cc954de30bccde5b6265ef80f20785cac",
+    "independent_checker": "119aae5784fcf136d2a2c699fd1af33799c0092b75cd8bdb9ab2538ea3b16329",
+    "domain_map_png": "846e07a7e574cf1e1a7e85e6ab4ce50252703e0e79d7304008a37c31fee42c91",
+    "report_mat": "604b30f5b317d0460c442f3de91f336b8658ab570e33e67ea2b2173249fd74cc",
+    "trajectories_csv": "5d5194d82b337b3be4464840832bce14bed6330efef0d7da69c1664a061a0101",
+    "trajectories_lyapunov_png": "31c6306bf1285427818cd467779e1d48ab5850c3b187db8cc1a958bcd6ae38d1"
+  }
+}
