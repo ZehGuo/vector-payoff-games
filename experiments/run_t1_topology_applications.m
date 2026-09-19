@@ -1,4 +1,4 @@
-function report = run_t1_topology_applications(outputDir,auditFigureDir)
+function report = run_t1_topology_applications(outputDir,auditFigureDir,assetDir)
 %RUN_T1_TOPOLOGY_APPLICATIONS Rebuild Chapter 2 face maps and application entry.
 % Every weighted Nash point solves M(weight)*x+b(weight)=0. Both M and b
 % are weighted. No full payoff Hessian is fabricated from own-gradient rows.
@@ -6,8 +6,10 @@ function report = run_t1_topology_applications(outputDir,auditFigureDir)
 repoRoot=fileparts(fileparts(mfilename('fullpath')));
 if nargin<1 || isempty(outputDir), outputDir=fullfile(repoRoot,'results','t1'); end
 if nargin<2 || isempty(auditFigureDir), auditFigureDir=fullfile(repoRoot,'audit','implementation','figures'); end
+if nargin<3, assetDir=''; end
 if ~exist(outputDir,'dir'), mkdir(outputDir); end
 if ~exist(auditFigureDir,'dir'), mkdir(auditFigureDir); end
+if ~isempty(assetDir) && ~exist(assetDir,'dir'), mkdir(assetDir); end
 configDir=fullfile(repoRoot,'experiments','configs'); addpath(configDir);
 cleanupPath=onCleanup(@()rmpath(configDir));
 p=t1_topology_parameters();
@@ -25,6 +27,12 @@ plotCube(p.cube,cube,fullfile(auditFigureDir,'T1_cube_face_correspondence.png'))
 plotPrism(p.prism,prism,fullfile(auditFigureDir,'T1_prism_face_correspondence.png'));
 plotApplication(application,fullfile(auditFigureDir,'T1_production_pollution.png'));
 plotNonlinearSchematic(fullfile(auditFigureDir,'T1_nonquadratic_schematic.png'));
+if ~isempty(assetDir)
+    plotCorrespondenceCard('cube',fullfile(assetDir,'T1_cube_correspondence_card.png'));
+    plotCorrespondenceCard('prism',fullfile(assetDir,'T1_prism_correspondence_card.png'));
+    plotApplication(application,fullfile(assetDir,'T1_production_pollution_card.png'));
+    plotNonlinearSchematic(fullfile(assetDir,'T1_nonquadratic_schematic_card.png'));
+end
 writeFaceCsv(fullfile(outputDir,'t1_face_correspondence.csv'));
 writeFeatureCsv(fullfile(outputDir,'t1_vertex_correspondence.csv'), ...
     fullfile(outputDir,'t1_edge_correspondence.csv'),cube,prism);
@@ -144,11 +152,22 @@ end
 function plotCube(c,out,path)
 colors=faceColors(); names={'F1 w_1=0','F2 w_1=1','F3 w_2=0','F4 w_2=1','F5 w_3=0','F6 w_3=1'};
 fig=figure('Color','w','Position',[70,70,1500,720]);tl=tiledlayout(1,2,'Padding','compact','TileSpacing','compact');
-ax1=nexttile(tl); hold(ax1,'on'); drawCubeFaces(ax1,@(z)z,colors); drawFeatures(ax1,out.verticesWeight,out.edges,'C');
+ax1=nexttile(tl); hold(ax1,'on'); drawCubeFaces(ax1,@(z)z,colors); drawFeatures(ax1,out.verticesWeight,out.edges,'C'); labelCubeFaces(ax1,@(z)z);
 axis(ax1,'equal');grid(ax1,'on');view(ax1,34,24);xlabel(ax1,'w_1');ylabel(ax1,'w_2');zlabel(ax1,'w_3');title(ax1,'weight domain Delta^1 x Delta^1 x Delta^1');
-ax2=nexttile(tl);hold(ax2,'on');drawCubeFaces(ax2,@(z)cubePoint(c,z),colors);drawFeatures(ax2,out.verticesState,out.edges,'C');
+ax2=nexttile(tl);hold(ax2,'on');drawCubeFaces(ax2,@(z)cubePoint(c,z),colors);drawFeatures(ax2,out.verticesState,out.edges,'C');labelCubeFaces(ax2,@(z)cubePoint(c,z));
 axis(ax2,'equal');grid(ax2,'on');view(ax2,34,24);xlabel(ax2,'x^1');ylabel(ax2,'x^2');zlabel(ax2,'x^3');title(ax2,'weighted Nash image X*(J)');
-addFaceLegend(ax2,colors,names);title(tl,'T1 cube: all six faces, edges, and vertices correspond (paper parameters)');exportgraphics(fig,path,'Resolution',180);close(fig);
+addFaceLegend(ax2,colors,names);title(tl,'Cube face and vertex correspondence (paper parameters)');
+annotation(fig,'textbox',[.405,.01,.19,.07],'String',{'weight w  ->  solve','M(w)x+b(w)=0  ->  x*(w)'}, ...
+    'HorizontalAlignment','center','VerticalAlignment','middle','FontWeight','bold','EdgeColor',[.25,.25,.25],'BackgroundColor','w');
+exportgraphics(fig,path,'Resolution',180);close(fig);
+end
+
+function labelCubeFaces(ax,map)
+centers=[0,.5,.5;1,.5,.5;.5,0,.5;.5,1,.5;.5,.5,0;.5,.5,1];
+for k=1:6
+    x=map(centers(k,:)); text(ax,x(1),x(2),x(3),sprintf(' F%d',k), ...
+        'FontSize',9,'FontWeight','bold','Color',[.08,.08,.08],'BackgroundColor','w','Margin',1);
+end
 end
 
 function drawCubeFaces(ax,map,colors)
@@ -166,11 +185,22 @@ end
 function plotPrism(p,out,path)
 colors=faceColors(); names={'P1 q=0','P2 q=1','P3 lambda_1=0','P4 lambda_2=0','P5 lambda_3=0'};
 fig=figure('Color','w','Position',[70,70,1500,720]);tl=tiledlayout(1,2,'Padding','compact','TileSpacing','compact');
-ax1=nexttile(tl);hold(ax1,'on');drawPrismFaces(ax1,@(z)z,colors);drawFeatures(ax1,out.verticesWeight,out.edges,'P');
+ax1=nexttile(tl);hold(ax1,'on');drawPrismFaces(ax1,@(z)z,colors);drawFeatures(ax1,out.verticesWeight,out.edges,'P');labelPrismFaces(ax1,@(z)z);
 axis(ax1,'equal');grid(ax1,'on');view(ax1,35,23);xlabel(ax1,'lambda_1');ylabel(ax1,'lambda_2');zlabel(ax1,'q');title(ax1,'weight domain Delta^2 x Delta^1');
-ax2=nexttile(tl);hold(ax2,'on');drawPrismFaces(ax2,@(z)prismPoint(p,z),colors);drawFeatures(ax2,out.verticesState,out.edges,'P');
+ax2=nexttile(tl);hold(ax2,'on');drawPrismFaces(ax2,@(z)prismPoint(p,z),colors);drawFeatures(ax2,out.verticesState,out.edges,'P');labelPrismFaces(ax2,@(z)prismPoint(p,z));
 axis(ax2,'equal');grid(ax2,'on');view(ax2,35,23);xlabel(ax2,'x_1^1');ylabel(ax2,'x_2^1');zlabel(ax2,'x^2');title(ax2,'weighted Nash image X*(J)');
-addFaceLegend(ax2,colors(1:5,:),names);title(tl,'T1 triangular prism: all five faces, nine edges, and six vertices correspond');exportgraphics(fig,path,'Resolution',180);close(fig);
+addFaceLegend(ax2,colors(1:5,:),names);title(tl,'Triangular-prism face and vertex correspondence');
+annotation(fig,'textbox',[.405,.01,.19,.07],'String',{'weight (lambda,q)  ->  solve','M(w)x+b(w)=0  ->  x*(w)'}, ...
+    'HorizontalAlignment','center','VerticalAlignment','middle','FontWeight','bold','EdgeColor',[.25,.25,.25],'BackgroundColor','w');
+exportgraphics(fig,path,'Resolution',180);close(fig);
+end
+
+function labelPrismFaces(ax,map)
+centers=[1/3,1/3,0;1/3,1/3,1;0,.5,.5;.5,0,.5;.5,.5,.5];
+for k=1:5
+    x=map(centers(k,:)); text(ax,x(1),x(2),x(3),sprintf(' P%d',k), ...
+        'FontSize',9,'FontWeight','bold','Color',[.08,.08,.08],'BackgroundColor','w','Margin',1);
+end
 end
 
 function drawPrismFaces(ax,map,colors)
@@ -207,11 +237,12 @@ end
 function plotApplication(a,path)
 fig=figure('Color','w','Position',[80,80,1120,820]);ax=axes(fig);hold(ax,'on');
 surf(ax,a.x1,a.x2,zeros(size(a.x1)),'FaceColor',[.55,.2,.7],'FaceAlpha',.5,'EdgeColor','none');view(ax,2);
-x=linspace(0,20,400);plot(ax,x,(100-14*x)/2,'r-','LineWidth',1.8);plot(ax,zeros(size(x)),x,'r--','LineWidth',1.8);
-plot(ax,(100-12*x)/2,x,'Color',[0,.55,.85],'LineWidth',1.8);plot(ax,x,zeros(size(x)),'--','Color',[0,.55,.85],'LineWidth',1.8);
-xlim(ax,[0,20]);ylim(ax,[0,20]);axis(ax,'square');grid(ax,'on');xlabel(ax,'x^1 production');ylabel(ax,'x^2 production');
-title(ax,{'Example 2.11: production and pollution-control game','purple = weighted Nash image (not a centralized social Pareto set)'});
-legend(ax,{'weighted Nash image','BR profit, agent 1','BR environment, agent 1','BR profit, agent 2','BR environment, agent 2'},'Location','northeast');
+x=linspace(0,20,400);plot(ax,x,(100-14*x)/2,'-','Color',[.80,.13,.18],'LineWidth',2.0);plot(ax,zeros(size(x)),x,'--','Color',[.80,.13,.18],'LineWidth',2.0);
+plot(ax,(100-12*x)/2,x,'-.','Color',[0,.40,.72],'LineWidth',2.0);plot(ax,x,zeros(size(x)),':','Color',[0,.40,.72],'LineWidth',2.4);
+xlim(ax,[0,20]);ylim(ax,[0,20]);axis(ax,'square');grid(ax,'on');xlabel(ax,'agent 1 production x^1 (dimensionless model units)');ylabel(ax,'agent 2 production x^2 (dimensionless model units)');
+title(ax,'Production-pollution: decentralized weighted Nash image');
+text(ax,.03,.96,'Not a centralized social Pareto set','Units','normalized','FontWeight','bold','Color',[.36,.08,.45],'BackgroundColor','w','Margin',3);
+legend(ax,{'weighted Nash image','best response (BR): profit, agent 1','best response (BR): environment, agent 1','best response (BR): profit, agent 2','best response (BR): environment, agent 2'},'Location','northeast');
 exportgraphics(fig,path,'Resolution',180);close(fig);
 end
 
@@ -222,10 +253,40 @@ t=linspace(-1.35,1.35,300);left=-1.15+.22*t.^2;right=.65+.34*t.^2;lower=-.85+.36
 mask=X>=(-1.15+.22*Y.^2) & X<=(.65+.34*Y.^2) & ...
      Y>=(-.85+.36*X.^2) & Y<=(.9-.30*X.^2);
 contourf(ax,X,Y,double(mask),[.5,.5],'FaceColor',[.55,.2,.7],'FaceAlpha',.28,'LineStyle','none');
-plot(ax,left,t,'r-','LineWidth',2);plot(ax,right,t,'r-','LineWidth',2);plot(ax,t,lower,'Color',[0,.55,.85],'LineWidth',2);plot(ax,t,upper,'Color',[0,.55,.85],'LineWidth',2);
-axis(ax,'equal');xlim(ax,[-1.5,1.45]);ylim(ax,[-1.5,1.5]);axis(ax,'off');title(ax,{'Nonquadratic Nash geometry - schematic only','no source functions or numerical parameters are asserted'});
-text(ax,-1.25,-1.58,'Concept: nonlinear own-gradient zero sets can bound a curved weighted Nash image','FontSize',10);
+plot(ax,left,t,'-','Color',[.80,.13,.18],'LineWidth',2);plot(ax,right,t,'--','Color',[.80,.13,.18],'LineWidth',2);plot(ax,t,lower,'-.','Color',[0,.40,.72],'LineWidth',2);plot(ax,t,upper,':','Color',[0,.40,.72],'LineWidth',2.4);
+axis(ax,'equal');xlim(ax,[-1.5,1.45]);ylim(ax,[-1.5,1.5]);axis(ax,'off');title(ax,'Schematic nonquadratic Nash geometry');
+text(ax,.03,.96,'SCHEMATIC ONLY','Units','normalized','FontWeight','bold','Color',[.36,.08,.45]);
+text(ax,-1.25,-1.58,'Curved own-gradient zero sets can bound a weighted Nash image','FontSize',10);
 exportgraphics(fig,path,'Resolution',180);close(fig);
+end
+
+function plotCorrespondenceCard(kind,path)
+if strcmp(kind,'cube')
+    faceRows={'F1/F2: w_1=0/1','F3/F4: w_2=0/1','F5/F6: w_3=0/1'};
+    vertexText='C1-C8: identical labels on weight and Nash vertices';
+    heading='Cube correspondence key';
+else
+    faceRows={'P1/P2: q=0/1','P3: lambda_1=0','P4: lambda_2=0','P5: lambda_3=0'};
+    vertexText='P1-P6: identical labels on weight and Nash vertices';
+    heading='Triangular-prism correspondence key';
+end
+fig=figure('Color','w','Visible','off','Position',[60,60,760,760]);ax=axes(fig);hold(ax,'on');axis(ax,'off');
+xlim(ax,[0,1]);ylim(ax,[0,1]);
+text(ax,.5,.94,heading,'HorizontalAlignment','center','FontSize',18,'FontWeight','bold');
+text(ax,.18,.82,'weight domain','HorizontalAlignment','center','FontSize',13,'FontWeight','bold');
+text(ax,.82,.82,'weighted Nash image','HorizontalAlignment','center','FontSize',13,'FontWeight','bold');
+text(ax,.50,.82,'->','HorizontalAlignment','center','FontSize',24,'FontWeight','bold');
+text(ax,.50,.74,{'same face ID','same vertex ID'},'HorizontalAlignment','center','FontSize',12,'Color',[.25,.25,.25]);
+if numel(faceRows)==3, y=.61; step=.12; boxHeight=.09; else, y=.61; step=.095; boxHeight=.072; end
+for k=1:numel(faceRows)
+    rectangle(ax,'Position',[.08,y-boxHeight/2,.84,boxHeight],'Curvature',.08,'FaceColor',[.94,.94,.98],'EdgeColor',[.45,.35,.55]);
+    text(ax,.5,y,faceRows{k},'HorizontalAlignment','center','FontSize',13,'FontWeight','bold'); y=y-step;
+end
+rectangle(ax,'Position',[.08,.10,.84,.115],'Curvature',.08,'FaceColor',[.90,.96,.93],'EdgeColor',[.25,.55,.35]);
+text(ax,.5,.158,vertexText,'HorizontalAlignment','center','FontSize',11,'FontWeight','bold');
+text(ax,.5,.035,'Global one-to-one correspondence uses the paper theorem conditions; finite samples are diagnostics.', ...
+    'HorizontalAlignment','center','FontSize',9,'Color',[.25,.25,.25]);
+exportgraphics(fig,path,'Resolution',150);close(fig);
 end
 
 function writeFaceCsv(path)

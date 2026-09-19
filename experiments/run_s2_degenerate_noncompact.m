@@ -1,4 +1,4 @@
-function report = run_s2_degenerate_noncompact(outputDir)
+function report = run_s2_degenerate_noncompact(outputDir,assetDir)
 %RUN_S2_DEGENERATE_NONCOMPACT Reconstruct thesis Fig. 3.6/3.7 case content.
 %
 % This is a new, explicitly documented construction.  It does not claim that
@@ -11,7 +11,9 @@ if nargin < 1 || isempty(outputDir)
     repoRoot = fileparts(fileparts(mfilename('fullpath')));
     outputDir = fullfile(repoRoot,'results','s2');
 end
+if nargin<2, assetDir=''; end
 if ~exist(outputDir,'dir'), mkdir(outputDir); end
+if ~isempty(assetDir) && ~exist(assetDir,'dir'), mkdir(assetDir); end
 
 degenerate = defineDegenerateCases();
 noncompact = defineNoncompactCases();
@@ -24,6 +26,13 @@ writeNoncompactSummary(fullfile(outputDir,'s2_noncompact_summary.csv'),noncompac
 writeTrajectories(fullfile(outputDir,'s2_trajectory_summary.csv'),degenerate,noncompact);
 plotDegenerate(degenerate,report.degenerate,fullfile(outputDir,'S2_rank_degenerate_five_cases.png'));
 plotNoncompact(noncompact,report.noncompact,fullfile(outputDir,'S2_noncompact_three_configurations.png'));
+if ~isempty(assetDir)
+    plotRankCard(degenerate(2),report.degenerate(2),fullfile(assetDir,'S2_rank_degenerate_stable_card.png'));
+    plotRankCard(degenerate(5),report.degenerate(5),fullfile(assetDir,'S2_rank_degenerate_unstable_card.png'));
+    for k=1:3
+        plotNoncompactCard(noncompact(k),report.noncompact(k),fullfile(assetDir,sprintf('S2_noncompact_%s_card.png',noncompact(k).id)));
+    end
+end
 save(fullfile(outputDir,'s2_report.mat'),'degenerate','noncompact','report');
 
 fprintf('S2 outputs written to %s\n',outputDir);
@@ -202,18 +211,26 @@ for k=1:5
     for s=1:size(starts,1)
         [~,tr]=simulate(games(k),starts(s,:)',5,0.015);
         color=[0.1,0.1,0.1]; width=1.0;
-        if k==5 && s==1, color=[0.88,0.05,0.05]; width=2.3; end
-        plot(ax,tr(:,1),tr(:,2),'-','Color',color,'LineWidth',width);
+        style='-'; marker='none';
+        if k==5 && s==1, color=[.72,.08,.55]; width=2.5; style='--'; marker='>'; end
+        plot(ax,tr(:,1),tr(:,2),style,'Color',color,'LineWidth',width,'Marker',marker,'MarkerIndices',round(linspace(1,size(tr,1),min(5,size(tr,1)))));
         plot(ax,tr(1,1),tr(1,2),'o','Color',color,'MarkerFaceColor',color,'MarkerSize',3);
+        addTrajectoryArrow(ax,tr,color,.58);
     end
     plot(ax,0,0,'kp','MarkerFaceColor',[1,.75,.1],'MarkerSize',9);
-    title(ax,sprintf('Case %d: %s',k,games(k).label),'Interpreter','none');
+    title(ax,sprintf('D%d: %s',k,ternary(games(k).expectedStable,'stable','unstable')),'Interpreter','none');
+    if games(k).expectedStable
+        criterion='all det>0 -> stable (Thm. 3.11)';
+    else
+        criterion='all det<0 -> unstable (Thm. 3.11)';
+    end
+    text(ax,.02,.97,criterion,'Units','normalized','VerticalAlignment','top','FontSize',8,'FontWeight','bold','BackgroundColor','w','Margin',2);
     xlabel(ax,'x^1'); ylabel(ax,'x^2');
 end
 ax=subplot(2,3,6,'Parent',fig); axis(ax,'off');
-text(ax,0,.95,{'S2 rank-degenerate construction','red/blue: agent 1/2 BRs','purple: X*(J) in the shown window', ...
-    'gold marker: rank-zero Nash pinch','black: representative trajectories','red: unstable representative', ...
-    'Case identity: determinant signs + Theorem 3.11.','The finite window is not a compactness proof.'}, ...
+text(ax,0,.95,{'NEW CONSTRUCTION under Assumption 4','orange solid/dashed: agent 1 BRs','blue dash-dot/dotted: agent 2 BRs','purple fill: X*(J) in the shown window', ...
+    'gold star: rank-zero Nash pinch','black + arrows: representative trajectories','magenta dashed + triangles: unstable witness', ...
+    'Identity: determinant signs + Theorem 3.11.','Trajectories and the finite window illustrate only.'}, ...
     'VerticalAlignment','top','FontSize',11);
 exportPng(fig,path); close(fig);
 end
@@ -226,15 +243,19 @@ for k=1:3
     starts=representativeStarts(games(k),'noncompact');
     for s=1:size(starts,1)
         [~,tr]=simulate(games(k),starts(s,:)',7,0.015);
-        plot(ax,tr(:,1),tr(:,2),'k-','LineWidth',1.05);
+        plot(ax,tr(:,1),tr(:,2),'--','Color',[.18,.18,.18],'LineWidth',1.05);
         plot(ax,tr(1,1),tr(1,2),'ko','MarkerFaceColor','k','MarkerSize',3);
+        addTrajectoryArrow(ax,tr,[.18,.18,.18],.55);
     end
     dets=reshape([reports(k).branches.det],1,[]);
-    title(ax,{sprintf('%s: %s',games(k).id,games(k).label), ...
-        sprintf('mixed det [%s]',strjoin(compose('%.2f',dets),', '))},'Interpreter','none');
+    title(ax,sprintf('%s: %s',games(k).id,games(k).label),'Interpreter','none');
     xlabel(ax,'x^1'); ylabel(ax,'x^2');
-    text(ax,.02,.02,'noncompact by Prop. 3.1 (mixed signs)','Units','normalized', ...
-        'FontSize',9,'BackgroundColor','w','Margin',2);
+    text(ax,.02,.98,{sprintf('ANALYTIC CERTIFICATE: mixed det [%s]',strjoin(compose('%.2f',dets),', ')), ...
+        '=> X*(J) noncompact (Proposition 3.1)'},'Units','normalized','VerticalAlignment','top', ...
+        'FontSize',8,'FontWeight','bold','BackgroundColor','w','Margin',2);
+    drawRecessionArrows(ax,games(k));
+    text(ax,.02,.02,'Dashed trajectories and finite window: illustration only','Units','normalized', ...
+        'FontSize',8,'BackgroundColor','w','Margin',2);
 end
 exportPng(fig,path); close(fig);
 end
@@ -252,13 +273,64 @@ end
 quiver(ax,Xq,Yq,U,V,.42,'Color',[.65,.69,.76],'LineWidth',.55);
 xx=linspace(window(1),window(2),500);
 for j=1:2
-    plot(ax,xx,(xx-game.c(j))/game.p(j),'Color',[.85,.15+.18*(j-1),.18],'LineWidth',1.35);
-    plot(ax,xx,game.q(j)*xx+game.d(j),'Color',[.10,.33+.19*(j-1),.85],'LineWidth',1.35);
+    styles1={'-','--'}; styles2={'-.',':'};
+    plot(ax,xx,(xx-game.c(j))/game.p(j),styles1{j},'Color',[.86,.38,.08],'LineWidth',1.55);
+    plot(ax,xx,game.q(j)*xx+game.d(j),styles2{j},'Color',[.08,.38,.72],'LineWidth',1.65);
 end
 end
 
+function addTrajectoryArrow(ax,tr,color,fraction)
+if size(tr,1)<3, return; end
+i=max(1,min(size(tr,1)-1,round(fraction*(size(tr,1)-1))));d=tr(i+1,:)-tr(i,:);
+if norm(d)>1e-12,quiver(ax,tr(i,1),tr(i,2),d(1),d(2),0,'Color',color,'LineWidth',1.2,'MaxHeadSize',1.8);end
+end
+
+function drawRecessionArrows(ax,game)
+theta=linspace(0,2*pi,7201);theta(end)=[];chosen=[];
+for k=1:numel(theta)
+    v=[cos(theta(k));sin(theta(k))];a=-v(1)+game.p*v(2);b=game.q*v(1)-v(2);
+    if a(1)*a(2)<=1e-12 && b(1)*b(2)<=1e-12,chosen=v;break;end
+end
+if isempty(chosen),return;end
+w=game.window;span=.18*min(w(2)-w(1),w(4)-w(3));origin=.15*span*chosen;
+quiver(ax,origin(1),origin(2),span*chosen(1),span*chosen(2),0,'Color',[.35,.05,.55],'LineWidth',3,'MaxHeadSize',.5);
+quiver(ax,-origin(1),-origin(2),-span*chosen(1),-span*chosen(2),0,'Color',[.35,.05,.55],'LineWidth',3,'MaxHeadSize',.5);
+text(ax,.53,.10,'recession direction','Units','normalized','Color',[.35,.05,.55],'FontWeight','bold','BackgroundColor','w','Margin',2);
+end
+
+function plotRankCard(game,report,path)
+fig=figure('Color','w','Visible','off','Position',[60,60,720,760]);ax=axes(fig);hold(ax,'on');box(ax,'on');grid(ax,'on');axis(ax,'equal');
+pts=[report.corners,report.otherSameAgentIntersection,[0;0]];lo=min(pts,[],2)-1.5;hi=max(pts,[],2)+1.5;
+drawFieldAndNash(ax,game,[lo(1),hi(1),lo(2),hi(2)]);plot(ax,0,0,'kp','MarkerFaceColor',[1,.75,.1],'MarkerSize',11);
+starts=representativeStarts(game,'degenerate');[~,tr]=simulate(game,starts(1,:)',5,.015);
+if game.expectedStable,color=[.08,.08,.08];style='-';criterion='STABLE: all det(A)>0 (Theorem 3.11)';else,color=[.72,.08,.55];style='--';criterion='UNSTABLE: all det(A)<0 (Theorem 3.11)';end
+plot(ax,tr(:,1),tr(:,2),style,'Color',color,'LineWidth',2.2,'Marker','>','MarkerIndices',round(linspace(1,size(tr,1),min(5,size(tr,1)))));addTrajectoryArrow(ax,tr,color,.58);
+title(ax,sprintf('%s: rank-degenerate new construction',game.id));xlabel(ax,'x^1');ylabel(ax,'x^2');
+text(ax,.03,.97,{'Assumption 4: rank-zero Nash pinch at gold star',criterion},'Units','normalized','VerticalAlignment','top','FontWeight','bold','BackgroundColor','w','Margin',3);
+text(ax,.03,.03,'Trajectory is illustrative; determinant signs and theorem assumptions certify the case.','Units','normalized','FontSize',9,'BackgroundColor','w','Margin',2);
+exportPng(fig,path);close(fig);
+end
+
+function plotNoncompactCard(game,report,path)
+fig=figure('Color','w','Visible','off','Position',[60,60,720,760]);ax=axes(fig);hold(ax,'on');box(ax,'on');grid(ax,'on');axis(ax,'equal');
+drawFieldAndNash(ax,game,game.window);drawRecessionArrows(ax,game);dets=reshape([report.branches.det],1,[]);
+title(ax,sprintf('%s: noncompact Nash geometry',game.id));xlabel(ax,'x^1');ylabel(ax,'x^2');
+text(ax,.03,.97,{sprintf('Mixed det [%s]',strjoin(compose('%.2f',dets),', ')),'=> noncompact by Proposition 3.1'}, ...
+    'Units','normalized','VerticalAlignment','top','FontWeight','bold','BackgroundColor','w','Margin',3);
+text(ax,.03,.03,'Recession arrow is geometric guidance; the finite window is not the proof.','Units','normalized','FontSize',9,'BackgroundColor','w','Margin',2);
+exportPng(fig,path);close(fig);
+end
+
+function value=ternary(condition,a,b)
+if condition,value=a;else,value=b;end
+end
+
 function exportPng(fig,path)
-try, exportgraphics(fig,path,'Resolution',160); catch, print(fig,path,'-dpng','-r160'); end
+try
+    exportgraphics(fig,path,'Resolution',160);
+catch
+    print(fig,path,'-dpng','-r160');
+end
 end
 
 function writeCaseSummary(path,games,reports)
@@ -276,11 +348,15 @@ end
 function writeBranchDiagnostics(path,games,reports)
 fid=fopen(path,'w'); cleaner=onCleanup(@() fclose(fid));
 fprintf(fid,'case,j1,j2,a11,a12,a21,a22,det,eig1_real,eig1_imag,eig2_real,eig2_imag,corner_x1,corner_x2\n');
-for k=1:numel(games), for j1=1:2, for j2=1:2
-    b=reports(k).branches(j1,j2); ev=b.eigenvalues;
-    fprintf(fid,'%d,%d,%d,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g\n', ...
-        k,j1,j2,b.A(1,1),b.A(1,2),b.A(2,1),b.A(2,2),b.det,real(ev(1)),imag(ev(1)),real(ev(2)),imag(ev(2)),reports(k).corners(:,2*(j1-1)+j2));
-end, end, end
+for k=1:numel(games)
+    for j1=1:2
+        for j2=1:2
+            b=reports(k).branches(j1,j2); ev=b.eigenvalues;
+            fprintf(fid,'%d,%d,%d,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g\n', ...
+                k,j1,j2,b.A(1,1),b.A(1,2),b.A(2,1),b.A(2,2),b.det,real(ev(1)),imag(ev(1)),real(ev(2)),imag(ev(2)),reports(k).corners(:,2*(j1-1)+j2));
+        end
+    end
+end
 end
 
 function writeNoncompactSummary(path,games,reports)

@@ -1,4 +1,4 @@
-function report = run_s1_five_cases(outputDir)
+function report = run_s1_five_cases(outputDir,assetDir)
 %RUN_S1_FIVE_CASES Rebuild the five two-agent stability cases from T Remark 3.9.
 %
 %   REPORT = RUN_S1_FIVE_CASES() constructs four stable slope configurations
@@ -15,9 +15,11 @@ if nargin < 1 || isempty(outputDir)
     repoRoot = fileparts(fileparts(mfilename('fullpath')));
     outputDir = fullfile(repoRoot, 'results', 's1');
 end
+if nargin < 2, assetDir = ''; end
 if ~exist(outputDir, 'dir')
     mkdir(outputDir);
 end
+if ~isempty(assetDir) && ~exist(assetDir,'dir'), mkdir(assetDir); end
 
 cases = defineCases();
 report = diagnoseCase(cases(1));
@@ -32,6 +34,10 @@ writeBranchDiagnostics(fullfile(outputDir, 's1_branch_diagnostics.csv'), cases, 
 plotOverview(cases, report, fullfile(outputDir, 's1_five_case_overview.png'));
 plotTransitionExplanation(cases, report, ...
     fullfile(outputDir, 's1_eigenvectors_and_transitions.png'));
+if ~isempty(assetDir)
+    plotPublicCaseCard(cases(2),report(2),2,fullfile(assetDir,'S1_stable_case_card.png'));
+    plotPublicCaseCard(cases(5),report(5),5,fullfile(assetDir,'S1_unstable_case_card.png'));
+end
 save(fullfile(outputDir, 's1_report.mat'), 'cases', 'report');
 
 fprintf('S1 outputs written to %s\n', outputDir);
@@ -62,13 +68,14 @@ orders = {
     };
 labels = {'stable-CW', 'stable-real', 'stable-CCW', ...
     'stable-mixed', 'unstable-saddle'};
+cases = repmat(struct(),1,5);
 
 for k = 1:5
     s1 = slopes{k,1};
     s2 = slopes{k,2};
     c1 = p1(1) - s1*p1(2);
     c2 = p2(2) - s2*p2(1);
-    cases(k).id = k; %#ok<AGROW>
+    cases(k).id = k;
     cases(k).label = labels{k};
     cases(k).expectedStable = k < 5;
     cases(k).slopeOrder = orders{k};
@@ -321,11 +328,12 @@ for k = 1:5
     patch(ax,vertices(1,ord),vertices(2,ord),[0.65,0.42,0.72], ...
         'FaceAlpha',0.38,'EdgeColor',[0.42,0.19,0.48],'LineWidth',1.2);
     xx = linspace(lo(1),hi(1),300);
+    agent1Styles={'-','--'}; agent2Styles={'-.',':'};
     for j = 1:2
         yy1 = (xx-cases(k).c1(j))/cases(k).s1(j);
-        plot(ax,xx,yy1,'Color',[0.82,0.20+0.18*(j-1),0.20],'LineWidth',1.25);
+        plot(ax,xx,yy1,agent1Styles{j},'Color',[.86,.38,.08],'LineWidth',1.45);
         yy2 = cases(k).s2(j)*xx+cases(k).c2(j);
-        plot(ax,xx,yy2,'Color',[0.15,0.36+0.18*(j-1),0.82],'LineWidth',1.25);
+        plot(ax,xx,yy2,agent2Styles{j},'Color',[0.08,.38,.72],'LineWidth',1.55);
     end
     center = mean(vertices,2);
     radius = max(vecnorm(vertices-center,2,1))+0.75;
@@ -335,6 +343,7 @@ for k = 1:5
         [~,traj] = simulateFixedStep(cases(k),x0,4,0.03);
         plot(ax,traj(:,1),traj(:,2),'k-','LineWidth',0.9);
         plot(ax,traj(1,1),traj(1,2),'ko','MarkerSize',2.5,'MarkerFaceColor','k');
+        addTrajectoryArrow(ax,traj,[.08,.08,.08],.55);
     end
     if k == 5
         b = report(k).branches(1,2);
@@ -344,15 +353,22 @@ for k = 1:5
         if branchAt(cases(k),xStar+1e-4*v) ~= 12, v=-v; end
         x0 = xStar+0.06*v/norm(v);
         [~,traj] = simulateFixedStep(cases(k),x0,2.2,0.015);
-        plot(ax,traj(:,1),traj(:,2),'-','Color',[0.85,0.05,0.05],'LineWidth',2.4);
+        plot(ax,traj(:,1),traj(:,2),'--','Color',[.72,.08,.55],'LineWidth',2.6,'Marker','>','MarkerIndices',round(linspace(1,size(traj,1),5)),'MarkerSize',4);
+        addTrajectoryArrow(ax,traj,[.72,.08,.55],.75);
     end
-    title(ax,sprintf('Case %d: %s',k,cases(k).label),'Interpreter','none');
+    title(ax,sprintf('Case %d: %s',k,ternary(k<5,'stable','unstable')),'Interpreter','none');
+    if k<5
+        criterion='all det(A)>0; every branch Hurwitz';
+    else
+        criterion='all det(A)<0; active +lambda eigenray';
+    end
+    text(ax,.02,.97,criterion,'Units','normalized','VerticalAlignment','top','FontSize',8,'FontWeight','bold','BackgroundColor','w','Margin',2);
     xlabel(ax,'x^1'); ylabel(ax,'x^2');
 end
 ax = subplot(2,3,6,'Parent',fig); axis(ax,'off');
-text(ax,0,0.92,{'Common construction','red: agent 1 BRs','blue: agent 2 BRs', ...
-    'purple: Nash set','black: multiple trajectories','red trajectory: positive-eigenvalue witness', ...
-    'Case identity is certified by slopes, branch matrices,','eigenstructure and active-cone transitions - not endpoints.'}, ...
+text(ax,0,0.92,{'Role key','orange solid/dashed: agent 1 best responses (BRs)','blue dash-dot/dotted: agent 2 BRs', ...
+    'purple fill: Nash set','black + arrows: representative trajectories','magenta dashed + triangles: unstable eigenray witness', ...
+    'Certification: slopes, every branch matrix, eigenstructure,','active cones, and theorem assumptions. Trajectories illustrate only.'}, ...
     'VerticalAlignment','top','FontSize',11);
 try
     exportgraphics(fig,path,'Resolution',120);
@@ -362,13 +378,13 @@ end
 close(fig);
 end
 
-function plotTransitionExplanation(cases,report,path)
+function plotTransitionExplanation(~,report,path)
 examples = [2,1,1; 2,1,2; 1,1,1; 5,1,2];
 titles = {'0-transitive: larger eigenvalue ray inside', ...
     '2-transitive: smaller eigenvalue ray separates exits', ...
     '1-transitive: complex pair, clockwise exit', ...
     'unstable: positive eigenvalue ray remains active'};
-fig = figure('Color','w','Visible','off','Position',[80,80,1300,780]);
+fig = figure('Color','w','Visible','off','Position',[80,80,1300,900]);
 for q = 1:4
     k=examples(q,1); j1=examples(q,2); j2=examples(q,3);
     b=report(k).branches(j1,j2);
@@ -402,6 +418,10 @@ for q = 1:4
         'Interpreter','none','FontSize',10);
     xlabel(ax,'x^1-x_*^1'); ylabel(ax,'x^2-x_*^2');
 end
+annotation(fig,'textbox',[.05,.005,.90,.075],'String', ...
+    {'Transition count: 0 = no cone-boundary exit; 1 = one adjacent exit; 2 = two possible exits.', ...
+     'Role key: black = active-cone boundary; gray = other eigenray; red = eigenray inside the active cone; blue arrows = local rotational flow.'}, ...
+    'HorizontalAlignment','center','VerticalAlignment','middle','FontSize',10,'EdgeColor',[.55,.55,.55],'BackgroundColor','w');
 try
     exportgraphics(fig,path,'Resolution',120);
 catch
@@ -410,8 +430,48 @@ end
 close(fig);
 end
 
+function addTrajectoryArrow(ax,traj,color,fraction)
+if size(traj,1)<3, return; end
+i=max(1,min(size(traj,1)-1,round(fraction*(size(traj,1)-1))));
+d=traj(i+1,:)-traj(i,:);
+if norm(d)>1e-12
+    quiver(ax,traj(i,1),traj(i,2),d(1),d(2),0,'Color',color,'LineWidth',1.2,'MaxHeadSize',1.8);
+end
+end
+
+function plotPublicCaseCard(game,diagOut,caseNumber,path)
+fig=figure('Color','w','Visible','off','Position',[60,60,720,760]);ax=axes(fig);hold(ax,'on');axis(ax,'equal');box(ax,'on');grid(ax,'on');
+vertices=diagOut.vertices;ord=diagOut.vertexOrder;allPoints=[vertices,game.p1,game.p2];lo=min(allPoints,[],2)-1;hi=max(allPoints,[],2)+1;
+if caseNumber==5, hi=hi+.8; end
+xlim(ax,[lo(1),hi(1)]);ylim(ax,[lo(2),hi(2)]);
+[X,Y]=meshgrid(linspace(lo(1),hi(1),13),linspace(lo(2),hi(2),13));U=zeros(size(X));V=U;
+for q=1:numel(X),f=pseudoGradient(game,[X(q);Y(q)]);z=max(norm(f),1e-12);U(q)=f(1)/z;V(q)=f(2)/z;end
+quiver(ax,X,Y,U,V,.38,'Color',[.72,.76,.82],'LineWidth',.6);
+patch(ax,vertices(1,ord),vertices(2,ord),[.65,.42,.72],'FaceAlpha',.38,'EdgeColor',[.42,.19,.48],'LineWidth',1.4);
+xx=linspace(lo(1),hi(1),300);styles1={'-','--'};styles2={'-.',':'};
+for j=1:2
+    plot(ax,xx,(xx-game.c1(j))/game.s1(j),styles1{j},'Color',[.86,.38,.08],'LineWidth',1.8);
+    plot(ax,xx,game.s2(j)*xx+game.c2(j),styles2{j},'Color',[.08,.38,.72],'LineWidth',1.8);
+end
+center=mean(vertices,2);radius=max(vecnorm(vertices-center,2,1))+.75;x0=center+radius*[1;0];[~,traj]=simulateFixedStep(game,x0,4,.03);
+plot(ax,traj(:,1),traj(:,2),'k-','LineWidth',1.5);plot(ax,traj(1,1),traj(1,2),'ko','MarkerFaceColor','k');addTrajectoryArrow(ax,traj,[.08,.08,.08],.55);
+if caseNumber==5
+    b=diagOut.branches(1,2);pos=find(real(b.eigenvalues)>0,1);v=real(b.eigenvectors(:,pos));xStar=diagOut.vertices(:,2);
+    if branchAt(game,xStar+1e-4*v)~=12,v=-v;end
+    [~,witness]=simulateFixedStep(game,xStar+.06*v/norm(v),2.2,.015);
+    plot(ax,witness(:,1),witness(:,2),'--','Color',[.72,.08,.55],'LineWidth',2.8,'Marker','>','MarkerIndices',round(linspace(1,size(witness,1),5)));
+    criterion='UNSTABLE: det(A)<0 and an active positive-eigenvalue ray';
+else
+    criterion='STABLE: det(A)>0 and all branch matrices are Hurwitz';
+end
+title(ax,sprintf('S1 Case %d',caseNumber));xlabel(ax,'x^1');ylabel(ax,'x^2');
+text(ax,.03,.97,criterion,'Units','normalized','VerticalAlignment','top','FontWeight','bold','BackgroundColor','w','Margin',3);
+text(ax,.03,.03,'Arrows show time direction; trajectories illustrate the certified case.','Units','normalized','FontSize',9,'BackgroundColor','w','Margin',2);
+exportgraphics(fig,path,'Resolution',150);close(fig);
+end
+
 function writeCaseSummary(path,cases,report)
-fid=fopen(path,'w'); cleaner=onCleanup(@()fclose(fid)); %#ok<NASGU>
+fid=fopen(path,'w'); cleaner=onCleanup(@()fclose(fid));
 fprintf(fid,['case,label,expected_stability,slope_order,s11,s12,s21,s22,' ...
     'det_min,det_max,n0,n1,n2,unstable_active_rays,saddle_other\n']);
 for k=1:5
@@ -426,8 +486,8 @@ for k=1:5
 end
 end
 
-function writeBranchDiagnostics(path,cases,report)
-fid=fopen(path,'w'); cleaner=onCleanup(@()fclose(fid)); %#ok<NASGU>
+function writeBranchDiagnostics(path,~,report)
+fid=fopen(path,'w'); cleaner=onCleanup(@()fclose(fid));
 fprintf(fid,['case,j1,j2,a11,a12,a21,a22,det,lambda1_real,lambda1_imag,' ...
     'lambda2_real,lambda2_imag,v1_x_real,v1_y_real,v2_x_real,v2_y_real,' ...
     'cone_angle_deg,eigenray_in_cone,transition,xstar1,xstar2\n']);
