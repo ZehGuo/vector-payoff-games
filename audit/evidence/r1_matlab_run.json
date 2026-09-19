@@ -1,0 +1,56 @@
+{
+  "task": "R1",
+  "date": "2026-09-19",
+  "matlab": {
+    "version": "25.2.0.3360999 (R2025b) Update 7",
+    "computer": "MACI64",
+    "executable": "/Applications/MATLAB_R2025b.app/bin/matlab",
+    "path_entry_available": false,
+    "startup_warning": "Directory access failure: /Users/lei/Documents/MATLAB",
+    "startup_warning_effect": "No effect on repository-local outputs."
+  },
+  "execution": {
+    "scientific_entry_processes": 6,
+    "assembly_processes": 1,
+    "clean_run_root": "results/r1/20260919-clean",
+    "review_pack": "results/r1/20260919-review-pack",
+    "all_processes_separate": true,
+    "all_exit_codes_zero": true,
+    "checked_figures": 18,
+    "checked_nonfigure_artifacts": 21,
+    "visual_review": "All 18 clean-session pack figures inspected; no clipped scientific comparison or visible axes toolbar."
+  },
+  "task_results": {
+    "T1": "cube/prism residual and mapping diagnostics passed; exportgraphics emitted a toolbar warning but the exported images have no visible toolbar",
+    "S1": "five cases and 20 branches regenerated; Cases 1-4 positive/Hurwitz, Case 5 negative with active positive-eigenvalue ray",
+    "S2": "five rank-degenerate and three noncompact games regenerated; determinant classifications passed",
+    "P1": "three property games and actual-rule trap regenerated; MATLAB witness t1=0.020, t2=1.820, changes [-0.313864,-0.319846]",
+    "X1": "3505 branch-consistency points, zero residual, certificate margins 12.6691 and 2.24408, first separation t=0.047",
+    "I1": "INC-0 and INC-omega complete budget maxima both zero; all declared outputs regenerated"
+  },
+  "pack_figure_sha256": {
+    "I1_INC_omega.png": "7aacf5c9bb569bea70d456a721d53544cfc518323bfd88ca03cb3b0697975c96",
+    "I1_before_after.png": "3957f2df90953f8cefbe2edf60152158ad8af51b57d29273607a9b861d773c85",
+    "I1_design_geometry.png": "1a3a0cce7ae169b0d5010327a456d49f3e32943bb4e091f8997afc0b3dafb3c8",
+    "I1_sigma_budget.png": "ef0fdd968ea4323b5304fae778e374e68e5095793d7e6a244ab35a81c208db7d",
+    "P1_rate_decomposition.png": "b3670cb142bd6c3581af2b446f0ab3d9612b0a7a65c92c7102c0a30e11c943ac",
+    "P1_three_payoff_properties.png": "1763d85aa6eff6a493bfdd2870bc1a6fae13824caa32bbba83fb5f664f02414a",
+    "P1_weak_pareto_trap.png": "8c1ea717cd36303398de15621744c6de06cb4b9e3e833adb61590c8a4d98e072",
+    "S1_eigenvectors_transitions.png": "52f402de20d8839bb23f15778313ebe4e5dabb443ba537fe78d0eb21b0ee29a0",
+    "S1_five_case_overview.png": "b2edd10cee11f835743018d28d9e768dc8f4b6276af4d6c31139b7528d66c189",
+    "S2_noncompact_three_configurations.png": "601afc3d53e2512e7a39e85682074ecf21ff979312f7bb5f13d28b3287207e1b",
+    "S2_rank_degenerate_five_cases.png": "844e28404945a9806bf513c075f87fc37206a03ed3870e8496dc82e4ed97099f",
+    "T1_cube_face_correspondence.png": "ce2263e0d541005b888d97c3cc625ce40a63d62173acf4cc42216998876454c9",
+    "T1_nonquadratic_schematic.png": "a8695f81dbf06920872d77833415fbc380da1aa61170bf91ba3a10ffc2b453bb",
+    "T1_prism_face_correspondence.png": "a020643136376cde523a1294fdd5aa4c28208a0527355f5d2a3daac339d7365d",
+    "T1_production_pollution.png": "bca7cbb28b322acabe9fd00760c9622a65a414c62c37fe0161e3f9b2749c7a2c",
+    "X1_domain_map.png": "0b0a91602a4bedbc02a7ff4df2d4374294419dad2dbd0095e4b28045fb816fea",
+    "X1_fiber_collapse.png": "0ef3c3cf6aaca3c9818158176ea7b094d0a33380ebccffc8a5767c91a59344a3",
+    "X1_trajectories_lyapunov.png": "c75f88115f00144d0cffa60c896e599be595e73aebc24288acaf954815603e8e"
+  },
+  "publication": {
+    "pushed": false,
+    "deployed": false,
+    "published": false
+  }
+}

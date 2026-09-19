@@ -80,3 +80,12 @@
 | D37 | Fig3.6五例复用S1已认证斜率身份并改截距，使agent 1两条BR在Nash点`(0,0)`秩零；不按`cdc2023`文件名或正文`(c)/(e)`矛盾猜测原图对应 | Assumption4、Theorem3.11、AUTHOR_REVIEW Q4 | S2 D1–D5 | case身份继续由四分支det/eigenstructure与定理条件给出；轨迹只作代表 | 作者授权＋论文＋独立/MATLAB核查 |
 | D38 | Fig3.7用三组满足general position但mixed determinant signs的新参数表达主要noncompact构型 | Proposition3.1、Assumption2、Fig3.7 | S2 N1–N3 | noncompact由充要条件确认；有限窗口与recession角采样不得写成紧性证明 | 论文＋作者授权＋直接计算 |
 | D39 | mixed-det非紧例不套用Theorem3.11的全正/全负结论；单个saddle分支或有限轨迹不升级为全局稳定性判定 | Theorem3.11前件、任务卡边界 | S2 noncompact图/报告 | R1须将“定理不适用”与“系统已证不稳定”分开 | 论文＋任务卡 |
+
+## R1整合与展示评审更新
+
+| ID | 决定内容 | 依据 | 相关论文/代码/实验 | 后续影响 | 来源 |
+|---|---|---|---|---|---|
+| D40 | R1以六个独立MATLAB进程复跑科研入口，再以第七个进程验收和组包；退出码、文件存在、视觉检查和科研比较分别记录 | R1任务卡及实际运行 | T1/S1/S2/P1/X1/I1、`r1_matlab_run.json` | 以后不得只以测试/退出码声明全范围完成 | 作者要求＋运行证据 |
+| D41 | manifest的数值实验必须有实际输出；无完整数值来源的示意/论证图可明确归档或合并解释，但不能伪称复现，也不能从科研记录删除 | R1任务卡、32项逐条覆盖表 | `r1_coverage.csv` | 仓库范围完整性与独立图数量分开计算 | 作者要求＋逐项审阅 |
+| D42 | 网站候选只从作者认可组分层；S1五case为紧凑附图候选，S2 noncompact与X1 fiber的升级属于新选图建议 | AUTHOR_REVIEW Q5、实际18图视觉评审 | `R1_FIGURE_GUIDE.md` | 未经审阅不改变网站重要图组，不因美观删除仓库实验 | 作者范围＋R1建议 |
+| D43 | P1提交图的独立渲染与R1干净MATLAB渲染保留不同provenance标签；R1图包采用MATLAB输出，不以视觉或数值相似冒充同一生成器 | P1报告与R1实跑文件 | P1三图、review pack | 以后图源声明必须绑定实际生成入口 | 直接运行证据 |

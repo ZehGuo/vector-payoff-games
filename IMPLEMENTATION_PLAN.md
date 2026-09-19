@@ -1,6 +1,6 @@
 # 后续 session 执行计划
 
-版本：2026-09-18；M0、S1、P1、I1、X1、T1、S2已完成各自记录的实现与核查；S1、P1、I1、X1、T1、S2均已通过MATLAB R2025b复跑；R1未实施。长期范围见 PROJECT_BRIEF.md，最新符号/分支契约见 audit/implementation/M0.md，完整图目录见 audit/FIGURE_MANIFEST.md。**旧提交2ab0d68的Q1计算不可作为正确基线。**
+版本：2026-09-19；M0、S1、P1、I1、X1、T1、S2与R1均已完成。六个科研入口已在六个独立MATLAB R2025b干净进程中复跑，第七个干净进程完成18图/21非图产物核对与本地图包组装。长期范围见 PROJECT_BRIEF.md，最新符号/分支契约见 audit/implementation/M0.md，完整图目录见 audit/FIGURE_MANIFEST.md。**旧提交2ab0d68的Q1计算不可作为正确基线。**
 
 ## 1. 要重建的问题
 
@@ -25,9 +25,9 @@
 | X1 变换与稳定性 | 高 | 原/像/独立轨迹与Lyapunov、适用边界 | M0；S1提供case解释 | 已完成（MATLAB R2025b＋独立核查通过；见X1.md） |
 | T1 拓扑与应用 | 中 | cube/prism全部面对应、生产环境例 | agent/objective记法确认即可 | 已完成（paper/legacy分版、MATLAB R2025b通过；见T1.md） |
 | S2 退化与非紧case | 中后；3.7必须保留 | 3.6五case及3.7非紧代表构型 | S1 | 已完成（MATLAB R2025b＋独立核查通过，见S2.md） |
-| R1 整合与展示评审 | 最后 | 全范围覆盖报告、简洁文档、候选图包 | 以上科研任务完成 | 待执行 |
+| R1 整合与展示评审 | 最后 | 全范围覆盖报告、简洁文档、候选图包 | 以上科研任务完成 | 已完成（见R1.md及本地图包） |
 
-下一session推荐执行R1；T1、X1、S1、P1、I1、S2已完成并停止。依赖已列出；这里不自动创建session，也不启用subagent。不同时在同一checkout运行多个改文件任务。
+本计划任务卡均已完成并停止。网站终选、推送、部署或公开发布仍需新的明确授权；R1只给出候选分层和本地评审包，不自动创建session，也不启用subagent。
 
 每个任务统一交付：
 

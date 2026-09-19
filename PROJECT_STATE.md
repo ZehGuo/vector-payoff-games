@@ -2,7 +2,15 @@
 
 ## 当前阶段
 
-2026-09-18：S2秩退化与noncompact补充已完成实现、两张图及MATLAB R2025b clean-batch复跑。Assumption 4下五个case均由分支determinant与Theorem 3.11确认；三种noncompact构型由Assumption 1下mixed determinant signs及Proposition 3.1确认，不使用有限绘图窗口证明紧性。T1、X1、I1、P1与S1此前亦已完成。
+2026-09-19：R1整合与展示评审完成。T1、S1、S2、P1、X1、I1六个入口分别在独立MATLAB R2025b clean-batch进程中全量复跑，第七个进程核对18张图与21个非图产物并生成本地评审包。32个manifest条目均有实际输出、明确示意或讨论性归档处置；所有必需数值实验均已交付。
+
+## R1最新完成
+
+- 完整报告：`audit/implementation/R1.md`；逐项覆盖表：`audit/implementation/r1_coverage.csv`；运行记录与图哈希：`audit/evidence/r1_matlab_run.json`。
+- 本地图包：`results/r1/20260919-review-pack/`，含18张干净MATLAB图、索引和说明；`results/`保持Git忽略，图包不是发布物。
+- 仓库范围保留全部实验；网站只按作者认可候选分层。S1五case作为紧凑附图候选，并明确不稳定active-cone方向、充分条件不适用、非双射信息丢失三者不同。
+- P1提交图的独立渲染来源与本次干净MATLAB图分开登记；数值结论一致，不把独立渲染冒充MATLAB产物。
+- 全仓核查确认旧Q1错误数组只保留于历史/更正证据，没有进入六个实验入口或R1结论。
 
 ## S2最新完成
 
@@ -28,7 +36,7 @@
 
 ## 下一session
 
-按IMPLEMENTATION_PLAN.md进入R1整合与展示评审。T1、X1、I1、P1、S1与S2均已停止。
+本计划任务均已完成并停止。若作者希望继续，可另行审阅网站终选或授权发布；当前不自动进入网站修改、推送或部署。
 
 ## 保持的边界
 
@@ -38,4 +46,4 @@ MATLAB不在shell的`PATH`中，但已定位并成功调用`/Applications/MATLAB
 
 ## 当前阻碍
 
-没有必须现在询问作者的问题。T1、X1、I1、P1、S1与S2均无运行环境待办。OPEN_QUESTIONS.md保存R1展示选择及X1最小纸面差异。每个后续session只做对应任务、更新记忆并本地提交后停止。
+没有必须现在询问作者的问题。所有实现与R1均无运行环境待办。OPEN_QUESTIONS.md仅保留网站终选建议及X1最小纸面差异；它们不阻碍仓库完成状态。
