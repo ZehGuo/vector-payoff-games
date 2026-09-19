@@ -1,13 +1,16 @@
-function report = run_i1_incentive_budget(outputDir, auditFigureDir)
+function report = run_i1_incentive_budget(outputDir, auditFigureDir, derivedFigureDir)
 %RUN_I1_INCENTIVE_BUDGET Rebuild I1 incentive and budget comparisons.
 % State order is x=[x^1;x^2]; payoff order is [J_1^1,J_2^1,J_1^2,J_2^2].
 % Only J_1^i is incentivized.  The implemented field uses nearest-BR.
+% DERIVEDFIGUREDIR optionally receives the two mobile/homepage cards.
 
 repoRoot=fileparts(fileparts(mfilename('fullpath')));
 if nargin<1 || isempty(outputDir), outputDir=fullfile(repoRoot,'results','i1'); end
 if nargin<2 || isempty(auditFigureDir), auditFigureDir=fullfile(repoRoot,'audit','implementation','figures'); end
+if nargin<3, derivedFigureDir=''; end
 if ~exist(outputDir,'dir'), mkdir(outputDir); end
 if ~exist(auditFigureDir,'dir'), mkdir(auditFigureDir); end
+if ~isempty(derivedFigureDir) && ~exist(derivedFigureDir,'dir'), mkdir(derivedFigureDir); end
 
 inc0=makeGame('INC-0',[5,-440;30,-20;360,0;58.5,0],[.7,4,1,2],[16;-15],.05,[.3,.7],[0,0],8);
 incw=makeGame('INC-omega',[5,730;30,-295;360,0;180,0],[.5,2.5,.5,2],[21;-35],3,[.5,.5],[1,4],5);
@@ -25,6 +28,10 @@ plotDesignGeometry(inc0,omega0,omegap,report.INC0,fullfile(auditFigureDir,'I1_de
 plotSigma(report.sigma,fullfile(auditFigureDir,'I1_sigma_budget.png'));
 plotBeforeAfter(report.INC0,fullfile(auditFigureDir,'I1_before_after.png'));
 plotSupplement(report.INComega,fullfile(auditFigureDir,'I1_INC_omega.png'));
+if ~isempty(derivedFigureDir)
+    plotTrajectoryCard(report.INC0,fullfile(derivedFigureDir,'I1_trajectory_card.png'));
+    plotTransferCard(report.INC0,fullfile(derivedFigureDir,'I1_aggregate_transfer_card.png'));
+end
 
 writeConditionCsv(fullfile(outputDir,'i1_condition_checks.csv'),report);
 writeTrajectoryCsv(fullfile(outputDir,'i1_trajectory_summary.csv'),report);
@@ -135,19 +142,22 @@ end
 
 function plotDesignGeometry(g,g0,gp,r,path)
 fig=figure('Color','w','Position',[80,80,1450,920]);
-subplot(2,2,1); plotParetoNash(g); title('INC-0: social Pareto set vs Nash set');
-subplot(2,2,2); plotDomains(g); title('x_0, target, welfare and budget domains');
-subplot(2,2,3); plotOmegaCompare(g0,gp); title('Same game: omega moves target relative to Nash set');
+subplot(2,2,1); plotParetoNash(g); title('1  Social Pareto samples vs decentralized Nash set');
+subplot(2,2,2); plotDomains(g); title('2  Target, x_0, welfare and budget boundaries');
+subplot(2,2,3); plotOmegaCompare(g0,gp); title('3  Same game: omega moves the Nash geometry');
 subplot(2,2,4); plot(r.xo(:,1),r.xo(:,2),'k--','LineWidth',1.8);hold on;plot(r.x(:,1),r.x(:,2),'m-','LineWidth',2);scatter(g.x0(1),g.x0(2),45,'k','filled');scatter(g.target(1),g.target(2),55,'b','filled');grid on;axis equal;xlabel('x^1');ylabel('x^2');legend('original','incentivized','x_0','target','Location','best');title('Behavior before and after incentive');
-sgtitle('I1 design geometry (social optimum is not a Nash set)');exportgraphics(fig,path,'Resolution',180);close(fig);
+title('4  Behavior before and after incentive');
+sgtitle({'I1 design: social Pareto/Nash -> domains -> same-game omega -> behavior', ...
+    'Only J_1^i is modified; the finite endpoint is not identified with the target'});exportgraphics(fig,path,'Resolution',180);close(fig);
 end
 
 function plotParetoNash(g)
-hold on; cols=lines(4); xx=linspace(-10,40,200); for j=1:4, owner=1+(j>2); row=g.A(owner,:,j); yy=-(row(1)*xx+g.b(owner,j))/row(2);plot(xx,yy,'Color',cols(j,:),'LineWidth',1.1);end
+hold on; cols=lines(4); xx=linspace(-10,40,200); for j=1:4, owner=1+(j>2); row=g.A(owner,:,j); yy=-(row(1)*xx+g.b(owner,j))/row(2);plot(xx,yy,'Color',cols(j,:),'LineWidth',1.1,'HandleVisibility','off');end
 pts=[]; step=.08; for w1=0:step:1,for w2=0:step:1-w1,for w3=0:step:1-w1-w2,w4=1-w1-w2-w3;w=[w1,w2,w3,w4];if sum(w>0)==0,continue;end;A=zeros(2);b=zeros(2,1);for j=1:4,A=A+w(j)*g.A(:,:,j);b=b+w(j)*g.b(:,j);end;if rcond(A)>1e-10,pts(end+1,:)=[-A\b]';end,end,end,end %#ok<AGROW>
-scatter(pts(:,1),pts(:,2),8,[.2,.65,.25],'filled','MarkerFaceAlpha',.25);
+hp=scatter(pts(:,1),pts(:,2),8,[.2,.65,.25],'filled','MarkerFaceAlpha',.25);
 [X,Y]=meshgrid(linspace(-10,40,180),linspace(-50,25,180));mask=false(size(X));for k=1:numel(X),z=[X(k);Y(k)];[~,h]=gradients(g.A,g.b,z);mask(k)=h(1)*h(2)<=0 && h(3)*h(4)<=0;end;contourf(X,Y,double(mask),[.5,.5],'FaceColor',[.2,.35,.85],'FaceAlpha',.18,'LineStyle','none');
-xlim([-10,40]);ylim([-50,25]);grid on;xlabel('x^1');ylabel('x^2');
+hn=patch(nan,nan,[.2,.35,.85],'FaceAlpha',.18,'EdgeColor','none');
+xlim([-10,40]);ylim([-50,25]);grid on;xlabel('x^1');ylabel('x^2');legend([hp,hn],{'social Pareto samples','decentralized Nash set'},'Location','best');
 end
 
 function plotDomains(g)
@@ -169,22 +179,24 @@ ht=scatter(g0.target(1),g0.target(2),60,'k','filled');axis equal;xlim(xl);ylim(y
 end
 
 function plotSigma(s,path)
-fig=figure('Color','w','Position',[70,70,1550,850]); sigmas=[s.regimeSigma,s.accSigma]; titles={'0<sigma<sigma_1: interior ellipse','sigma_1<sigma<sigma_2: hyperbola','sigma>sigma_2: exterior ellipse','ACC-style D_{bud}^c, sigma=3','ACC-style D_{bud}^c, sigma=.551'};
-for p=1:5,subplot(2,3,p);budgetPanel(s,sigmas(p),p>3);title(titles{p});end
+fig=figure('Color','w','Position',[70,70,1550,850]); sigmas=[s.regimeSigma,s.accSigma]; titles={'0<sigma<sigma_1: ellipse','sigma_1<sigma<sigma_2: hyperbola','sigma>sigma_2: ellipse','ACC-style complement, sigma=3','ACC-style complement, sigma=.551'};
+for p=1:5,subplot(2,3,p);budgetPanel(s,sigmas(p));title(titles{p});end
 subplot(2,3,6);commonExclusionPanel(s);title('ACC common exclusion comparison');
-sgtitle('I1: sigma changes budget-boundary topology, not the common exclusion identity');exportgraphics(fig,path,'Resolution',180);close(fig);
+sgtitle({'I1: sigma changes the budget-boundary topology', ...
+    'Orange always means D_{bud}^c = {aggregate transfer > 0}; unshaded means the budget inequality holds'});exportgraphics(fig,path,'Resolution',180);close(fig);
 end
 
-function budgetPanel(s,sigma,showComplement)
+function budgetPanel(s,sigma)
 [X,Y]=meshgrid(linspace(-20,40,240),linspace(-25,50,240));B=zeros(size(X));U=zeros(size(X));J=zeros(size(X));
 for k=1:numel(X),z=[X(k);Y(k)];U(k)=pay(s.AU,s.bU,0,z)-pay(s.AU,s.bU,0,s.x0);J(k)=pay(s.AJ,s.bJ,0,z)-pay(s.AJ,s.bJ,0,s.x0);B(k)=sigma*U(k)-J(k);end
-if showComplement,contourf(X,Y,double(B>0),[.5,.5],'FaceColor',[.9,.5,.15],'FaceAlpha',.35,'LineStyle','none');else,contourf(X,Y,double(B<=0),[.5,.5],'FaceColor',[.85,.75,.25],'FaceAlpha',.25,'LineStyle','none');end;hold on;contour(X,Y,U,[0,0],'b','LineWidth',1.8);contour(X,Y,J,[0,0],'r','LineWidth',1.8);contour(X,Y,B,[0,0],'k--','LineWidth',1.5);scatter(s.x0(1),s.x0(2),28,'k','filled');axis equal;xlim([-20,40]);ylim([-25,50]);grid on;xlabel('x^1');ylabel('x^2');
+contourf(X,Y,double(B>0),[.5,.5],'FaceColor',[.9,.5,.15],'FaceAlpha',.35,'LineStyle','none');hold on;contour(X,Y,U,[0,0],'b','LineWidth',1.8);contour(X,Y,J,[0,0],'r','LineWidth',1.8);contour(X,Y,B,[0,0],'k--','LineWidth',1.5);scatter(s.x0(1),s.x0(2),28,'k','filled');axis equal;xlim([-20,40]);ylim([-25,50]);grid on;xlabel('x^1');ylabel('x^2');
+text(.02,.03,'orange: aggregate transfer > 0','Units','normalized','FontSize',8,'BackgroundColor','w','Margin',2);
 end
 
 function commonExclusionPanel(s)
 [X,Y]=meshgrid(linspace(-20,40,240),linspace(-25,50,240));U=zeros(size(X));J=zeros(size(X));B1=zeros(size(X));B2=zeros(size(X));
 for k=1:numel(X),z=[X(k);Y(k)];U(k)=pay(s.AU,s.bU,0,z)-pay(s.AU,s.bU,0,s.x0);J(k)=pay(s.AJ,s.bJ,0,z)-pay(s.AJ,s.bJ,0,s.x0);B1(k)=3*U(k)-J(k);B2(k)=.551*U(k)-J(k);end
-contourf(X,Y,double(B1>0&B2>0),[.5,.5],'FaceColor',[.95,.75,.15],'FaceAlpha',.38,'LineStyle','none');hold on;contourf(X,Y,double(U>=0&J<0),[.5,.5],'FaceColor',[.2,.65,.3],'FaceAlpha',.55,'LineStyle','none');contour(X,Y,U,[0,0],'b','LineWidth',1.6);contour(X,Y,J,[0,0],'r','LineWidth',1.6);scatter(s.x0(1),s.x0(2),28,'k','filled');axis equal;xlim([-20,40]);ylim([-25,50]);grid on;xlabel('x^1');ylabel('x^2');text(-18,46,{'yellow: D_{bud}^c(3) intersection D_{bud}^c(.551)','green: D(U,x_0) minus D(J_{sum},x_0)'},'Interpreter','none','FontSize',8);
+contourf(X,Y,double(B1>0&B2>0),[.5,.5],'FaceColor',[.95,.75,.15],'FaceAlpha',.38,'LineStyle','none');hold on;contourf(X,Y,double(U>=0&J<0),[.5,.5],'FaceColor',[.2,.65,.3],'FaceAlpha',.55,'LineStyle','none');contour(X,Y,U,[0,0],'b','LineWidth',1.6);contour(X,Y,J,[0,0],'r','LineWidth',1.6);scatter(s.x0(1),s.x0(2),28,'k','filled');axis equal;xlim([-20,40]);ylim([-25,50]);grid on;xlabel('x^1');ylabel('x^2');text(.02,.98,{'yellow: intersection of the two budget complements','green: welfare-improving but weighted-payoff-decreasing set'},'Units','normalized','VerticalAlignment','top','Interpreter','none','FontSize',8,'BackgroundColor','w','Margin',2);
 end
 
 function plotBeforeAfter(r,path)
@@ -192,8 +204,10 @@ fig=figure('Color','w','Position',[80,80,1500,850]);labels={'J_1^1','J_2^1','J_1
 subplot(2,2,1);xl=[3,21];yl=[-15.5,-4];hold on;for j=1:4,owner=1+(j>2);plotLineInBox(r.game.A(owner,:,j),r.game.b(owner,j),xl,yl,[.45,.45,.45],false);plotLineInBox(r.game.At(owner,:,j),r.game.bt(owner,j),xl,yl,[.2,.55,.85],true);end;hbr0=plot(nan,nan,'-','Color',[.45,.45,.45],'LineWidth',1.2);hbri=plot(nan,nan,'--','Color',[.2,.55,.85],'LineWidth',1.2);ho=plot(r.xo(:,1),r.xo(:,2),'k--','LineWidth',1.8);hi=plot(r.x(:,1),r.x(:,2),'m-','LineWidth',2);hx=scatter(r.game.x0(1),r.game.x0(2),40,'k','filled');ht=scatter(r.game.target(1),r.game.target(2),50,'b','filled');grid on;axis equal;xlim(xl);ylim(yl);legend([hbr0,hbri,ho,hi,hx,ht],{'original BR','incentivized BR','original trajectory','incentivized trajectory','x_0','target'},'Location','best');title('BR, Nash-boundary lines, and trajectories');xlabel('x^1');ylabel('x^2');
 subplot(2,2,2);plot(r.to,r.originalOnOriginal,'LineWidth',1.4);yline(0,'k:');grid on;title('Original system: original payoff changes');legend(labels,'Location','best');xlabel('t');
 subplot(2,2,3);plot(r.t,r.originalOnIncentivized,'LineWidth',1.4);yline(0,'k:');grid on;title('Incentivized path: original payoff changes');legend(labels,'Location','best');xlabel('t');
-subplot(2,2,4);plot(r.t,r.modifiedOnIncentivized,'LineWidth',1.4);hold on;plot(r.t,r.aggregateTransfer,'k','LineWidth',2);yline(0,'k:');grid on;title('Modified payoffs and aggregate transfer');legend([labels,{'p^1+p^2'}],'Location','best');xlabel('t');
-sgtitle('INC-0: before/after behavior, payoffs, and complete budget');exportgraphics(fig,path,'Resolution',180);close(fig);
+subplot(2,2,4);plot(r.t,r.modifiedOnIncentivized,'LineWidth',1.4);hold on;plot(r.t,r.aggregateTransfer,'k','LineWidth',2);yline(0,'k:');grid on;title('Modified payoffs and aggregate transfer');legend([labels,{'p^1+p^2'}],'Location','best');xlabel('t');ylabel('change from t=0');
+text(.02,.04,'budget convention: p^1+p^2 <= 0','Units','normalized','FontWeight','bold','BackgroundColor','w','Margin',2);
+sgtitle({sprintf('INC-0: before/after behavior; terminal distance to target = %.5f',r.targetDistance), ...
+    'Algebra checked | trajectory observed | invariant-set containment unproved'});exportgraphics(fig,path,'Resolution',180);close(fig);
 end
 
 function plotSupplement(r,path)
@@ -202,7 +216,30 @@ subplot(2,2,1);plot(r.xo(:,1),r.xo(:,2),'k--','LineWidth',1.8);hold on;plot(r.x(
 subplot(2,2,2);plot(r.t,r.originalOnIncentivized,'LineWidth',1.3);yline(0,'k:');grid on;title('Original payoff changes on incentivized path');legend('J_1^1','J_2^1','J_1^2','J_2^2','Location','best');
 subplot(2,2,3);plot(r.t,r.modifiedOnIncentivized,'LineWidth',1.3);hold on;plot(r.t,r.weighted,'--','LineWidth',1.8);yline(0,'k:');grid on;title('Modified payoffs and weighted combinations');legend('tilde J_1^1','J_2^1','tilde J_1^2','J_2^2','agent 1 weighted','agent 2 weighted','Location','best');
 subplot(2,2,4);plot(r.t,r.aggregateTransfer,'k','LineWidth',2);hold on;plot(r.t,r.omittedOmegaTransfer,'r--','LineWidth',1.7);yline(0,'k:');grid on;title('Corrected budget versus legacy omitted-omega formula');legend('complete p^1+p^2','old formula missing omega terms','Location','best');xlabel('t');
-sgtitle('INC-omega supplementary experiment (different game, not a one-factor omega control)');exportgraphics(fig,path,'Resolution',180);close(fig);
+sgtitle({'INC-omega supplementary experiment — DIFFERENT GAME', ...
+    'Not a one-factor omega control; complete budget retains both omega-weighted terms'});exportgraphics(fig,path,'Resolution',180);close(fig);
+end
+
+function plotTrajectoryCard(r,path)
+fig=figure('Color','w','Position',[100,100,900,650]);xl=[3,21];yl=[-15.5,-4];hold on;
+for j=1:4,owner=1+(j>2);plotLineInBox(r.game.A(owner,:,j),r.game.b(owner,j),xl,yl,[.65,.65,.65],false);plotLineInBox(r.game.At(owner,:,j),r.game.bt(owner,j),xl,yl,[.2,.55,.85],true);end
+h1=plot(r.xo(:,1),r.xo(:,2),'k--','LineWidth',2.2);h2=plot(r.x(:,1),r.x(:,2),'m-','LineWidth',2.6);
+h3=scatter(r.game.x0(1),r.game.x0(2),70,'k','filled');h4=scatter(r.game.target(1),r.game.target(2),80,'b','filled');
+grid on;axis equal;xlim(xl);ylim(yl);xlabel('x^1');ylabel('x^2');
+legend([h1,h2,h3,h4],{'original trajectory','incentivized trajectory','x_0','target'},'Location','southoutside','NumColumns',2);
+title({'Incentive changes behavior toward the target',sprintf('finite endpoint distance = %.5f (not zero)',r.targetDistance)});
+exportgraphics(fig,path,'Resolution',180);close(fig);
+end
+
+function plotTransferCard(r,path)
+fig=figure('Color','w','Position',[100,100,900,580]);
+plot(r.t,r.aggregateTransfer,'k','LineWidth',2.8);hold on;yline(0,'r--','budget boundary');grid on;
+xlabel('time t');ylabel('aggregate transfer  p^1+p^2');
+title({'Complete aggregate budget along the observed INC-0 trajectory', ...
+    sprintf('sign convention: feasible <= 0; sampled max = %.3g, min = %.3f',max(r.aggregateTransfer),min(r.aggregateTransfer))});
+text(.02,.05,{'Algebra checked | trajectory observed','Invariant-set containment remains unproved'}, ...
+    'Units','normalized','BackgroundColor','w','Margin',4,'FontWeight','bold');
+exportgraphics(fig,path,'Resolution',180);close(fig);
 end
 
 function writeConditionCsv(path,r)

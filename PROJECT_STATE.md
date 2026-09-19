@@ -60,3 +60,9 @@ MATLAB不在shell的`PATH`中，但已定位并成功调用`/Applications/MATLAB
 ## RR-01安全公开复现入口
 
 2026-09-19：已实现并验证`experiments/run_public_reproduction.m`与`docs/REPRODUCING.md`。MATLAB R2025b Update 7从仓库根目录在空临时输出目录依次完成T1/S1/S2/P1/X1/I1，核对18类图和21类非图科研产物；T1/I1图显式写入各自`figures/`子目录，运行前后tracked diff为空。成功运行仍只属于执行证据，不替代理论证明。
+
+## RR-03 P1/I1公共图形
+
+2026-09-19：P1三张tracked public图已改由`run_p1_payoff_properties.m`直接生成，采用clean MATLAB数值结果与真实轴/刻度；旧独立渲染只保留历史来源记录，不再与当前public PNG混标。I1四图重排了social Pareto/Nash、domains、same-game omega与behavior顺序，统一`D_bud`补集阴影，并就近标明terminal distance、budget符号和`algebra checked / trajectory observed / invariant containment unproved`。
+
+新增`docs/assets/p1_i1/`四张390px可读的主页/移动端派生卡与caption/provenance清单。修改前后P1/I1四个CSV逐字节一致，两个MAT包全部加载字段`isequaln`；七张技术图在1100/900/390px打开，四张派生卡在390px打开。INC-omega仍明确为different game。未补证`N_x0` containment，强`D(U,x0) subset D_bud`证书失败也未写成一般不可能。

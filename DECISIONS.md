@@ -107,3 +107,4 @@
 | D46 | P1公开图的权威生成器由作者选择；在决定前继续保留tracked独立渲染与R1 MATLAB输出的来源差异，不静默替换 | 两套图视觉与provenance对照 | P1三图、R1 review pack | RR-03只能准备候选与标注，不能冒充已作作者选择 | 直接证据＋编辑判断 |
 | D47 | 对外发布前须由作者确认许可证、推荐引用/公开论文链接、P1图源和主页终选；本轮不推送、不部署、不发布 | 当前tracked公共边界与本轮授权 | README、主页素材包 | 这些是发布门槛，不是科研结果缺陷 | 作者授权边界＋独立审阅 |
 | D48 | 公共复现统一使用安全wrapper；默认只写ignored `results/public`，T1/I1必须显式传入public figures目录，并逐项验收18图/21非图schema | CR-P0-01/02与实际MATLAB R2025b Update 7空目录运行 | `run_public_reproduction.m`、`REPRODUCING.md` | R1仍只作本地组包入口；成功运行、轨迹和有限网格仍不升级为定理证明 | 作者任务＋实际运行证据 |
+| D49 | P1 tracked public figures改以MATLAB入口与clean数值结果为权威生成源；独立渲染仅保留历史来源记录，不与当前public PNG混标 | RR-03明确授权；修改前后CSV逐字节相同、MAT字段`isequaln`、三档视觉检查 | P1三张tracked图、P1/I1派生卡与caption清单 | 不称精确Fig.4.3复现；P1 trap finite-grid边界及I1 invariant containment未证明继续保留 | 作者任务＋MATLAB clean run＋视觉核查 |

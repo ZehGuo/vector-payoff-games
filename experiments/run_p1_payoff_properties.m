@@ -1,8 +1,10 @@
-function report = run_p1_payoff_properties(outputDir)
+function report = run_p1_payoff_properties(outputDir, publicFigureDir, derivedFigureDir)
 %RUN_P1_PAYOFF_PROPERTIES Rebuild P1 payoff-property and weak-trap experiments.
 %
 % REPORT = RUN_P1_PAYOFF_PROPERTIES() writes figures, sampled diagnostics,
-% parameter tables, and a MAT report to results/p1.  State order is
+% parameter tables, and a MAT report to results/p1.  PUBLICFIGUREDIR can
+% separately receive the tracked public figures, and DERIVEDFIGUREDIR can
+% receive the two mobile cards.  State order is
 % x=[x^1;x^2], while the payoff order is [J_1^1,J_2^1,J_1^2,J_2^2].
 %
 % The first three games are a documented construction with exact trajectory
@@ -14,6 +16,10 @@ if nargin < 1 || isempty(outputDir)
     outputDir = fullfile(repoRoot, 'results', 'p1');
 end
 if ~exist(outputDir, 'dir'), mkdir(outputDir); end
+if nargin < 2 || isempty(publicFigureDir), publicFigureDir=outputDir; end
+if nargin < 3, derivedFigureDir=''; end
+if ~exist(publicFigureDir, 'dir'), mkdir(publicFigureDir); end
+if ~isempty(derivedFigureDir) && ~exist(derivedFigureDir, 'dir'), mkdir(derivedFigureDir); end
 
 games = defineGames();
 sampleStep = 0.002;
@@ -47,9 +53,23 @@ report(4).trapWitness = witness;
 
 writeSamples(fullfile(outputDir,'p1_samples.csv'),report);
 writeSummary(fullfile(outputDir,'p1_summary.csv'),report);
-plotThreeProperties(report(1:3),fullfile(outputDir,'p1_three_payoff_properties.png'));
-plotDecomposition(report(1:3),fullfile(outputDir,'p1_rate_decomposition.png'));
-plotTrap(report(4),fullfile(outputDir,'p1_weak_pareto_trap.png'));
+if strcmp(outputDir,publicFigureDir)
+    publicNames={'p1_three_payoff_properties.png','p1_rate_decomposition.png','p1_weak_pareto_trap.png'};
+else
+    publicNames={'P1_three_payoff_properties.png','P1_rate_decomposition.png','P1_weak_pareto_trap.png'};
+end
+plotThreeProperties(report(1:3),fullfile(publicFigureDir,publicNames{1}));
+plotDecomposition(report(1:3),fullfile(publicFigureDir,publicNames{2}));
+plotTrap(report(4),fullfile(publicFigureDir,publicNames{3}));
+if ~strcmp(outputDir,publicFigureDir)
+    copyfile(fullfile(publicFigureDir,publicNames{1}),fullfile(outputDir,'p1_three_payoff_properties.png'));
+    copyfile(fullfile(publicFigureDir,publicNames{2}),fullfile(outputDir,'p1_rate_decomposition.png'));
+    copyfile(fullfile(publicFigureDir,publicNames{3}),fullfile(outputDir,'p1_weak_pareto_trap.png'));
+end
+if ~isempty(derivedFigureDir)
+    plotRateCard(report(1),fullfile(derivedFigureDir,'P1_rate_decomposition_card.png'));
+    plotTrapCard(report(4),fullfile(derivedFigureDir,'P1_trap_two_times_card.png'));
+end
 save(fullfile(outputDir,'p1_report.mat'),'games','report');
 
 fprintf('P1 outputs written to %s\n',outputDir);
@@ -157,34 +177,46 @@ w=struct('t1',r.t(pair(1)),'t2',r.t(pair(2)), ...
 end
 
 function plotThreeProperties(r,path)
-fig=figure('Color','w','Position',[100,100,1500,980]);
+fig=figure('Color','w','Position',[100,100,1500,1080]);
+judgments={'Nonweak: both total rates are negative for each agent.', ...
+    'All-payoff: every total payoff rate is nonnegative.', ...
+    'Weak, not all: each agent has one positive and one negative total rate.'};
 for k=1:3
-    subplot(3,3,3*k-2); phasePanel(r(k)); title(strrep(r(k).game.name,'-',' '));
+    subplot(3,3,3*k-2); phasePanel(r(k)); title(sprintf('%c  %s',64+k,strrep(r(k).game.name,'-',' ')));
     subplot(3,3,3*k-1); plot(r(k).t,r(k).payoff-r(k).payoff(1,:),'LineWidth',1.5); yline(0,'k:'); grid on;
     if k==1, legend(payoffLabels(),'Location','best'); end
     ylabel('\Delta payoff'); xlabel('t');
-    subplot(3,3,3*k); plot(r(k).t,r(k).totalRate,'LineWidth',1.4); yline(0,'k:'); grid on;
+    subplot(3,3,3*k); plot(r(k).t,r(k).totalRate,'LineWidth',1.4); yline(0,'k:','zero'); grid on;
     ylabel('dJ/dt (total)'); xlabel('t');
+    text(.02,.96,judgments{k},'Units','normalized','VerticalAlignment','top', ...
+        'FontWeight','bold','FontSize',9,'BackgroundColor','w','Margin',2);
 end
-sgtitle('P1: nonweak, all-payoff nondecreasing, and weak-but-not-all');
+sgtitle({'P1: three exact comparison games (new family; not exact Fig. 4.3 parameters)', ...
+    'Columns: state trajectory | payoff change | total payoff rate'});
 exportgraphics(fig,path,'Resolution',180); close(fig);
 end
 
 function plotDecomposition(r,path)
 fig=figure('Color','w','Position',[100,100,1500,980]);
+cols=[0 .447 .741; .85 .325 .098];
 for k=1:3
     for agent=1:2
         subplot(3,2,2*(k-1)+agent); ids=(2*agent-1):(2*agent);
-        plot(r(k).t,r(k).totalRate(:,ids),'LineWidth',1.6); hold on;
-        plot(r(k).t,r(k).own(:,ids),'--','LineWidth',1.2);
-        plot(r(k).t,r(k).externality(:,ids),':','LineWidth',1.4); yline(0,'k-'); grid on;
+        for q=1:2, plot(r(k).t,r(k).totalRate(:,ids(q)),'Color',cols(q,:),'LineWidth',1.8); hold on; end
+        for q=1:2, plot(r(k).t,r(k).own(:,ids(q)),'--','Color',cols(q,:),'LineWidth',1.25); end
+        for q=1:2, plot(r(k).t,r(k).externality(:,ids(q)),':','Color',cols(q,:),'LineWidth',1.65); end
+        yline(0,'k-','zero','LabelHorizontalAlignment','left'); grid on;
         title(sprintf('%s: agent %d',strrep(r(k).game.name,'-',' '),agent)); xlabel('t'); ylabel('rate');
-        if k==1 && agent==1
-            legend({'total obj1','total obj2','own obj1','own obj2','external obj1','external obj2'},'Location','best');
-        end
     end
 end
-sgtitle('Total rate = own-direction contribution + externality');
+han=axes(fig,'Visible','off'); %#ok<LAXES>
+hold(han,'on');
+h(1)=plot(han,nan,nan,'Color',cols(1,:),'LineWidth',2);h(2)=plot(han,nan,nan,'Color',cols(2,:),'LineWidth',2);
+h(3)=plot(han,nan,nan,'k-','LineWidth',2);h(4)=plot(han,nan,nan,'k--','LineWidth',1.5);h(5)=plot(han,nan,nan,'k:','LineWidth',1.8);
+legend(h,{'objective 1','objective 2','total rate','own-direction contribution','externality'}, ...
+    'Location','southoutside','Orientation','horizontal');
+sgtitle({'Total payoff rate = own-direction contribution + externality', ...
+    'Color identifies objective; line style identifies term; horizontal black line is zero'});
 exportgraphics(fig,path,'Resolution',180); close(fig);
 end
 
@@ -199,13 +231,43 @@ xline(w.t1,'k--'); xline(w.t2,'r--');
 scatter([w.t1,w.t1],w.payoff1,35,'k','filled');
 scatter([w.t2,w.t2],w.payoff2,35,'r','filled'); grid on;
 legend({'J_1^2','J_2^2','t_1','t_2'},'Location','best'); xlabel('t'); ylabel('payoff');
-title(sprintf('t_1=%.3f < t_2=%.3f',w.t1,w.t2));
+title(sprintf('Interior witness: t_1=%.3f < t_2=%.3f',w.t1,w.t2));
+text(.02,.04,sprintf('J_1^2: %+.3f   J_2^2: %+.3f',w.delta(1),w.delta(2)), ...
+    'Units','normalized','FontWeight','bold','BackgroundColor','w','Margin',3);
 subplot(1,3,3); plot(r.t,r.totalRate(:,3:4),'LineWidth',1.6); hold on;
 plot(r.t,r.own(:,3:4),'--','LineWidth',1.1); plot(r.t,r.externality(:,3:4),':','LineWidth',1.4);
 yline(0,'k-'); grid on; xlabel('t'); ylabel('rate');
 legend({'total J_1^2','total J_2^2','own J_1^2','own J_2^2','external J_1^2','external J_2^2'},'Location','best');
-title('Weak locally; both worse across time');
+title('Rate decomposition for agent 2');
+sgtitle({'Legacy scaled-own-gradient trap: actual A/b/x_0/alpha and helper rule', ...
+    'Weak-at-every-time is finite-grid evidence; this trap does not replace the nonweak case'});
 exportgraphics(fig,path,'Resolution',180); close(fig);
+end
+
+function plotRateCard(r,path)
+fig=figure('Color','w','Position',[100,100,900,620]);ids=1:2;cols=[0 .447 .741;.85 .325 .098];
+for q=1:2,plot(r.t,r.totalRate(:,ids(q)),'Color',cols(q,:),'LineWidth',2.5);hold on;end
+for q=1:2,plot(r.t,r.own(:,ids(q)),'--','Color',cols(q,:),'LineWidth',1.8);end
+for q=1:2,plot(r.t,r.externality(:,ids(q)),':','Color',cols(q,:),'LineWidth',2.1);end
+yline(0,'k-','zero');grid on;xlabel('time t');ylabel('payoff rate');
+legend({'J_1^1 total','J_2^1 total','J_1^1 own','J_2^1 own','J_1^1 externality','J_2^1 externality'}, ...
+    'Location','southoutside','NumColumns',2);
+title({'Why moving in an own-improving direction may lower total payoff', ...
+    'total rate = own-direction contribution + externality'});
+exportgraphics(fig,path,'Resolution',180);close(fig);
+end
+
+function plotTrapCard(r,path)
+w=r.trapWitness;fig=figure('Color','w','Position',[100,100,900,620]);
+plot(r.t,r.payoff(:,3),'Color',[0 .447 .741],'LineWidth',2.2);hold on;
+plot(r.t,r.payoff(:,4),'Color',[.85 .325 .098],'LineWidth',2.2);
+xline(w.t1,'k--');xline(w.t2,'r--');
+scatter([w.t1,w.t1],w.payoff1,65,'k','filled');scatter([w.t2,w.t2],w.payoff2,65,'r','filled');
+grid on;xlabel('time t');ylabel('agent 2 payoff');
+legend({'J_1^2','J_2^2','t_1','t_2'},'Location','southoutside','Orientation','horizontal');
+title({sprintf('Two interior times: t_1=%.3f < t_2=%.3f',w.t1,w.t2), ...
+    sprintf('Both decrease: Delta J_1^2=%+.3f, Delta J_2^2=%+.3f',w.delta(1),w.delta(2))});
+exportgraphics(fig,path,'Resolution',180);close(fig);
 end
 
 function phasePanel(r)
