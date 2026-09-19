@@ -66,3 +66,9 @@ MATLAB不在shell的`PATH`中，但已定位并成功调用`/Applications/MATLAB
 2026-09-19：P1三张tracked public图已改由`run_p1_payoff_properties.m`直接生成，采用clean MATLAB数值结果与真实轴/刻度；旧独立渲染只保留历史来源记录，不再与当前public PNG混标。I1四图重排了social Pareto/Nash、domains、same-game omega与behavior顺序，统一`D_bud`补集阴影，并就近标明terminal distance、budget符号和`algebra checked / trajectory observed / invariant containment unproved`。
 
 新增`docs/assets/p1_i1/`四张390px可读的主页/移动端派生卡与caption/provenance清单。修改前后P1/I1四个CSV逐字节一致，两个MAT包全部加载字段`isequaln`；七张技术图在1100/900/390px打开，四张派生卡在390px打开。INC-omega仍明确为different game。未补证`N_x0` containment，强`D(U,x0) subset D_bud`证书失败也未写成一般不可能。
+
+## RR-04 X1公共图形
+
+2026-09-19：X1三张tracked技术图完成读者向重排。domain map新增`D^(i,j)`释义、稀疏marker与局部像边界；fiber collapse明确“many x -> one image point”并提升为public candidate；trajectory按原始`x(t)`、逐点`eta(x(t))`、独立积分`z(t)`、certificate四对象编号，A/B分离用inset及线型/marker双重编码。
+
+新增`docs/assets/x1/`五组900/390px主页/移动端派生图及caption/provenance清单。修改前后`x1_trajectories.csv`逐字节一致，MAT全部加载字段`isequaln`，certificate margins、branch/boundary checks与数值参数不变。fiber是否进入主页终选仍待作者决定；本轮未修改README、未发布。

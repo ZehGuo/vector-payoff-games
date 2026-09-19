@@ -1,4 +1,4 @@
-function report = run_x1_transformation_stability(outputDir)
+function report = run_x1_transformation_stability(outputDir,publicFigureDir,derivedFigureDir)
 %RUN_X1_TRANSFORMATION_STABILITY Rebuild the IFAC-extension transformation example.
 %
 % This entry keeps three objects separate:
@@ -13,6 +13,10 @@ if nargin < 1 || isempty(outputDir)
     outputDir = fullfile(repoRoot,'results','x1');
 end
 if ~exist(outputDir,'dir'), mkdir(outputDir); end
+if nargin < 2 || isempty(publicFigureDir), publicFigureDir=outputDir; end
+if nargin < 3, derivedFigureDir=''; end
+if ~exist(publicFigureDir,'dir'), mkdir(publicFigureDir); end
+if ~isempty(derivedFigureDir) && ~exist(derivedFigureDir,'dir'), mkdir(derivedFigureDir); end
 
 game = defineGame();
 certificate = verifyPrintedCertificate(game);
@@ -53,10 +57,24 @@ assert(branchCheck.passes && boundaryCheck.passes,'Branch or boundary checks fai
 
 Vimage = lyapunovValues(etaImage,certificate);
 Vz = lyapunovValues(z,certificate);
-plotDomainMap(game,fullfile(outputDir,'x1_domain_map.png'));
-plotFiberCollapse(game,fullfile(outputDir,'x1_fiber_collapse.png'));
+if strcmp(outputDir,publicFigureDir)
+    figureNames={'x1_domain_map.png','x1_fiber_collapse.png','x1_trajectories_lyapunov.png'};
+else
+    figureNames={'X1_domain_map.png','X1_fiber_collapse.png','X1_trajectories_lyapunov.png'};
+end
+plotDomainMap(game,fullfile(publicFigureDir,figureNames{1}));
+plotFiberCollapse(game,fullfile(publicFigureDir,figureNames{2}));
 plotTrajectories(game,t,x,etaImage,z,run,certificate, ...
-    fullfile(outputDir,'x1_trajectories_lyapunov.png'));
+    fullfile(publicFigureDir,figureNames{3}));
+if ~strcmp(outputDir,publicFigureDir)
+    copyfile(fullfile(publicFigureDir,figureNames{1}),fullfile(outputDir,'x1_domain_map.png'));
+    copyfile(fullfile(publicFigureDir,figureNames{2}),fullfile(outputDir,'x1_fiber_collapse.png'));
+    copyfile(fullfile(publicFigureDir,figureNames{3}),fullfile(outputDir,'x1_trajectories_lyapunov.png'));
+end
+if ~isempty(derivedFigureDir)
+    plotFiberCard(game,fullfile(derivedFigureDir,'X1_fiber_collapse_vertical.png'));
+    plotTrajectoryCards(game,t,x,etaImage,z,run,certificate,derivedFigureDir);
+end
 writeTrajectories(fullfile(outputDir,'x1_trajectories.csv'), ...
     t,x,etaImage,z,originalBranch,separation,Vimage,Vz);
 
@@ -249,7 +267,7 @@ end
 end
 
 function plotDomainMap(game,path)
-fig=figure('Color','w','Visible','off','Position',[40,40,1500,690]);
+fig=figure('Color','w','Visible','off','Position',[40,40,1500,760]);
 palette=domainPalette(); xBounds=[0,12]; yBounds=[-11,7];
 [X,Y]=meshgrid(linspace(xBounds(1),xBounds(2),300),linspace(yBounds(1),yBounds(2),300));
 C=zeros(size(X)); E=zeros(numel(X),2);
@@ -257,7 +275,7 @@ for k=1:numel(X)
     [e,s]=etaMap(game,[X(k);Y(k)]); C(k)=3*s(1)+s(2); E(k,:)=e;
 end
 
-ax1=subplot(1,2,1,'Parent',fig);hold(ax1,'on');axis(ax1,'equal');box(ax1,'on');
+ax1=axes(fig,'Position',[.055,.25,.40,.68]);hold(ax1,'on');axis(ax1,'equal');box(ax1,'on');
 imagesc(ax1,X(1,:),Y(:,1),C);set(ax1,'YDir','normal');colormap(ax1,palette);caxis(ax1,[-.5,8.5]);
 plotGameGeometry(ax1,game,xBounds,yBounds,true);
 for code=0:8
@@ -273,38 +291,59 @@ xlabel(ax1,'x^1');ylabel(ax1,'x^2');
 title(ax1,{'Original partition inside D_1^1 \cap D_1^2', ...
     'purple X^*(J)=D^{(0,0)}; curves are the four BR boundaries'});
 
-ax2=subplot(1,2,2,'Parent',fig);hold(ax2,'on');axis(ax2,'equal');box(ax2,'on');grid(ax2,'on');
+ax2=axes(fig,'Position',[.555,.25,.40,.68]);hold(ax2,'on');axis(ax2,'equal');box(ax2,'on');grid(ax2,'on');
 % The pale backgrounds indicate signs only.  Colored samples are the actual
 % images of the finite original-space window; no full quadrant is claimed.
 patch(ax2,[0,8,8,0],[0,0,8,8],[.88,.88,.88],'FaceAlpha',.18,'EdgeColor','none');
 patch(ax2,[-10,0,0,-10],[0,0,8,8],[.88,.88,.88],'FaceAlpha',.18,'EdgeColor','none');
 patch(ax2,[-10,0,0,-10],[-14,-14,0,0],[.88,.88,.88],'FaceAlpha',.18,'EdgeColor','none');
 patch(ax2,[0,8,8,0],[-14,-14,0,0],[.88,.88,.88],'FaceAlpha',.18,'EdgeColor','none');
-for code=[4,5,7,8,1,2,3,6]
+markers={'o','s','^','d'}; fullCodes=[4,5,7,8];
+for q=1:numel(fullCodes)
+    code=fullCodes(q);
     mask=C(:)==code;
-    scatter(ax2,E(mask,1),E(mask,2),5,palette(code+1,:),'.');
+    pts=E(mask,:); stride=max(1,ceil(size(pts,1)/650)); shown=pts(1:stride:end,:);
+    scatter(ax2,shown(:,1),shown(:,2),13,palette(code+1,:),markers{q}, ...
+        'filled','MarkerFaceAlpha',.22,'MarkerEdgeAlpha',.45);
+    if size(pts,1)>3
+        edge=boundary(pts(:,1),pts(:,2),.82);
+        plot(ax2,pts(edge,1),pts(edge,2),'-','Color',palette(code+1,:),'LineWidth',1.8);
+    end
+end
+axisStyles={'-','--','-.',':'}; axisCodes=[1,2,3,6];
+for q=1:numel(axisCodes)
+    code=axisCodes(q); mask=C(:)==code; pts=E(mask,:);
+    [~,order]=sortrows(pts,[1,2]); pts=pts(order,:);
+    plot(ax2,pts(:,1),pts(:,2),axisStyles{q},'Color',palette(code+1,:),'LineWidth',3.0);
 end
 plot(ax2,[-10,8],[0,0],'k-','LineWidth',1.6);plot(ax2,[0,0],[-14,8],'k-','LineWidth',1.6);
 plot(ax2,0,0,'o','Color',palette(1,:),'MarkerFaceColor',palette(1,:),'MarkerSize',9);
-for code=1:8
-    mask=C(:)==code;
-    if any(mask)
-        p=median(E(mask,:),1); offset=.18*[sign(p(1)+(p(1)==0)),sign(p(2)+(p(2)==0))];
-        text(ax2,p(1)+offset(1),p(2)+offset(2),domainLabel(code), ...
-            'FontWeight','bold','FontSize',9,'BackgroundColor','w','Margin',1);
-    end
+labelCodes=[4,5,7,8,1,2,3,6];
+labelPos=[-3.2,-8.0;-3.0,2.2;3.0,-3.1;3.1,2.2;-5.2,.65;5.0,.65;.35,-8.7;.35,3.1];
+for q=1:numel(labelCodes)
+    code=labelCodes(q);
+    text(ax2,labelPos(q,1),labelPos(q,2),domainLabel(code), ...
+        'FontWeight','bold','FontSize',9,'BackgroundColor','w','Margin',1);
 end
 text(ax2,.25,.25,'D^{(0,0)}','FontWeight','bold','Color',palette(1,:),'BackgroundColor','w');
 xlim(ax2,[-10,8]);ylim(ax2,[-14,8]);
 xlabel(ax2,'$\tilde{x}^1=\eta^1(x)$','Interpreter','latex');
 ylabel(ax2,'$\tilde{x}^2=\eta^2(x)$','Interpreter','latex');
 title(ax2,{'Actual image subsets of the same local window', ...
-    '2-D domains \rightarrow quadrant subsets; strips \rightarrow axes; Nash \rightarrow origin'});
+    'outlines/markers identify local subsets; pale quadrants show signs only'});
+axKey=axes(fig,'Position',[.055,.025,.90,.16]);axis(axKey,'off');xlim(axKey,[0,1]);ylim(axKey,[0,1]);
+text(axKey,.02,.78,'How to read D^{(i,j)}','FontWeight','bold','FontSize',12);
+text(axKey,.02,.50,{'i = agent 1 status;  j = agent 2 status', ...
+    '0 = inactive (already Pareto-optimal for that agent);  1/2 = selected objective', ...
+    'i,j in {1,2}: 2-D domain -> local quadrant subset   |   one zero: strip -> half-axis   |   (0,0): Nash set -> origin'}, ...
+    'FontSize',10,'VerticalAlignment','middle');
+text(axKey,.98,.12,'Local displayed image only - not a whole-quadrant surjectivity claim.', ...
+    'HorizontalAlignment','right','FontWeight','bold','Color',[.35,.12,.12],'FontSize',10);
 exportgraphics(fig,path,'Resolution',160);close(fig);
 end
 
 function plotFiberCollapse(game,path)
-fig=figure('Color','w','Visible','off','Position',[40,40,1500,650]);
+fig=figure('Color','w','Visible','off','Position',[40,40,1500,720]);
 palette=domainPalette(); xBounds=[0,12]; yBounds=[-11,7]; targets=[1,0;2,0;0,1;0,2];
 [X,Y]=meshgrid(linspace(xBounds(1),xBounds(2),260),linspace(yBounds(1),yBounds(2),260));
 kappa=zeros(4,1);
@@ -332,13 +371,16 @@ for q=1:4
 end
 xlim(ax1,xBounds);ylim(ax1,yBounds);xlabel(ax1,'x^1');ylabel(ax1,'x^2');
 title(ax1,{'Representative rank-one fibers in the original space', ...
-    'multiple marked x values on each fiber have exactly the same image'});
+    'each L_{\kappa}^{i,j} is a set of many original states x'});
 fiberLabels=cell(1,4);
 for q=1:4
-    fiberLabels{q}=sprintf('$D^{(%d,%d)}, %ckappa=%+.2f$', ...
-        targets(q,1),targets(q,2),char(92),kappa(q));
+    fiberLabels{q}=sprintf('$L_{%ckappa}^{%d,%d} %csubset D^{(%d,%d)},%cquad %ckappa=%+.2f$', ...
+        char(92),targets(q,1),targets(q,2),char(92), ...
+        targets(q,1),targets(q,2),char(92),char(92),kappa(q));
 end
 legend(fiberHandles,fiberLabels,'Interpreter','latex','Location','southwest');
+text(ax1,.03,.97,'FIBER: many x values','Units','normalized','VerticalAlignment','top', ...
+    'FontWeight','bold','BackgroundColor','w','Margin',3);
 
 ax2=subplot(1,2,2,'Parent',fig);hold(ax2,'on');axis(ax2,'equal');box(ax2,'on');grid(ax2,'on');
 plot(ax2,[-10,8],[0,0],'k-','LineWidth',1.6);plot(ax2,[0,0],[-14,8],'k-','LineWidth',1.6);
@@ -357,60 +399,168 @@ xlim(ax2,[-10,12]);ylim(ax2,[-14,8]);
 xlabel(ax2,'$\tilde{x}^1=\eta^1(x)$','Interpreter','latex');
 ylabel(ax2,'$\tilde{x}^2=\eta^2(x)$','Interpreter','latex');
 title(ax2,{'Fibers collapse to single axis points', ...
-    'the inverse on an axis is set-valued; no representative is selected'});
+    'one image point has a set-valued inverse (an entire fiber)'});
+text(ax2,.03,.97,'SINGLE IMAGE POINT','Units','normalized','VerticalAlignment','top', ...
+    'FontWeight','bold','BackgroundColor','w','Margin',3);
+annotation(fig,'textbox',[.31,.01,.38,.07], ...
+    'String','many original states x  ->  one eta(x); axis inverse is set-valued', ...
+    'HorizontalAlignment','center','VerticalAlignment','middle','FontWeight','bold', ...
+    'EdgeColor',[.25,.25,.25],'BackgroundColor','w');
 exportgraphics(fig,path,'Resolution',160);close(fig);
 end
 
 function plotTrajectories(game,t,x,etaImage,z,run,cert,path)
-fig=figure('Color','w','Visible','off','Position',[40,40,1500,880]);
-ax1=subplot(2,2,1,'Parent',fig);hold(ax1,'on');axis(ax1,'equal');box(ax1,'on');grid(ax1,'on');
+fig=figure('Color','w','Visible','off','Position',[40,40,1500,930]);
+tl=tiledlayout(fig,2,2,'TileSpacing','compact','Padding','compact');
+green=[0,.45,.15]; purple=[.55,0,.75]; orange=[.90,.25,.05];
+markEvery=round(linspace(1,numel(t),14));
+ax1=nexttile(tl,1);hold(ax1,'on');axis(ax1,'equal');box(ax1,'on');grid(ax1,'on');
 [X,Y]=meshgrid(linspace(-5,16,160),linspace(-11,8,150)); Z=zeros(size(X));
 for k=1:numel(X), e=etaMap(game,[X(k);Y(k)]); Z(k)=lyapunovValues(e,cert); end
 plotGameGeometry(ax1,game,[-5,16],[-11,8],false);
 contour(ax1,X,Y,Z,[5,20,50,100,200,400],'Color',[.45,.55,.45]);
-plot(ax1,x(:,1),x(:,2),'Color',[0,.45,.15],'LineWidth',2.2);
-plot(ax1,x(run(1):run(2),1),x(run(1):run(2),2),'Color',[.90,.25,.05],'LineWidth',3.0);
+plot(ax1,x(:,1),x(:,2),'-','Color',green,'LineWidth',2.2);
+plot(ax1,x(markEvery,1),x(markEvery,2),'o','Color',green,'MarkerFaceColor','w','MarkerSize',4);
+plot(ax1,x(run(1):run(2),1),x(run(1):run(2),2),'-','Color',orange,'LineWidth',3.0);
 plot(ax1,x(1,1),x(1,2),'ko','MarkerFaceColor','k');
-plot(ax1,x(run(1),1),x(run(1),2),'o','Color',[.90,.25,.05],'MarkerFaceColor','w','LineWidth',1.5);
-plot(ax1,x(run(2),1),x(run(2),2),'o','Color',[.90,.25,.05],'MarkerFaceColor',[.90,.25,.05]);
+plot(ax1,x(run(1),1),x(run(1),2),'o','Color',orange,'MarkerFaceColor','w','LineWidth',1.5);
+plot(ax1,x(run(2),1),x(run(2),2),'o','Color',orange,'MarkerFaceColor',orange);
 text(ax1,x(run(1),1)+.25,x(run(1),2),'A','FontWeight','bold');
 text(ax1,x(run(2),1)+.25,x(run(2),2),'B','FontWeight','bold');
 xlim(ax1,[-5,16]);ylim(ax1,[-11,8]);xlabel(ax1,'x^1');ylabel(ax1,'x^2');
-title(ax1,{'(1) independently integrated original x(t)','contours: pullback V(\eta(x)) on original grid'});
+title(ax1,{'(1) ORIGINAL: independently integrated x(t)','orange A-to-B interval is one-active in original space'});
 
-ax2=subplot(2,2,2,'Parent',fig);hold(ax2,'on');axis(ax2,'equal');box(ax2,'on');grid(ax2,'on');
+ax2=nexttile(tl,2);hold(ax2,'on');axis(ax2,'equal');box(ax2,'on');grid(ax2,'on');
 [E1,E2]=meshgrid(linspace(-10,8,180),linspace(-14,8,180)); G=[E1(:),E2(:)]; VG=lyapunovValues(G,cert);
-[~,hContour]=contour(ax2,E1,E2,reshape(VG,size(E1)),[5,20,50,100,200,400],'Color',[.45,.55,.45]);
+contour(ax2,E1,E2,reshape(VG,size(E1)),[5,20,50,100,200,400],'Color',[.78,.82,.78]);
 plot(ax2,[-10,8],[0,0],'k-','LineWidth',1.2,'HandleVisibility','off');
 plot(ax2,[0,0],[-14,8],'k-','LineWidth',1.2,'HandleVisibility','off');
-hEta=plot(ax2,etaImage(:,1),etaImage(:,2),'-','Color',[0,.45,.15],'LineWidth',2.3);
-hZ=plot(ax2,z(:,1),z(:,2),'--','Color',[.55,0,.75],'LineWidth',2.3);
-hSegment=plot(ax2,etaImage(run(1):run(2),1),etaImage(run(1):run(2),2),'-','Color',[.90,.25,.05],'LineWidth',3);
-hInitial=plot(ax2,etaImage(1,1),etaImage(1,2),'ko','MarkerFaceColor','k');
-plot(ax2,etaImage(run(1),1),etaImage(run(1),2),'o','Color',[.90,.25,.05],'MarkerFaceColor','w','LineWidth',1.5);
-plot(ax2,etaImage(run(2),1),etaImage(run(2),2),'o','Color',[.90,.25,.05],'MarkerFaceColor',[.90,.25,.05]);
+hZghost=plot(ax2,z(:,1),z(:,2),'--','Color',[.70,.55,.78],'LineWidth',1.3);
+hEta=plot(ax2,etaImage(:,1),etaImage(:,2),'-','Color',green,'LineWidth',2.6);
+plot(ax2,etaImage(markEvery,1),etaImage(markEvery,2),'o','Color',green,'MarkerFaceColor','w','MarkerSize',4,'HandleVisibility','off');
+hSegment=plot(ax2,etaImage(run(1):run(2),1),etaImage(run(1):run(2),2),'-','Color',orange,'LineWidth',3);
+plot(ax2,etaImage(1,1),etaImage(1,2),'ko','MarkerFaceColor','k','HandleVisibility','off');
+plot(ax2,etaImage(run(1),1),etaImage(run(1),2),'o','Color',orange,'MarkerFaceColor','w','LineWidth',1.5,'HandleVisibility','off');
+plot(ax2,etaImage(run(2),1),etaImage(run(2),2),'o','Color',orange,'MarkerFaceColor',orange,'HandleVisibility','off');
 text(ax2,etaImage(run(1),1)+.25,etaImage(run(1),2),'\eta(A)','FontWeight','bold');
 text(ax2,etaImage(run(2),1)+.25,etaImage(run(2),2),'\eta(B)','FontWeight','bold');
 xlim(ax2,[-10,8]);ylim(ax2,[-14,8]);
 xlabel(ax2,'$\tilde{x}^1$','Interpreter','latex');ylabel(ax2,'$\tilde{x}^2$','Interpreter','latex');
-title(ax2,{'(2) solid: pointwise image \eta(x(t))','(3) dashed: independently integrated transformed z(t)'});
-legend(ax2,[hContour,hEta,hZ,hSegment,hInitial], ...
-    {'V contours','\eta(x(t))','z(t) independent','mapped one-active segment','common initial value'}, ...
-    'Location','northeast');
+title(ax2,{'(2) POINTWISE IMAGE: solid \eta(x(t))','evaluate eta after integrating x(t); this is not an ODE solve'});
+legend(ax2,[hEta,hZghost,hSegment],{'solid + circles: \eta(x(t))','dashed context: independent z(t)','mapped A-to-B fiber segment'},'Location','northeast');
 
-ax3=subplot(2,2,3,'Parent',fig);hold(ax3,'on');box(ax3,'on');grid(ax3,'on');
-plot(ax3,t,vecnorm(etaImage,2,2),'Color',[0,.45,.15],'LineWidth',1.7);
-plot(ax3,t,vecnorm(z,2,2),'--','Color',[.55,0,.75],'LineWidth',1.7);
-xline(ax3,t(run(1)),'Color',[.90,.25,.05]);xline(ax3,t(run(2)),'Color',[.90,.25,.05]);
-xlabel(ax3,'t');ylabel(ax3,'Euclidean norm');title(ax3,'Norm can temporarily increase; this is not instability by itself');
-legend(ax3,{'||\eta(x(t))||_2','||z(t)||_2','separation segment bounds'});
+ax3=nexttile(tl,3);hold(ax3,'on');axis(ax3,'equal');box(ax3,'on');grid(ax3,'on');
+plot(ax3,[-10,8],[0,0],'k-','LineWidth',1.2,'HandleVisibility','off');
+plot(ax3,[0,0],[-14,8],'k-','LineWidth',1.2,'HandleVisibility','off');
+hEtaGhost=plot(ax3,etaImage(:,1),etaImage(:,2),'-','Color',[.50,.66,.55],'LineWidth',1.3);
+hZ=plot(ax3,z(:,1),z(:,2),'--','Color',purple,'LineWidth',2.6);
+plot(ax3,z(markEvery,1),z(markEvery,2),'^','Color',purple,'MarkerFaceColor','w','MarkerSize',5,'HandleVisibility','off');
+plot(ax3,z(1,1),z(1,2),'ko','MarkerFaceColor','k','HandleVisibility','off');
+xlim(ax3,[-10,8]);ylim(ax3,[-14,8]);
+xlabel(ax3,'$\tilde{x}^1$','Interpreter','latex');ylabel(ax3,'$\tilde{x}^2$','Interpreter','latex');
+title(ax3,{'(3) INDEPENDENT DYNAMICS: dashed z(t)','integrated from z(0)=\eta(x_0); no inverse fiber is selected'});
+legend(ax3,[hZ,hEtaGhost],{'dashed + triangles: independent z(t)','solid context: pointwise \eta(x(t))'},'Location','northeast');
 
-ax4=subplot(2,2,4,'Parent',fig);hold(ax4,'on');box(ax4,'on');grid(ax4,'on');
-plot(ax4,t,lyapunovValues(etaImage,cert),'Color',[0,.45,.15],'LineWidth',1.7);
-plot(ax4,t,lyapunovValues(z,cert),'--','Color',[.55,0,.75],'LineWidth',1.7);
-xlabel(ax4,'t');ylabel(ax4,'V');title(ax4,'Piecewise-quadratic certificate along both eta-space curves');
-legend(ax4,{'V(\eta(x(t)))','V(z(t)) independent'});
+ax4=nexttile(tl,4);hold(ax4,'on');box(ax4,'on');grid(ax4,'on');
+vEta=lyapunovValues(etaImage,cert);vZ=lyapunovValues(z,cert);
+plot(ax4,t,vEta,'-','Color',green,'LineWidth',2.0);
+plot(ax4,t,vZ,'--','Color',purple,'LineWidth',2.0);
+plot(ax4,t(markEvery),vEta(markEvery),'o','Color',green,'MarkerFaceColor','w','MarkerSize',4,'HandleVisibility','off');
+plot(ax4,t(markEvery),vZ(markEvery),'^','Color',purple,'MarkerFaceColor','w','MarkerSize',5,'HandleVisibility','off');
+xlabel(ax4,'time t');ylabel(ax4,'piecewise-quadratic V');
+title(ax4,{'(4) CERTIFICATE VALUES along the two eta-space curves', ...
+    'temporary Euclidean-norm growth alone is not an instability result'});
+legend(ax4,{'solid + circles: V(\eta(x(t)))','dashed + triangles: V(z(t))'},'Location','northeast');
+
+% A/B inset: the same two curves are shown with distinct line styles and
+% markers so their separation cannot be mistaken for plotting noise.
+idx=run(1):min(numel(t),run(2)+round(.12/(t(2)-t(1))));
+inset=axes(fig,'Position',[.765,.575,.19,.145]);hold(inset,'on');box(inset,'on');grid(inset,'on');
+plot(inset,etaImage(idx,1),etaImage(idx,2),'-','Color',green,'LineWidth',2.0);
+plot(inset,z(idx,1),z(idx,2),'--','Color',purple,'LineWidth',2.0);
+pick=idx(round(linspace(1,numel(idx),6)));
+plot(inset,etaImage(pick,1),etaImage(pick,2),'o','Color',green,'MarkerFaceColor','w','MarkerSize',3);
+plot(inset,z(pick,1),z(pick,2),'^','Color',purple,'MarkerFaceColor','w','MarkerSize',4);
+allPts=[etaImage(idx,:);z(idx,:)];span=max(allPts,[],1)-min(allPts,[],1);
+pad=.08*max(span,[1e-3,1e-3]);
+xlim(inset,[min(allPts(:,1))-pad(1),max(allPts(:,1))+pad(1)]);
+ylim(inset,[min(allPts(:,2))-pad(2),max(allPts(:,2))+pad(2)]);
+title(inset,'A/B split: different objects','FontSize',8);set(inset,'FontSize',7);
+title(tl,{'X1: a non-bijective coordinate map is an analysis device - not a controller or stabilizer', ...
+    'solid/round = pointwise \eta(x(t)); dashed/triangle = independently integrated z(t)'});
 exportgraphics(fig,path,'Resolution',160);close(fig);
+end
+
+function plotFiberCard(game,path)
+% A vertical, single-message derivative for narrow public layouts.
+palette=domainPalette();target=[1,0];xBounds=[0,12];yBounds=[-11,7];
+[X,Y]=meshgrid(linspace(xBounds(1),xBounds(2),260),linspace(yBounds(1),yBounds(2),260));
+vals=[];
+for k=1:numel(X)
+    [e,s]=etaMap(game,[X(k);Y(k)]);
+    if all(s==target),vals(end+1)=e(1);end %#ok<AGROW>
+end
+vals=sort(vals);kappa=vals(max(1,round(.55*numel(vals))));
+[fx,fy]=fiberPoints(game,target,kappa,xBounds,yBounds);code=3*target(1)+target(2);col=palette(code+1,:);
+fig=figure('Color','w','Visible','off','Position',[60,60,900,1180]);
+tl=tiledlayout(fig,2,1,'TileSpacing','compact','Padding','compact');
+ax1=nexttile(tl,1);hold(ax1,'on');axis(ax1,'equal');box(ax1,'on');grid(ax1,'on');
+plotGameGeometry(ax1,game,xBounds,yBounds,false);plot(ax1,fx,fy,'-','Color',col,'LineWidth',5);
+keep=find(isfinite(fx));marks=keep(round(linspace(1,numel(keep),6)));
+plot(ax1,fx(marks),fy(marks),'o','Color',col,'MarkerFaceColor','w','MarkerSize',8,'LineWidth',1.5);
+xlim(ax1,xBounds);ylim(ax1,yBounds);xlabel(ax1,'x^1');ylabel(ax1,'x^2');
+title(ax1,{'MANY ORIGINAL STATES x ON ONE FIBER', ...
+    sprintf('L_{\\kappa}^{1,0}: \\eta^1(x)=\\kappa within D^{(1,0)},  \\kappa=%+.2f',kappa)});
+ax2=nexttile(tl,2);hold(ax2,'on');axis(ax2,'equal');box(ax2,'on');grid(ax2,'on');
+plot(ax2,[-10,8],[0,0],'k-','LineWidth',1.6);plot(ax2,[0,0],[-14,8],'k-','LineWidth',1.6);
+plot(ax2,kappa,0,'o','Color',col,'MarkerFaceColor',col,'MarkerSize',16);
+text(ax2,kappa+.35,.7,sprintf('single image point  (%.2f, 0)',kappa), ...
+    'FontWeight','bold','Color',col,'BackgroundColor','w','Margin',2);
+xlim(ax2,[-10,8]);ylim(ax2,[-14,8]);xlabel(ax2,'\eta^1(x)');ylabel(ax2,'\eta^2(x)');
+title(ax2,{'ONE IMAGE POINT','axis inverse = full fiber (set-valued; no representative selected)'});
+title(tl,{'NON-BIJECTIVE COLLAPSE: many x map to one point', ...
+    'the same mechanism sends the Nash set to the origin'});
+exportgraphics(fig,path,'Resolution',180);close(fig);
+end
+
+function plotTrajectoryCards(game,t,x,etaImage,z,run,cert,assetDir)
+green=[0,.45,.15];purple=[.55,0,.75];orange=[.90,.25,.05];
+markEvery=round(linspace(1,numel(t),14));
+
+fig=figure('Color','w','Visible','off','Position',[60,60,900,680]);ax=axes(fig);hold(ax,'on');axis(ax,'equal');box(ax,'on');grid(ax,'on');
+plotGameGeometry(ax,game,[-5,16],[-11,8],false);plot(ax,x(:,1),x(:,2),'-','Color',green,'LineWidth',2.8);
+plot(ax,x(markEvery,1),x(markEvery,2),'o','Color',green,'MarkerFaceColor','w','MarkerSize',5);
+plot(ax,x(run(1):run(2),1),x(run(1):run(2),2),'-','Color',orange,'LineWidth',3.5);
+plot(ax,x(1,1),x(1,2),'ko','MarkerFaceColor','k');xlim(ax,[-5,16]);ylim(ax,[-11,8]);xlabel(ax,'x^1');ylabel(ax,'x^2');
+title(ax,{'(1) ORIGINAL x(t)','independently integrated in original state space; orange = one-active A-to-B interval'});
+exportgraphics(fig,fullfile(assetDir,'X1_original_x_card.png'),'Resolution',180);close(fig);
+
+fig=figure('Color','w','Visible','off','Position',[60,60,900,680]);ax=axes(fig);hold(ax,'on');axis(ax,'equal');box(ax,'on');grid(ax,'on');
+plot(ax,[-10,8],[0,0],'k-','LineWidth',1.3);plot(ax,[0,0],[-14,8],'k-','LineWidth',1.3);
+plot(ax,etaImage(:,1),etaImage(:,2),'-','Color',green,'LineWidth',2.8);
+plot(ax,etaImage(markEvery,1),etaImage(markEvery,2),'o','Color',green,'MarkerFaceColor','w','MarkerSize',5);
+plot(ax,etaImage(run(1):run(2),1),etaImage(run(1):run(2),2),'-','Color',orange,'LineWidth',3.5);
+xlim(ax,[-10,8]);ylim(ax,[-14,8]);xlabel(ax,'\eta^1(x)');ylabel(ax,'\eta^2(x)');
+title(ax,{'(2) POINTWISE \eta(x(t)) - SOLID + CIRCLES','evaluate the non-bijective map after integrating x(t); not a second ODE solve'});
+exportgraphics(fig,fullfile(assetDir,'X1_pointwise_eta_card.png'),'Resolution',180);close(fig);
+
+fig=figure('Color','w','Visible','off','Position',[60,60,900,680]);ax=axes(fig);hold(ax,'on');axis(ax,'equal');box(ax,'on');grid(ax,'on');
+plot(ax,[-10,8],[0,0],'k-','LineWidth',1.3);plot(ax,[0,0],[-14,8],'k-','LineWidth',1.3);
+plot(ax,z(:,1),z(:,2),'--','Color',purple,'LineWidth',2.8);
+plot(ax,z(markEvery,1),z(markEvery,2),'^','Color',purple,'MarkerFaceColor','w','MarkerSize',6);
+plot(ax,z(1,1),z(1,2),'ko','MarkerFaceColor','k');xlim(ax,[-10,8]);ylim(ax,[-14,8]);xlabel(ax,'z^1');ylabel(ax,'z^2');
+title(ax,{'(3) INDEPENDENT z(t) - DASHED + TRIANGLES','integrated from z(0)=\eta(x_0); no axis-fiber inverse representative is chosen'});
+exportgraphics(fig,fullfile(assetDir,'X1_independent_z_card.png'),'Resolution',180);close(fig);
+
+fig=figure('Color','w','Visible','off','Position',[60,60,900,680]);ax=axes(fig);hold(ax,'on');box(ax,'on');grid(ax,'on');
+vEta=lyapunovValues(etaImage,cert);vZ=lyapunovValues(z,cert);
+plot(ax,t,vEta,'-','Color',green,'LineWidth',2.5);plot(ax,t,vZ,'--','Color',purple,'LineWidth',2.5);
+plot(ax,t(markEvery),vEta(markEvery),'o','Color',green,'MarkerFaceColor','w','MarkerSize',5);
+plot(ax,t(markEvery),vZ(markEvery),'^','Color',purple,'MarkerFaceColor','w','MarkerSize',6);
+xlabel(ax,'time t');ylabel(ax,'piecewise-quadratic V');
+legend(ax,{'V(\eta(x(t)))','V(z(t))'},'Location','northeast');
+title(ax,{'(4) CERTIFICATE VALUES','temporary Euclidean-norm growth is not, by itself, an instability result'});
+exportgraphics(fig,fullfile(assetDir,'X1_certificate_card.png'),'Resolution',180);close(fig);
 end
 
 function palette=domainPalette()
