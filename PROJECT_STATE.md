@@ -88,3 +88,12 @@ MATLAB不在shell的`PATH`中，但已定位并成功调用`/Applications/MATLAB
 - README 7张嵌图均在900px和390px逐张打开；390px使用单比较响应式卡，未要求移动端解读完整多面板技术图。
 
 P1当前tracked public PNG的权威生成源已由RR-03收敛为clean MATLAB；旧“P1图源待作者选择”不再是当前阻碍。正式发布仍被三项作者选择阻断：许可证、正式citation元数据、作者确认的公开论文/DOI链接。个人主页终选仍是后续传播选择。本任务未创建`LICENSE`或`CITATION.cff`，未push、部署或发布。
+
+## RR-06个人主页可移植内容包
+
+2026-09-19：`publication/homepage/`内容包已准备，仍未由作者终选或发布。由于作者尚未终选图片，本包按`PUBLICATION_BLUEPRINT.md`建立明确标注的provisional editorial selection：T1 production为引导，P1 trap＋rate、X1 fiber、I1 trajectory＋aggregate transfer组成主页主线；cube/prism可选，S1 stable/unstable与S2 noncompact仅作扩展。
+
+- `story.md`给出面向非专业主页读者的英文短叙事；`captions.md`固定caption、alt、repository/paper target与就近科学边界；`asset_manifest.csv`逐项登记tracked源、生成方式、provenance、390/900尺寸、claim boundary与作者审批状态。
+- `assets/`中的科学图只从RR-02/03/04已批准tracked public derivatives逐字节复制或等比例缩放；未从audit figure、ignored R1输出或本地PDF取图。
+- 1100px与390px静态稿已用实际卡片渲染并视觉检查。390px逐卡只承担一个比较，无六宫格/九宫格技术图作为主页主证据，且保留线型、marker、直接标签等非颜色编码。
+- 最终选图、license、citation与公开paper/DOI链接仍待作者勾选；本轮未读取或修改真实个人网站仓库，未push、deploy、publish，也未自动发布本地PDF。状态只能写作“主页内容包已准备/仍未终选或发布”，不能写作“网站已完成”。
