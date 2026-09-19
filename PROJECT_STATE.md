@@ -72,3 +72,19 @@ MATLAB不在shell的`PATH`中，但已定位并成功调用`/Applications/MATLAB
 2026-09-19：X1三张tracked技术图完成读者向重排。domain map新增`D^(i,j)`释义、稀疏marker与局部像边界；fiber collapse明确“many x -> one image point”并提升为public candidate；trajectory按原始`x(t)`、逐点`eta(x(t))`、独立积分`z(t)`、certificate四对象编号，A/B分离用inset及线型/marker双重编码。
 
 新增`docs/assets/x1/`五组900/390px主页/移动端派生图及caption/provenance清单。修改前后`x1_trajectories.csv`逐字节一致，MAT全部加载字段`isequaln`，certificate margins、branch/boundary checks与数值参数不变。fiber是否进入主页终选仍待作者决定；本轮未修改README、未发布。
+
+## RR-05 / CR-P1-01 / CR-P1-02 / CR-P1-03 公开读者入口
+
+2026-09-19：README读者入口已实现。公开路线现按“问题—为什么是set—几何—动力学—welfare—非双射表示—条件化激励—复现—provenance/limitations”组织，不再要求先读`PROJECT_STATE`或`AUDIT`；audit只作为“how this reconstruction was verified”的深入入口。
+
+- `README.md`嵌入7张tracked响应式代表图，并提供30秒、3分钟和15分钟阅读路线。
+- `docs/RESULTS.md`覆盖全部18张tracked技术图；每张均有question、comparison、look、takeaway、do-not-infer、caption和alt text。
+- `docs/CONCEPTS_AND_NOTATION.md`固定`J_j^i`、BR、`X*(J)`、selected pseudo-gradient、own/externality/total、`Gamma/Omega`、`eta/z`、`sigma/omega`及完整预算恒等式。
+- `docs/PROVENANCE.md`分开paper、legacy、new construction、schematic、independent numerical/renderer和clean MATLAB层级，并明确ignored本地材料不属于公共clone。
+- 公开复现仍只链接RR-01的`docs/REPRODUCING.md`与`run_public_reproduction.m`，未修改命令逻辑。
+- 在新建空`/private/tmp`输出根实际运行`/Applications/MATLAB_R2025b.app/bin/matlab -batch "addpath('experiments'); run_public_reproduction('<empty-output-root>')"`，退出码0，索引为18图＋21非图；运行前后公开文档、状态文件与实验入口SHA-256清单一致。
+- 本地隔离clone按`git ls-files`逐项解析README及四份公开docs的相对链接，全部解析为tracked文件，且无链接指向`results/r1`、local PDF或ignored-only目录。
+- 人工走读通过：30秒路线能回答多目标为何生成Nash set且Nash不等于social Pareto；3分钟路线能区分own/externality/total及`eta(x(t))/z(t)`；15分钟路线能找到六组入口、18图说明、复现与限制。
+- README 7张嵌图均在900px和390px逐张打开；390px使用单比较响应式卡，未要求移动端解读完整多面板技术图。
+
+P1当前tracked public PNG的权威生成源已由RR-03收敛为clean MATLAB；旧“P1图源待作者选择”不再是当前阻碍。正式发布仍被三项作者选择阻断：许可证、正式citation元数据、作者确认的公开论文/DOI链接。个人主页终选仍是后续传播选择。本任务未创建`LICENSE`或`CITATION.cff`，未push、部署或发布。

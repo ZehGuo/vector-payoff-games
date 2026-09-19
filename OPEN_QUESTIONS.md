@@ -77,3 +77,10 @@
 ### RR-01增量（已关闭）
 
 安全公开复现入口与独立复现文档已实现，并以MATLAB R2025b Update 7在空临时目录验证18类图、21类非图产物及tracked worktree不变。CR-P0-01/02中的runner安全缺口已关闭；许可证、引用、P1公开图源和主页终选仍是发布前作者决定。
+
+### RR-03 / RR-05增量
+
+- P1公开图源已由RR-03关闭：当前tracked P1 PNG以clean MATLAB入口和未改数值结果为权威生成源，旧独立renderer只保留历史provenance。它不再是release blocker。
+- RR-05已关闭README连续研究链、统一notation、18图逐图说明、公开/本地provenance和三条阅读路线缺口；`docs/REPRODUCING.md`继续作为唯一公开复现说明。
+- 仍需作者决定且阻碍正式release：**许可证、正式citation元数据、作者确认的公开paper/DOI链接**。本仓库不代选许可证、不伪造`CITATION.cff`、不链接local PDF。
+- 个人主页最终选图与篇幅仍待作者在后续任务审阅；它不改变当前GitHub仓库的18图覆盖或科研结论。
