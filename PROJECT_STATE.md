@@ -56,3 +56,7 @@ MATLAB不在shell的`PATH`中，但已定位并成功调用`/Applications/MATLAB
 ## 当前阻碍
 
 科研实现与R1没有运行环境阻碍。对外传播前有四项作者决定：许可证、推荐引用/公开论文链接、P1公开图的权威生成器、个人主页最终选图与篇幅。这些不推翻科研完成状态，但会阻碍正式公开发布。
+
+## RR-01安全公开复现入口
+
+2026-09-19：已实现并验证`experiments/run_public_reproduction.m`与`docs/REPRODUCING.md`。MATLAB R2025b Update 7从仓库根目录在空临时输出目录依次完成T1/S1/S2/P1/X1/I1，核对18类图和21类非图科研产物；T1/I1图显式写入各自`figures/`子目录，运行前后tracked diff为空。成功运行仍只属于执行证据，不替代理论证明。
