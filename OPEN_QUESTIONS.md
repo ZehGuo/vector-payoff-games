@@ -82,5 +82,6 @@
 
 - P1公开图源已由RR-03关闭：当前tracked P1 PNG以clean MATLAB入口和未改数值结果为权威生成源，旧独立renderer只保留历史provenance。它不再是release blocker。
 - RR-05已关闭README连续研究链、统一notation、18图逐图说明、公开/本地provenance和三条阅读路线缺口；`docs/REPRODUCING.md`继续作为唯一公开复现说明。
-- 仍需作者决定且阻碍正式release：**许可证、正式citation元数据、作者确认的公开paper/DOI链接**。本仓库不代选许可证、不伪造`CITATION.cff`、不链接local PDF。
+- 2026-09-20作者已关闭正式release三项门槛：代码BSD-3-Clause，原创文档/生成图CC BY 4.0，软件引用与模块论文链接见`CITATION.cff`和`docs/RELATED_PUBLICATIONS.md`。仍不链接或发布local PDF。
+- 仅余metadata维护：ECC 2026最终DOI/page range公开后更新引用；IFAC 2023标题的`Function/Functions`以最终publisher export复核。二者不阻碍`v1.0.0`发布。
 - 个人主页最终选图与篇幅仍待作者在后续任务审阅；它不改变当前GitHub仓库的18图覆盖或科研结论。

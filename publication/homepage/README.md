@@ -56,8 +56,9 @@ extension material only; they do not interrupt the short route.
 - Describe X1 as information-losing analysis, not stabilization. Keep I1's
   `algebra checked | trajectory observed | invariant containment unproved`
   boundary next to the design cards.
-- Replace `PAPER_LINK_PENDING` only with author-confirmed public DOI/version
-  URLs. Never substitute a path to a local PDF.
+- Use only the author-confirmed DOI and conference-record URLs in
+  [`docs/RELATED_PUBLICATIONS.md`](../../docs/RELATED_PUBLICATIONS.md). Never
+  substitute a path to a local PDF.
 
 ## Static layout checks
 
@@ -77,9 +78,11 @@ and each card carries one comparison.
 - [ ] Approve the paired I1 trajectory and aggregate-transfer cards.
 - [ ] Decide whether the S1 stable/unstable and S2 noncompact extensions appear
   on the homepage or remain repository-only links.
-- [ ] Select a repository license.
-- [ ] Supply the preferred citation metadata.
-- [ ] Supply and approve public paper/DOI link targets.
+- [x] Repository code license: BSD-3-Clause.
+- [x] Documentation and original generated-figure license: CC BY 4.0.
+- [x] Software citation metadata: `CITATION.cff`, release `v1.0.0`.
+- [x] Public paper targets: DOI records plus the ECC 2026 program pending its
+  final DOI/page range.
 
 These are editorial and release decisions. The pack does not reopen resolved
 scientific questions and must not be described as a completed website.

@@ -87,7 +87,7 @@ MATLAB不在shell的`PATH`中，但已定位并成功调用`/Applications/MATLAB
 - 人工走读通过：30秒路线能回答多目标为何生成Nash set且Nash不等于social Pareto；3分钟路线能区分own/externality/total及`eta(x(t))/z(t)`；15分钟路线能找到六组入口、18图说明、复现与限制。
 - README 7张嵌图均在900px和390px逐张打开；390px使用单比较响应式卡，未要求移动端解读完整多面板技术图。
 
-P1当前tracked public PNG的权威生成源已由RR-03收敛为clean MATLAB；旧“P1图源待作者选择”不再是当前阻碍。正式发布仍被三项作者选择阻断：许可证、正式citation元数据、作者确认的公开论文/DOI链接。个人主页终选仍是后续传播选择。本任务未创建`LICENSE`或`CITATION.cff`，未push、部署或发布。
+P1当前tracked public PNG的权威生成源已由RR-03收敛为clean MATLAB；旧“P1图源待作者选择”不再是当前阻碍。2026-09-20作者确认代码采用BSD-3-Clause、原创文档/生成图采用CC BY 4.0，并批准`CITATION.cff`、相关论文DOI链接、公开仓库`ZehGuo/vector-payoff-games`及首发`v1.0.0`。个人主页终选仍是后续传播选择，不随仓库发布自动部署。
 
 ## RR-06个人主页可移植内容包
 
@@ -96,4 +96,4 @@ P1当前tracked public PNG的权威生成源已由RR-03收敛为clean MATLAB；�
 - `story.md`给出面向非专业主页读者的英文短叙事；`captions.md`固定caption、alt、repository/paper target与就近科学边界；`asset_manifest.csv`逐项登记tracked源、生成方式、provenance、390/900尺寸、claim boundary与作者审批状态。
 - `assets/`中的科学图只从RR-02/03/04已批准tracked public derivatives逐字节复制或等比例缩放；未从audit figure、ignored R1输出或本地PDF取图。
 - 1100px与390px静态稿已用实际卡片渲染并视觉检查。390px逐卡只承担一个比较，无六宫格/九宫格技术图作为主页主证据，且保留线型、marker、直接标签等非颜色编码。
-- 最终选图、license、citation与公开paper/DOI链接仍待作者勾选；本轮未读取或修改真实个人网站仓库，未push、deploy、publish，也未自动发布本地PDF。状态只能写作“主页内容包已准备/仍未终选或发布”，不能写作“网站已完成”。
+- 最终选图仍待作者勾选；license、citation与公开paper/DOI链接已确认。真实个人网站仓库仍未修改或部署，也未发布本地PDF。状态只能写作“主页内容包已准备/仍未终选或发布”，不能写作“网站已完成”。

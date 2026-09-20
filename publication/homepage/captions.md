@@ -1,8 +1,8 @@
 # Homepage captions, alt text, and targets
 
 Status: provisional editorial selection; author approval pending. Keep every
-boundary statement adjacent to its image. `PAPER_LINK_PENDING` means an
-author-confirmed public DOI/version URL, never a local PDF.
+boundary statement adjacent to its image. Paper targets are public DOI or
+conference records from `docs/RELATED_PUBLICATIONS.md`, never local PDFs.
 
 ## Main route
 
@@ -14,7 +14,7 @@ author-confirmed public DOI/version URL, never a local PDF.
 - Alt text: Styled red and blue best-response lines enclose a purple weighted
   Nash region in a two-dimensional production and pollution example.
 - Repository target: [`README.md` — Why a set?](../../README.md#why-a-set)
-- Paper target: `PAPER_LINK_PENDING`.
+- Paper target: [ACC 2024](https://doi.org/10.23919/ACC60939.2024.10644643).
 - Boundary: Weighted decentralized Nash equilibria are not centralized welfare
   optima.
 
@@ -26,7 +26,7 @@ author-confirmed public DOI/version URL, never a local PDF.
 - Alt text: A card compares two sampled times on one trajectory and reports both
   payoff components of agent 2 lower at the later time.
 - Repository target: [`docs/RESULTS.md` — Weak-Pareto trap](../../docs/RESULTS.md#11-weak-pareto-trap)
-- Paper target: `PAPER_LINK_PENDING`.
+- Paper targets: [IEEE Control Systems Letters 2024](https://doi.org/10.1109/LCSYS.2024.3522596) and [CDC 2024](https://doi.org/10.1109/CDC56724.2024.10886420).
 - Boundary: This trap is separate from the new nonweak comparison game.
 
 ### P1 rate decomposition — proposed welfare card 2
@@ -36,7 +36,7 @@ author-confirmed public DOI/version URL, never a local PDF.
 - Alt text: Curves for own contribution, externality, and total payoff rate are
   distinguished by line style and labeled relative to zero.
 - Repository target: [`docs/RESULTS.md` — Rate decomposition](../../docs/RESULTS.md#10-rate-decomposition)
-- Paper target: `PAPER_LINK_PENDING`.
+- Paper targets: [IEEE Control Systems Letters 2024](https://doi.org/10.1109/LCSYS.2024.3522596) and [CDC 2024](https://doi.org/10.1109/CDC56724.2024.10886420).
 - Boundary: The three terms diagnose one dynamics; they are not three different
   trajectories or a theorem proof.
 
@@ -47,7 +47,7 @@ author-confirmed public DOI/version URL, never a local PDF.
 - Alt text: Six open-circle states on one original-space line fiber collapse to
   one filled point on a transformed coordinate axis.
 - Repository target: [`docs/RESULTS.md` — Fiber collapse](../../docs/RESULTS.md#13-fiber-collapse)
-- Paper target: `PAPER_LINK_PENDING`.
+- Paper target: [ECC 2026 program](https://controls.papercept.net/conferences/conferences/ECC26/program/ECC26_ContentListWeb_3.html); DOI/page range pending.
 - Boundary: The transformation is an information-losing analysis device, not a
   controller or stabilizer.
 
@@ -58,7 +58,7 @@ author-confirmed public DOI/version URL, never a local PDF.
 - Alt text: Original and incentivized paths are drawn with distinct styles near
   best-response lines and a marked target.
 - Repository target: [`docs/RESULTS.md` — INC-0 before and after](../../docs/RESULTS.md#17-inc-0-before-and-after)
-- Paper target: `PAPER_LINK_PENDING`.
+- Paper targets: [IEEE Control Systems Letters 2024](https://doi.org/10.1109/LCSYS.2024.3522596) and [CDC 2024](https://doi.org/10.1109/CDC56724.2024.10886420).
 - Boundary: Algebra checked; trajectory observed; invariant containment
   unproved.
 
@@ -69,7 +69,7 @@ author-confirmed public DOI/version URL, never a local PDF.
 - Alt text: Aggregate transfer is plotted over time at or below a labeled zero
   line.
 - Repository target: [`docs/RESULTS.md` — INC-0 before and after](../../docs/RESULTS.md#17-inc-0-before-and-after)
-- Paper target: `PAPER_LINK_PENDING`.
+- Paper targets: [IEEE Control Systems Letters 2024](https://doi.org/10.1109/LCSYS.2024.3522596) and [CDC 2024](https://doi.org/10.1109/CDC56724.2024.10886420).
 - Boundary: This sampled observation is not a certificate of full invariant-set
   containment. INC-omega is a different game, not a one-factor causal control.
 
@@ -82,7 +82,7 @@ author-confirmed public DOI/version URL, never a local PDF.
 - Alt text: A compact key pairs six cube faces and eight vertices by matching
   labels across the weight domain and Nash image.
 - Repository target: [`docs/RESULTS.md` — Cube](../../docs/RESULTS.md#1-cube-face-correspondence)
-- Paper target: `PAPER_LINK_PENDING`.
+- Paper target: [ACC 2024](https://doi.org/10.23919/ACC60939.2024.10644643).
 - Boundary: The routing key and finite sampling do not prove the global
   diffeomorphism.
 
@@ -94,7 +94,7 @@ author-confirmed public DOI/version URL, never a local PDF.
 - Alt text: A compact key pairs five prism faces and six vertices by matching
   labels across the weight domain and Nash image.
 - Repository target: [`docs/RESULTS.md` — Prism](../../docs/RESULTS.md#2-triangular-prism-face-correspondence)
-- Paper target: `PAPER_LINK_PENDING`.
+- Paper target: [ACC 2024](https://doi.org/10.23919/ACC60939.2024.10644643).
 - Boundary: Visibility in a 3D view and finite samples do not establish global
   bijectivity.
 
@@ -108,7 +108,7 @@ author-confirmed public DOI/version URL, never a local PDF.
 - Alt text: Two separate phase-portrait cards contrast an inward stable path
   with an unstable magenta outward eigenray witness.
 - Repository target: [`docs/RESULTS.md` — S1](../../docs/RESULTS.md#s1--stable-and-unstable-piecewise-dynamics)
-- Paper target: `PAPER_LINK_PENDING`.
+- Paper targets: [IFAC 2023](https://doi.org/10.1016/j.ifacol.2023.10.1395) and [CDC 2023](https://doi.org/10.1109/CDC49753.2023.10384265).
 - Boundary: Stability identity comes from slope order, branch matrices,
   eigenstructure, active cones, and theorem assumptions—not a plotted path.
 
@@ -120,6 +120,6 @@ author-confirmed public DOI/version URL, never a local PDF.
 - Alt text: Each separate card shows one unbounded purple Nash geometry with a
   mixed-sign certificate and a recession-direction arrow.
 - Repository target: [`docs/RESULTS.md` — S2 noncompact](../../docs/RESULTS.md#8-three-noncompact-configurations)
-- Paper target: `PAPER_LINK_PENDING`.
+- Paper targets: [IFAC 2023](https://doi.org/10.1016/j.ifacol.2023.10.1395) and [CDC 2023](https://doi.org/10.1109/CDC49753.2023.10384265).
 - Boundary: A bounded viewport does not test compactness, and Theorem 3.11 does
   not classify these mixed-sign systems.

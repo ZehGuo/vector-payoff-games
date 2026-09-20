@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: >-
+  If you use this software, please cite this software release and the
+  publication or publications corresponding to the experiment modules you use.
+title: "Vector-Payoff Games: From Nash-Set Geometry to Incentive Design"
+type: software
+authors:
+  - family-names: "Guo"
+    given-names: "Zehui"
+    website: "https://zehguo.github.io/"
+version: "1.0.0"
+date-released: 2026-09-20
+repository-code: "https://github.com/ZehGuo/vector-payoff-games"
+url: "https://github.com/ZehGuo/vector-payoff-games"
+license: BSD-3-Clause
+keywords:
+  - vector-payoff games
+  - Nash equilibrium sets
+  - piecewise dynamical systems
+  - Pareto improvement
+  - incentive design
+  - MATLAB

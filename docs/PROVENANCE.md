@@ -93,15 +93,16 @@ how the reconstruction was checked can continue to:
 These records distinguish static inspection, exact calculations, independent
 checks, clean MATLAB runs, and exact-reproduction status.
 
-## Release blockers
+## Public-release metadata
 
-The author has not yet supplied or confirmed:
+The author confirmed the public-release metadata on 2026-09-20:
 
-1. a license;
-2. formal citation metadata; and
-3. public paper/DOI links.
+- software code: BSD-3-Clause;
+- original documentation and repository-generated figures: CC BY 4.0;
+- software citation: root `CITATION.cff`, release `v1.0.0`;
+- module-specific papers: [`RELATED_PUBLICATIONS.md`](RELATED_PUBLICATIONS.md).
 
-No license or `CITATION.cff` is created by inference, and no local PDF is linked.
-These items block public release even though the scientific reconstruction and
-public reproduction route are implemented. Homepage image selection is a
-separate author decision and does not alter repository figure provenance.
+No local PDF is linked or redistributed. The license scope excludes
+publisher-formatted papers, third-party material, legacy archives, trademarks,
+and content not distributed in this repository. Homepage image selection is a
+separate editorial decision and does not alter repository figure provenance.

@@ -193,15 +193,17 @@ directories. A new clone does not contain local PDFs, the legacy archive,
 previous prototypes, or generated run bundles, and no public link in these docs
 depends on them.
 
-## Papers, citation, and license — release blockers
+## Papers, citation, and license
 
-Formal citation metadata, author-confirmed public paper/DOI links, and a license
-have **not yet been supplied**. Therefore:
+Use [`CITATION.cff`](CITATION.cff) to cite release `v1.0.0`. If you use a
+specific experiment group, also cite the corresponding paper listed in
+[Related publications](docs/RELATED_PUBLICATIONS.md). Public links point to DOI
+or conference records; publisher PDFs are not redistributed here.
 
-- no `CITATION.cff` is fabricated;
-- no local paper PDF or unconfirmed public URL is linked;
-- no license is selected or created on the author's behalf; and
-- the repository must not be described as ready for public release until the
-  author resolves all three items.
-
-The reconstruction work also performs no push, deployment, or publication.
+Code in `experiments/` and `audit/evidence/` is released under the
+[BSD 3-Clause License](LICENSE). Original documentation and
+repository-generated figures are released under
+[CC BY 4.0](LICENSE-DOCUMENTATION) unless a file or provenance record states
+otherwise. These licenses do not cover publisher-formatted papers, third-party
+source material, legacy archives, trademarks, or material not distributed in
+this repository.
