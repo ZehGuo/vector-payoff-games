@@ -61,22 +61,22 @@ welfare optimum.*
 
 ## From preference weights to a Nash set
 
-For agent `i`, `J_j^i` denotes objective `j`, and `w_j^i >= 0` is an
+For agent $i$, $J_j^i$ denotes objective $j$, and $w_j^i \geq 0$ is an
 admissible weight on that objective. A weighted scalar game asks each agent to
 maximize
 
-```text
-sum_j w_j^i J_j^i(x).
-```
+$$
+\sum_j w_j^i J_j^i(x).
+$$
 
-`X*(J)` is the union of the Nash states obtained over the allowed weights. In
+$X^*(J)$ is the union of the Nash states obtained over the allowed weights. In
 the quadratic T1 examples, a weight produces a state by solving
 
-```text
-M(w)x + b(w) = 0,
-```
+$$
+M(w)x+b(w)=0,
+$$
 
-with the **same weights applied to both `M` and `b`**. Under the paper's stated
+with the **same weights applied to both $M$ and $b$**. Under the paper's stated
 regularity conditions, this gives the weight-domain/Nash-image correspondence.
 The finite grids in this repository check the implementation; they do not prove
 the global one-to-one/onto statement. See
@@ -138,11 +138,17 @@ sampled recession direction is not the noncompactness proof.
 **Question:** If an agent moves in a direction that improves its selected
 objective, must its total payoff improve?
 
-For every payoff,
+For dynamics $\dot{x}=f(x)$, the rate of every payoff decomposes as
 
-```text
-total payoff rate = own-direction contribution + externality.
-```
+$$
+\frac{dJ_j^i}{dt}
+=
+\underbrace{\frac{\partial J_j^i}{\partial x^i}\dot{x}^i}_{\text{own-direction contribution}}
++
+\underbrace{\frac{\partial J_j^i}{\partial x^{-i}}\dot{x}^{-i}}_{\text{externality}}.
+$$
+
+In words: **total payoff rate = own-direction contribution + externality**.
 
 The answer is no in general. An agent's own motion can contribute positively
 while the other agent's motion creates a sufficiently negative externality.
@@ -165,14 +171,14 @@ externality from the other agent's motion is the missing term.*
 **Question:** Can a set-stability problem be represented as an origin-stability
 problem, and what information can that representation lose?
 
-The original problem asks whether `x(t)` approaches the Nash set. The
-transformation `z = eta(x)` maps the Nash set to the origin, allowing the
+The original problem asks whether $x(t)$ approaches the Nash set. The
+transformation $z=\eta(x)$ maps the Nash set to the origin, allowing the
 set-stability question to be studied in transformed coordinates.
 
-The key limitation is that `eta` is non-bijective. Different original states
+The key limitation is that $\eta$ is non-bijective. Different original states
 may have the same image, so an inverse image can be a set-valued fiber. The
-original trajectory `x(t)`, its pointwise image `eta(x(t))`, and an
-independently integrated transformed-system trajectory `z(t)` are therefore
+original trajectory $x(t)$, its pointwise image $\eta(x(t))$, and an
+independently integrated transformed-system trajectory $z(t)$ are therefore
 different mathematical objects. The transformation is an analysis device, not
 a controller or stabilizer.
 
@@ -188,9 +194,9 @@ decentralized behavior toward a chosen welfare target?
 
 I1 moves the research chain from **analysis of a given game** to **designing
 incentives that change decentralized behavior**. The construction modifies
-only `J_1^i` and keeps the target, `omega`, `sigma`, anchoring, and budget roles
+only $J_1^i$ and keeps the target, $\omega$, $\sigma$, anchoring, and budget roles
 explicit. It evaluates original payoffs, modified payoffs, and aggregate
-transfer. `omega` is compared within the same INC-0 game; the INC-omega
+transfer. $\omega$ is compared within the same INC-0 game; the INC-omega
 supplement is a different game.
 
 The evidence boundary remains:
@@ -211,7 +217,7 @@ not been proved for the displayed parameters.*
 | S1 | When is the piecewise Nash set stable or unstable? | Four new cases satisfy the stable branch pattern; one retains active positive-eigenvalue witnesses. | [`run_s1_five_cases`](experiments/run_s1_five_cases.m) |
 | S2 | What changes at rank degeneracy or noncompactness? | Rank-degenerate cases use Theorem 3.11; mixed determinant signs certify separate noncompact constructions via Proposition 3.1. | [`run_s2_degenerate_noncompact`](experiments/run_s2_degenerate_noncompact.m) |
 | P1 | Does own improvement imply payoff improvement? | No: total change also contains externality; the legacy trap is separate finite-grid evidence. | [`run_p1_payoff_properties`](experiments/run_p1_payoff_properties.m) |
-| X1 | What does a non-bijective representation preserve or collapse? | Fibers collapse, and `eta(x(t))` is not the independently integrated `z(t)`. | [`run_x1_transformation_stability`](experiments/run_x1_transformation_stability.m) |
+| X1 | What does a non-bijective representation preserve or collapse? | Fibers collapse, and $\eta(x(t))$ is not the independently integrated $z(t)$. | [`run_x1_transformation_stability`](experiments/run_x1_transformation_stability.m) |
 | I1 | What can a budget-aware incentive design show? | The algebra and observed paths pass their checks, while full invariant-set containment remains unproved. | [`run_i1_incentive_budget`](experiments/run_i1_incentive_budget.m) |
 
 Every one of the 18 technical figures has a research question, comparison,
