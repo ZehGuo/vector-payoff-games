@@ -1,43 +1,65 @@
 # Vector-Payoff Games: From Nash-Set Geometry to Incentive Design
 
-In a scalar-payoff game, each agent optimizes one ordered objective. Here each
-agent has several payoff components without a fixed preference between them, so
-admissible objective weights generally generate a **set of Nash states**, not a
-single Nash point.
+**Research question:** What changes when each agent pursues several payoff
+objectives, but no preference between those objectives is fixed in advance?
 
-This repository connects vector-payoff Nash-set geometry, piecewise dynamics,
-welfare, non-bijective representation, and conditional incentive design. It
-combines paper-parameter cases, explicitly labeled new constructions, one
-legacy simulation, exact calculations, independent checks, and MATLAB runs
-without treating those evidence levels as interchangeable.
+## Why does Nash equilibrium become a set?
 
-- **Geometry:** map payoff-weight domains to weighted Nash images.
-- **Dynamics and welfare:** identify stable, unstable, degenerate, and
-  noncompact cases, then separate own improvement from externality and total
-  payoff change.
-- **Representation and design:** show what a non-bijective transformation
-  preserves or collapses, and test an incentive construction under explicit
-  theorem conditions and a complete budget identity.
+In a standard scalar-payoff game, each agent optimizes one payoff, and the
+analysis often focuses on a Nash equilibrium of that game.
+
+Here, each agent has several payoff components. To obtain a scalar game, the
+components are combined using objective weights. Different admissible weights
+represent different preferences and can produce different Nash equilibria.
+
+The central object is therefore the **Nash equilibrium set**: the collection of
+decentralized equilibrium states generated as the admissible preference weights
+vary. The repository asks what this set looks like, whether decentralized
+behavior approaches or leaves it, how that behavior affects payoffs, what a
+change of representation preserves, and how incentives can alter the behavior.
+
+```text
+Multiple objectives
+        ↓
+Preference weights
+        ↓
+Nash equilibrium set
+        ↓
+Geometry             T1
+        ↓
+Stability            S1 / S2
+        ↓
+Payoff effects       P1
+        ↓
+Representation       X1
+        ↓
+Incentive design     I1
+```
+
+**Start here:** [follow the six-part results guide](docs/RESULTS.md) ·
+[learn the notation](docs/CONCEPTS_AND_NOTATION.md) ·
+[reproduce all six experiments](docs/REPRODUCING.md)
+
+## Three objects that should not be confused
+
+| Object | What it means here | Question it answers |
+|---|---|---|
+| **Nash set** | The decentralized equilibrium states obtained from different admissible preference weights. | Where can individually optimal responses balance? |
+| **Dynamics** | The state trajectory generated when agents move according to a selected pseudo-gradient and branch rule. | Does behavior approach, enter, or leave the Nash set? |
+| **Social Pareto / welfare target** | A centralized comparison based on the agents' payoffs or a chosen welfare function. | Which states are desirable from a collective viewpoint? |
+
+**A Nash set is not a social Pareto set.** Nash states describe decentralized
+mutual best responses under selected preferences. A social Pareto set or welfare
+target compares outcomes centrally. The two constructions answer different
+questions and need not select the same states.
 
 ![Four styled best-response lines bound a purple weighted Nash region in two-dimensional production space; the region is explicitly distinguished from a social Pareto set.](docs/assets/t1_s1_s2/T1_production_pollution_card_900.png)
 
-*A Nash set is not a social Pareto set. In the production--pollution example,
-the purple region is the image of weighted decentralized Nash equilibria. It is
-not a centralized welfare optimum.*
+*In the production--pollution example, varying the objective weights produces
+the purple decentralized weighted Nash image. The region is not a centralized
+welfare optimum.*
 
-**Start here:** [read the research story](docs/RESULTS.md) ·
-[reproduce all six experiments](docs/REPRODUCING.md) ·
-[learn the notation](docs/CONCEPTS_AND_NOTATION.md)
-
-## Repository structure
-
-- `experiments/`: six MATLAB experiment entries and the safe all-in-one runner.
-- `figures/`: 18 tracked MATLAB reference figures used by the results guide.
-- `docs/`: concepts, results, reproduction instructions, provenance, and papers.
-- `verification/`: independent numerical checks and compact reference outputs.
-- `results/`: generated output location; ignored by Git.
-
-## Why is the equilibrium a set?
+## From preference weights to a Nash set
 
 For agent `i`, `J_j^i` denotes objective `j`, and `w_j^i >= 0` is an
 admissible weight on that objective. A weighted scalar game asks each agent to
@@ -58,34 +80,41 @@ with the **same weights applied to both `M` and `b`**. Under the paper's stated
 regularity conditions, this gives the weight-domain/Nash-image correspondence.
 The finite grids in this repository check the implementation; they do not prove
 the global one-to-one/onto statement. See
-[concepts and notation](docs/CONCEPTS_AND_NOTATION.md) for the full symbol map.
+[Concepts and notation](docs/CONCEPTS_AND_NOTATION.md) for the complete symbol
+map.
 
 ![A compact key pairs the six cube faces and eight vertices by matching identifiers from the weight cube to the weighted Nash image.](docs/assets/t1_s1_s2/T1_cube_correspondence_card_900.png)
 
-*Matching face and vertex identifiers route the reader through the paper's cube
-correspondence. The card is a map key, not a numerical proof of global
+*Matching identifiers connect faces and vertices of the weight cube to the
+weighted Nash image. This card is a map key, not a numerical proof of global
 bijectivity.*
 
-## The research chain
+## The six-part research chain
 
-### 1. Geometry — T1
+### T1 — Geometry of the Nash Set
 
-Weights generate scalarized games; their Nash states assemble into a geometric
-image. Cube and prism cases retain the paper parameters, the
-production--pollution case gives an application, and the nonlinear boundary
+**Question:** How do admissible preference weights generate and organize a Nash
+set?
+
+Weights define scalarized games, and their Nash equilibria assemble into a
+geometric image. The cube and prism cases retain the paper parameters, the
+production--pollution case provides an application, and the nonlinear boundary
 figure is explicitly schematic.
 
-### 2. Piecewise dynamics — S1 and S2
+### S1 — Stability of Piecewise Game Dynamics
+
+**Question:** When do decentralized piecewise dynamics approach a compact Nash
+set, and when can they move away from it?
 
 A selected pseudo-gradient chooses one own-objective direction for each active
 agent. Branch matrices, determinant signs, eigenstructure, active cones, and
-theorem assumptions distinguish four stable S1 cases from one unstable case.
-S2 then separates rank-degenerate stable/unstable constructions from new
-noncompact constructions.
+theorem assumptions distinguish four stable new cases from one unstable new
+case. Trajectories illustrate these classifications; they do not establish them
+by themselves.
 
 ![A stable phase portrait shows a black trajectory entering a purple Nash quadrilateral among styled best-response lines.](docs/assets/t1_s1_s2/S1_stable_case_card_900.png)
 
-*Stable S1 representative: the analytic branch and theorem checks classify the
+*Stable S1 representative: analytic branch and theorem checks classify the
 case; the trajectory illustrates that classification.*
 
 ![An unstable phase portrait highlights a magenta dashed outward eigenray witness within a purple Nash quadrilateral.](docs/assets/t1_s1_s2/S1_unstable_case_card_900.png)
@@ -93,13 +122,32 @@ case; the trajectory illustrates that classification.*
 *Unstable S1 representative: the active positive-eigenvalue ray is the local
 witness. Visual slope or one trajectory endpoint is not the proof.*
 
-### 3. Welfare — P1
+### S2 — Degenerate and Noncompact Cases
+
+**Question:** What changes when the Nash geometry becomes rank-degenerate or
+unbounded?
+
+S2 separates two settings. New rank-degenerate constructions are classified
+under the recorded Theorem 3.11 hypotheses. Separate new noncompact
+constructions use mixed branch-determinant signs under the recorded
+general-position condition and Proposition 3.1. A bounded plotting window or a
+sampled recession direction is not the noncompactness proof.
+
+### P1 — Payoff Improvement and Externalities
+
+**Question:** If an agent moves in a direction that improves its selected
+objective, must its total payoff improve?
 
 For every payoff,
 
 ```text
 total payoff rate = own-direction contribution + externality.
 ```
+
+The answer is no in general. An agent's own motion can contribute positively
+while the other agent's motion creates a sufficiently negative externality.
+This decomposition is the bridge between the decentralized dynamics and their
+welfare effects.
 
 The first three P1 games keep the trajectory and own-gradient structure fixed
 while changing only linear externalities. They are a new exact comparison
@@ -112,26 +160,40 @@ a sampled two-time weak-Pareto trap.
 *Moving in an own-improving direction need not raise total payoff. The
 externality from the other agent's motion is the missing term.*
 
-### 4. Non-bijective representation — X1
+### X1 — Non-bijective Representation
 
-The map `eta` sends two-dimensional active domains to local quadrant subsets,
-one-active strips to axes, and the Nash set to the origin. An axis point can
-therefore have an entire set-valued inverse fiber. The original trajectory
-`x(t)`, its pointwise image `eta(x(t))`, and an independently integrated
-transformed trajectory `z(t)` are three different objects.
+**Question:** Can a set-stability problem be represented as an origin-stability
+problem, and what information can that representation lose?
+
+The original problem asks whether `x(t)` approaches the Nash set. The
+transformation `z = eta(x)` maps the Nash set to the origin, allowing the
+set-stability question to be studied in transformed coordinates.
+
+The key limitation is that `eta` is non-bijective. Different original states
+may have the same image, so an inverse image can be a set-valued fiber. The
+original trajectory `x(t)`, its pointwise image `eta(x(t))`, and an
+independently integrated transformed-system trajectory `z(t)` are therefore
+different mathematical objects. The transformation is an analysis device, not
+a controller or stabilizer.
 
 ![Six original states lie on one colored fiber and map to one filled point on a transformed coordinate axis.](docs/assets/x1/X1_fiber_collapse_vertical_900.png)
 
 *Many original states can share one image point. The inverse is the full fiber,
-not a selected representative state; the map is an analysis device, not a
-controller.*
+not a selected representative state.*
 
-### 5. Conditional incentive design — I1
+### I1 — Conditional Incentive Design
 
-The construction modifies only `J_1^i`, keeps target, `omega`, `sigma`,
-anchoring, and budget roles explicit, and evaluates original payoffs, modified
-payoffs, and aggregate transfer. `omega` is compared within the same INC-0 game;
-the INC-omega supplement is a different game. The public conclusion is:
+**Question:** Under explicit conditions, how can incentives change
+decentralized behavior toward a chosen welfare target?
+
+I1 moves the research chain from **analysis of a given game** to **designing
+incentives that change decentralized behavior**. The construction modifies
+only `J_1^i` and keeps the target, `omega`, `sigma`, anchoring, and budget roles
+explicit. It evaluates original payoffs, modified payoffs, and aggregate
+transfer. `omega` is compared within the same INC-0 game; the INC-omega
+supplement is a different game.
+
+The evidence boundary remains:
 
 `algebra checked | trajectory observed | invariant containment unproved`
 
@@ -140,19 +202,6 @@ the INC-omega supplement is a different game. The public conclusion is:
 *The observed incentivized trajectory approaches the target region. This is not
 an unconditional theorem guarantee because full invariant-set containment has
 not been proved for the displayed parameters.*
-
-## Reading routes
-
-- **30 seconds:** read the opening, “Why is the equilibrium a set?”, and the
-  production--pollution caption.
-- **3 minutes:** add the P1 rate decomposition, the X1 fiber collapse, the I1
-  condition boundary, and [provenance and limitations](docs/PROVENANCE.md).
-- **15 minutes:** follow all six experiment groups in
-  [Results](docs/RESULTS.md), then use the linked entry, figure, table, and
-  verification records for the groups that matter to you.
-
-The README is the public entry point; supporting pages provide the details
-needed to interpret and reproduce the results.
 
 ## Results at a glance
 
@@ -168,6 +217,16 @@ needed to interpret and reproduce the results.
 Every one of the 18 technical figures has a research question, comparison,
 caption, alt text, evidence statement, and “do not infer” boundary in
 [Results](docs/RESULTS.md).
+
+## Reading routes
+
+- **30 seconds:** read “Why does Nash equilibrium become a set?”, the research
+  map, and “Three objects that should not be confused.”
+- **3 minutes:** add the six research questions, the P1 rate decomposition, the
+  X1 fiber limitation, and the I1 evidence boundary.
+- **15 minutes:** follow all six experiment groups in
+  [Results](docs/RESULTS.md), then use the linked entries, figures, and
+  verification records for the groups that matter to you.
 
 ## Reproduce the public outputs
 
@@ -185,7 +244,15 @@ archives, or earlier result bundles. See [Reproducing](docs/REPRODUCING.md) for
 requirements, alternate MATLAB paths, a custom output location, the output
 schema, and interpretation boundaries.
 
-## Provenance, limitations, and local-only material
+## Repository structure
+
+- `experiments/`: six MATLAB experiment entries and the safe all-in-one runner.
+- `figures/`: 18 tracked MATLAB reference figures used by the results guide.
+- `docs/`: concepts, results, reproduction instructions, provenance, and papers.
+- `verification/`: independent numerical checks and compact reference outputs.
+- `results/`: generated output location; ignored by Git.
+
+## Provenance and limitations
 
 The repository keeps theorem/paper identity, exact algebra, clean MATLAB
 execution, independent numerical checks, finite sampling, and schematic
