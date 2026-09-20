@@ -3,7 +3,7 @@ function publicReport = run_public_reproduction(outputRoot)
 %
 % PUBLICREPORT = RUN_PUBLIC_REPRODUCTION() must be called from the repository
 % root. It writes only beneath results/public, explicitly redirects the T1
-% and I1 figures away from tracked audit figures, checks all 18 figure and
+% and I1 figures away from tracked reference figures, checks all 18 figure and
 % 21 nonfigure experiment artifacts, and writes a human-readable index.
 %
 % PUBLICREPORT = RUN_PUBLIC_REPRODUCTION(OUTPUTROOT) uses an empty custom

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Independent arithmetic, integration, witness search, and rendering for P1.
 
-This does not call MATLAB or the previous prototype.  The first three games
-have an exact continuous-time solution and exact rate signs.  The legacy trap
-uses deterministic RK4 sampling; its weak-property margin is therefore
-reported only as finite-grid evidence, never as a continuous-time proof.
+This does not call MATLAB. The first three games have an exact continuous-time
+solution and exact rate signs. The source-labelled trap uses deterministic RK4
+sampling; its weak-property margin is therefore finite-grid evidence, not a
+continuous-time proof.
 """
 
 from __future__ import annotations
@@ -14,10 +14,10 @@ import json
 import math
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-FIG = ROOT / "audit" / "implementation" / "figures"
-OUT_JSON = ROOT / "audit" / "evidence" / "p1_checks.json"
-OUT_CSV = ROOT / "audit" / "implementation" / "p1_diagnostics.csv"
+ROOT = Path(__file__).resolve().parents[1]
+FIG = ROOT / "results" / "p1" / "independent"
+OUT_JSON = ROOT / "verification" / "p1_checks.json"
+OUT_CSV = ROOT / "verification" / "reference-results" / "p1_diagnostics.csv"
 ORDER = ["J_1^1", "J_2^1", "J_1^2", "J_2^2"]
 
 

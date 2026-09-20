@@ -5,12 +5,11 @@ agent has several payoff components without a fixed preference between them, so
 admissible objective weights generally generate a **set of Nash states**, not a
 single Nash point.
 
-This repository presents a complete, layered, and reproducible research chain
-from vector-payoff Nash-set geometry to piecewise dynamics, welfare,
-non-bijective representation, and conditional incentive design. It combines
-paper-parameter cases, explicitly labeled new constructions, one legacy
-simulation, schematics, exact calculations, independent checks, and clean
-MATLAB runs without treating those evidence levels as interchangeable.
+This repository connects vector-payoff Nash-set geometry, piecewise dynamics,
+welfare, non-bijective representation, and conditional incentive design. It
+combines paper-parameter cases, explicitly labeled new constructions, one
+legacy simulation, exact calculations, independent checks, and MATLAB runs
+without treating those evidence levels as interchangeable.
 
 - **Geometry:** map payoff-weight domains to weighted Nash images.
 - **Dynamics and welfare:** identify stable, unstable, degenerate, and
@@ -29,6 +28,14 @@ not a centralized welfare optimum.*
 **Start here:** [read the research story](docs/RESULTS.md) ·
 [reproduce all six experiments](docs/REPRODUCING.md) ·
 [learn the notation](docs/CONCEPTS_AND_NOTATION.md)
+
+## Repository structure
+
+- `experiments/`: six MATLAB experiment entries and the safe all-in-one runner.
+- `figures/`: 18 tracked MATLAB reference figures used by the results guide.
+- `docs/`: concepts, results, reproduction instructions, provenance, and papers.
+- `verification/`: independent numerical checks and compact reference outputs.
+- `results/`: generated output location; ignored by Git.
 
 ## Why is the equilibrium a set?
 
@@ -141,12 +148,11 @@ not been proved for the displayed parameters.*
 - **3 minutes:** add the P1 rate decomposition, the X1 fiber collapse, the I1
   condition boundary, and [provenance and limitations](docs/PROVENANCE.md).
 - **15 minutes:** follow all six experiment groups in
-  [Results](docs/RESULTS.md), then use the linked entry, figure, table, and audit
-  records for the groups that matter to you.
+  [Results](docs/RESULTS.md), then use the linked entry, figure, table, and
+  verification records for the groups that matter to you.
 
-The README is the public entry point. [Project state](PROJECT_STATE.md) records
-current work, while the [audit](audit/AUDIT.md) explains how the reconstruction
-was verified; neither is required before reading the research story.
+The README is the public entry point; supporting pages provide the details
+needed to interpret and reproduce the results.
 
 ## Results at a glance
 
@@ -200,7 +206,7 @@ specific experiment group, also cite the corresponding paper listed in
 [Related publications](docs/RELATED_PUBLICATIONS.md). Public links point to DOI
 or conference records; publisher PDFs are not redistributed here.
 
-Code in `experiments/` and `audit/evidence/` is released under the
+Code in `experiments/` and `verification/` is released under the
 [BSD 3-Clause License](LICENSE). Original documentation and
 repository-generated figures are released under
 [CC BY 4.0](LICENSE-DOCUMENTATION) unless a file or provenance record states

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Independent algebra and rendering check for IMPLEMENTATION_PLAN S1.
+"""Independent algebra and rendering check for the S1 experiment.
 
 This script uses the same documented, newly constructed parameter sets as the
-MATLAB entry, but it does not call MATLAB or the previous prototype.  It checks
+MATLAB entry, but it does not call MATLAB. It checks
 slope identities, branch determinants/eigenstructure, general position, local
 active cones, and the Case 5 positive-eigenvalue witness.  It also renders the
-committed evidence figures with Pillow when available.
+independent comparison figures with Pillow when available.
 """
 
 from __future__ import annotations
@@ -15,9 +15,9 @@ import json
 import math
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-OUT_JSON = ROOT / "audit" / "evidence" / "s1_checks.json"
-OUT_CSV = ROOT / "audit" / "evidence" / "s1_independent_branch_diagnostics.csv"
+ROOT = Path(__file__).resolve().parents[1]
+OUT_JSON = ROOT / "verification" / "s1_checks.json"
+OUT_CSV = ROOT / "verification" / "s1_independent_branch_diagnostics.csv"
 FIG_DIR = ROOT / "results" / "s1" / "independent"
 
 CASES = [

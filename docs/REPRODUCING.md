@@ -8,10 +8,10 @@ This page is for a first-time reader who has cloned the repository and installed
 
 - Tested: **MATLAB R2025b Update 7** on macOS.
 - Other MATLAB releases have not been verified.
-- Start in the repository root (the directory containing `experiments/`, `docs/`, and `PROJECT_STATE.md`).
+- Start in the repository root (the directory containing `experiments/`, `docs/`, and `README.md`).
 - The default output directory, `results/public`, must be absent or empty. The runner refuses to mix a new run with old output.
 
-The local directories `source_material/`, `reference/`, and `results/` are intentionally excluded from Git. A new clone therefore does not contain the source PDFs, the legacy archive, previous results, or the local R1 review pack. None of those local-only materials is needed by the six experiment runners.
+The local directories `source_material/`, `reference/`, and `results/` are intentionally excluded from Git. A new clone therefore does not contain the source PDFs, the legacy archive, or previous generated results. None of those local-only materials is needed by the six experiment runners.
 
 ## One-command run
 
@@ -52,9 +52,9 @@ The six experiments produce 18 figure classes and 21 nonfigure experiment-artifa
 | X1 | `x1/x1_domain_map.png`; `x1_fiber_collapse.png`; `x1_trajectories_lyapunov.png` | `x1_trajectories.csv`; `x1_report.mat` |
 | I1 | `i1/figures/I1_design_geometry.png`; `I1_sigma_budget.png`; `I1_before_after.png`; `I1_INC_omega.png` | `i1_condition_checks.csv`; `i1_trajectory_summary.csv`; `i1_report.mat` |
 
-Paths after the first entry in a table cell use the same task directory. T1 and I1 receive their `figures/` directories explicitly, so the public runner never uses their unsafe maintenance default of `audit/implementation/figures/`.
+Paths after the first entry in a table cell use the same task directory. T1 and I1 receive their `figures/` directories explicitly, so every generated artifact remains below the selected output root.
 
-The public entry is [`experiments/run_public_reproduction.m`](../experiments/run_public_reproduction.m). The six scientific entries it calls, in order, are [T1](../experiments/run_t1_topology_applications.m), [S1](../experiments/run_s1_five_cases.m), [S2](../experiments/run_s2_degenerate_noncompact.m), [P1](../experiments/run_p1_payoff_properties.m), [X1](../experiments/run_x1_transformation_stability.m), and [I1](../experiments/run_i1_incentive_budget.m). [`run_r1_integration_review.m`](../experiments/run_r1_integration_review.m) is a separate local packaging/checking entry; it does not start the six experiments and is not required here.
+The public entry is [`experiments/run_public_reproduction.m`](../experiments/run_public_reproduction.m). The six scientific entries it calls, in order, are [T1](../experiments/run_t1_topology_applications.m), [S1](../experiments/run_s1_five_cases.m), [S2](../experiments/run_s2_degenerate_noncompact.m), [P1](../experiments/run_p1_payoff_properties.m), [X1](../experiments/run_x1_transformation_stability.m), and [I1](../experiments/run_i1_incentive_budget.m).
 
 ## Scientific interpretation boundaries
 

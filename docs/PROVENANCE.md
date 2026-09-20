@@ -1,9 +1,9 @@
 # Provenance and limitations
 
-This repository reconstructs a research program from papers, retained legacy
-code, and newly authorized implementations. Provenance is attached to each
-claim and figure so that visual agreement, executable agreement, and theorem
-identity are not confused.
+This repository reconstructs a research program from published papers,
+source-labelled legacy configurations, and new implementations. Provenance is
+attached to each claim and figure so that visual agreement, executable
+agreement, and theorem identity are not confused.
 
 ## Evidence hierarchy
 
@@ -17,9 +17,9 @@ identity are not confused.
 | Schematic | A visual explanation of a mathematical possibility. | A sourced parameter set or numerical result. |
 
 An **independent renderer** can be useful for comparison, but its output must
-not be called MATLAB output. The current tracked P1 public PNGs were regenerated
-by MATLAB in RR-03; the former independent renderings remain historical audit
-context only.
+not be called MATLAB output. The tracked public figures in [`figures/`](../figures/)
+are the MATLAB-generated reference images; independent renderings, when
+produced, are written below the ignored `results/` directory.
 
 ## Configuration labels by experiment
 
@@ -73,25 +73,19 @@ directories are intentionally ignored:
 
 - `source_material/`: local paper PDFs and extracted source material;
 - `reference/`: legacy archives and previous prototypes;
-- `results/`: generated MATLAB runs, including local integration-review packs.
+- `results/`: generated MATLAB and independent-check outputs.
 
 A new clone does not contain those directories. The six public experiment
 entries are self-contained and write new outputs below `results/public/` by
 default. No public reproduction command depends on a local PDF, a legacy
 archive, or a previous result bundle.
 
-## Verification trail for maintainers
+## Independent checks
 
-The public reading route does not require an audit. Readers who want to inspect
-how the reconstruction was checked can continue to:
-
-- [M0 notation and rule contract](../audit/implementation/M0.md);
-- [R1 integrated verification](../audit/implementation/R1.md);
-- [figure manifest](../audit/FIGURE_MANIFEST.md); and
-- [project audit](../audit/AUDIT.md).
-
-These records distinguish static inspection, exact calculations, independent
-checks, clean MATLAB runs, and exact-reproduction status.
+The [`verification/`](../verification/) directory contains independently
+written numerical checks, recorded check summaries, and compact reference CSV
+outputs. These checks complement the MATLAB entries; they do not replace the
+paper hypotheses or turn finite sampling into a theorem proof.
 
 ## Public-release metadata
 
@@ -104,5 +98,4 @@ The author confirmed the public-release metadata on 2026-09-20:
 
 No local PDF is linked or redistributed. The license scope excludes
 publisher-formatted papers, third-party material, legacy archives, trademarks,
-and content not distributed in this repository. Homepage image selection is a
-separate editorial decision and does not alter repository figure provenance.
+and content not distributed in this repository.

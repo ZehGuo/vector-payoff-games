@@ -1,14 +1,14 @@
-function report = run_t1_topology_applications(outputDir,auditFigureDir,assetDir)
+function report = run_t1_topology_applications(outputDir,figureDir,assetDir)
 %RUN_T1_TOPOLOGY_APPLICATIONS Rebuild Chapter 2 face maps and application entry.
 % Every weighted Nash point solves M(weight)*x+b(weight)=0. Both M and b
 % are weighted. No full payoff Hessian is fabricated from own-gradient rows.
 
 repoRoot=fileparts(fileparts(mfilename('fullpath')));
 if nargin<1 || isempty(outputDir), outputDir=fullfile(repoRoot,'results','t1'); end
-if nargin<2 || isempty(auditFigureDir), auditFigureDir=fullfile(repoRoot,'audit','implementation','figures'); end
+if nargin<2 || isempty(figureDir), figureDir=outputDir; end
 if nargin<3, assetDir=''; end
 if ~exist(outputDir,'dir'), mkdir(outputDir); end
-if ~exist(auditFigureDir,'dir'), mkdir(auditFigureDir); end
+if ~exist(figureDir,'dir'), mkdir(figureDir); end
 if ~isempty(assetDir) && ~exist(assetDir,'dir'), mkdir(assetDir); end
 configDir=fullfile(repoRoot,'experiments','configs'); addpath(configDir);
 cleanupPath=onCleanup(@()rmpath(configDir));
@@ -23,10 +23,10 @@ assert(cube.minAbsJacobianDet>1e-6 && prism.minAbsJacobianDet>1e-6, ...
 assert(cube.maxEquationResidual<1e-10 && prism.maxEquationResidual<1e-10, ...
     'Weighted Nash equation residual is too large.');
 
-plotCube(p.cube,cube,fullfile(auditFigureDir,'T1_cube_face_correspondence.png'));
-plotPrism(p.prism,prism,fullfile(auditFigureDir,'T1_prism_face_correspondence.png'));
-plotApplication(application,fullfile(auditFigureDir,'T1_production_pollution.png'));
-plotNonlinearSchematic(fullfile(auditFigureDir,'T1_nonquadratic_schematic.png'));
+plotCube(p.cube,cube,fullfile(figureDir,'T1_cube_face_correspondence.png'));
+plotPrism(p.prism,prism,fullfile(figureDir,'T1_prism_face_correspondence.png'));
+plotApplication(application,fullfile(figureDir,'T1_production_pollution.png'));
+plotNonlinearSchematic(fullfile(figureDir,'T1_nonquadratic_schematic.png'));
 if ~isempty(assetDir)
     plotCorrespondenceCard('cube',fullfile(assetDir,'T1_cube_correspondence_card.png'));
     plotCorrespondenceCard('prism',fullfile(assetDir,'T1_prism_correspondence_card.png'));
@@ -45,7 +45,7 @@ report=struct('notation',p.notation,'parameters',p,'cube',cube,'prism',prism, ..
     'bijectionMeaning','surjective and injective: every image point has exactly one weight', ...
     'centralizedParetoComputed',false,'completedPayoffHessians',false);
 save(fullfile(outputDir,'t1_report.mat'),'report');
-fprintf('T1 outputs written to %s and %s\n',outputDir,auditFigureDir);
+fprintf('T1 outputs written to %s and %s\n',outputDir,figureDir);
 fprintf('Cube: min rcond %.6g, min |det Dx| %.6g, max residual %.3g.\n', ...
     cube.minRcond,cube.minAbsJacobianDet,cube.maxEquationResidual);
 fprintf('Prism: min rcond %.6g, min |det Dx| %.6g, max residual %.3g.\n', ...

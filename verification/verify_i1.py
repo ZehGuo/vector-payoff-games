@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Independent formula and finite-grid checks for I1.
 
-This checker does not use the previous prototype.  It preserves the two
-legacy games, corrects the omega terms in the supplementary budget, and
-keeps theorem hypotheses separate from sampled trajectory observations.
+It preserves the two source-labelled games, includes the omega terms in the
+supplementary budget, and keeps theorem hypotheses separate from sampled
+trajectory observations.
 """
 
 from __future__ import annotations
@@ -15,9 +15,9 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[2]
-OUT_JSON = ROOT / "audit/evidence/i1_checks.json"
-OUT_CSV = ROOT / "audit/implementation/i1_condition_checks.csv"
+ROOT = Path(__file__).resolve().parents[1]
+OUT_JSON = ROOT / "verification/i1_checks.json"
+OUT_CSV = ROOT / "verification/reference-results/i1_condition_checks.csv"
 
 
 def q(A, b, x):
@@ -218,7 +218,7 @@ def main():
         assert r["aggregate_transfer_max"] < 1e-7
     OUT_JSON.write_text(json.dumps(checks,indent=2)+"\n")
     with OUT_CSV.open("w",newline="") as f:
-        w=csv.writer(f); w.writerow(["experiment","p_x0_max_abs","budget_identity_max_error","min_own_curvature_margin","min_branch_det","min_pair_det","min_triple_residual","budget_max","budget_min","budget_final","omitted_budget_final","target_distance_final","strong_domain_grid_max","validation_level"])
+        w=csv.writer(f,lineterminator="\n"); w.writerow(["experiment","p_x0_max_abs","budget_identity_max_error","min_own_curvature_margin","min_branch_det","min_pair_det","min_triple_residual","budget_max","budget_min","budget_final","omitted_budget_final","target_distance_final","strong_domain_grid_max","validation_level"])
         for r in results:
             w.writerow([r["name"],max(abs(v) for v in r["p_at_x0"]),r["budget_identity_max_error"],-max(r["own_curvatures"]),min(r["branch_determinants"]),r["min_line_pair_determinant"],r["min_nonincident_line_residual"],r["aggregate_transfer_max"],r["aggregate_transfer_min"],r["aggregate_transfer_final"],r["omitted_formula_final"],r["target_distance_final"],r["strong_domain_inclusion_grid_max"],r["validation_level"]])
     print(json.dumps(checks,indent=2))

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independent checks for X1 without MATLAB or the previous prototype."""
+"""Independent numerical checks for X1 without calling MATLAB."""
 
 from __future__ import annotations
 
@@ -9,9 +9,9 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[2]
-OUT_JSON = ROOT / "audit" / "evidence" / "x1_checks.json"
-OUT_CSV = ROOT / "audit" / "evidence" / "x1_certificate_margins.csv"
+ROOT = Path(__file__).resolve().parents[1]
+OUT_JSON = ROOT / "verification" / "x1_checks.json"
+OUT_CSV = ROOT / "verification" / "x1_certificate_margins.csv"
 
 A = np.array([
     [[-2, -1], [-1, -3]],
@@ -154,7 +154,7 @@ def main():
     indices = np.flatnonzero(axis_mask)
     first_axis, last_axis = int(indices[0]), int(indices[np.flatnonzero(np.diff(indices) > 1)[0]])
     report = dict(
-        provenance="independent NumPy/RK4 transcription of paper formulas; no MATLAB or previous prototype",
+        provenance="independent NumPy/RK4 transcription of paper formulas; no MATLAB",
         U_entrywise_nonnegative=True,
         W_entrywise_nonnegative=True,
         certificate=dict(

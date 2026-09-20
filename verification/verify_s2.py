@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independent standard-library checks for IMPLEMENTATION_PLAN S2.
+"""Independent standard-library checks for the S2 experiment.
 
 This does not call MATLAB, inspect cdc2023 filenames as case labels, or infer
 compactness from a plotting window.  It checks the new documented parameters,
@@ -14,9 +14,9 @@ import json
 import math
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-OUT_JSON = ROOT / "audit" / "evidence" / "s2_checks.json"
-OUT_CSV = ROOT / "audit" / "evidence" / "s2_independent_branch_diagnostics.csv"
+ROOT = Path(__file__).resolve().parents[1]
+OUT_JSON = ROOT / "verification" / "s2_checks.json"
+OUT_CSV = ROOT / "verification" / "s2_independent_branch_diagnostics.csv"
 
 DEGENERATE = [
     ("D1", "stable-CW", (.8, .3), (-.6, -.2), (0., 0.), (1., -1.), True),

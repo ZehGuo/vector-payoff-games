@@ -1,15 +1,15 @@
-function report = run_i1_incentive_budget(outputDir, auditFigureDir, derivedFigureDir)
+function report = run_i1_incentive_budget(outputDir, figureDir, derivedFigureDir)
 %RUN_I1_INCENTIVE_BUDGET Rebuild I1 incentive and budget comparisons.
 % State order is x=[x^1;x^2]; payoff order is [J_1^1,J_2^1,J_1^2,J_2^2].
 % Only J_1^i is incentivized.  The implemented field uses nearest-BR.
-% DERIVEDFIGUREDIR optionally receives the two mobile/homepage cards.
+% DERIVEDFIGUREDIR optionally receives two compact reader-facing cards.
 
 repoRoot=fileparts(fileparts(mfilename('fullpath')));
 if nargin<1 || isempty(outputDir), outputDir=fullfile(repoRoot,'results','i1'); end
-if nargin<2 || isempty(auditFigureDir), auditFigureDir=fullfile(repoRoot,'audit','implementation','figures'); end
+if nargin<2 || isempty(figureDir), figureDir=outputDir; end
 if nargin<3, derivedFigureDir=''; end
 if ~exist(outputDir,'dir'), mkdir(outputDir); end
-if ~exist(auditFigureDir,'dir'), mkdir(auditFigureDir); end
+if ~exist(figureDir,'dir'), mkdir(figureDir); end
 if ~isempty(derivedFigureDir) && ~exist(derivedFigureDir,'dir'), mkdir(derivedFigureDir); end
 
 inc0=makeGame('INC-0',[5,-440;30,-20;360,0;58.5,0],[.7,4,1,2],[16;-15],.05,[.3,.7],[0,0],8);
@@ -24,10 +24,10 @@ report.sameGameOmega0=staticChecks(omega0);
 report.sameGameOmegaPositive=staticChecks(omegap);
 report.sigma=sigmaData();
 
-plotDesignGeometry(inc0,omega0,omegap,report.INC0,fullfile(auditFigureDir,'I1_design_geometry.png'));
-plotSigma(report.sigma,fullfile(auditFigureDir,'I1_sigma_budget.png'));
-plotBeforeAfter(report.INC0,fullfile(auditFigureDir,'I1_before_after.png'));
-plotSupplement(report.INComega,fullfile(auditFigureDir,'I1_INC_omega.png'));
+plotDesignGeometry(inc0,omega0,omegap,report.INC0,fullfile(figureDir,'I1_design_geometry.png'));
+plotSigma(report.sigma,fullfile(figureDir,'I1_sigma_budget.png'));
+plotBeforeAfter(report.INC0,fullfile(figureDir,'I1_before_after.png'));
+plotSupplement(report.INComega,fullfile(figureDir,'I1_INC_omega.png'));
 if ~isempty(derivedFigureDir)
     plotTrajectoryCard(report.INC0,fullfile(derivedFigureDir,'I1_trajectory_card.png'));
     plotTransferCard(report.INC0,fullfile(derivedFigureDir,'I1_aggregate_transfer_card.png'));
@@ -36,7 +36,7 @@ end
 writeConditionCsv(fullfile(outputDir,'i1_condition_checks.csv'),report);
 writeTrajectoryCsv(fullfile(outputDir,'i1_trajectory_summary.csv'),report);
 save(fullfile(outputDir,'i1_report.mat'),'report','inc0','incw','omega0','omegap');
-fprintf('I1 outputs written to %s and %s\n',outputDir,auditFigureDir);
+fprintf('I1 outputs written to %s and %s\n',outputDir,figureDir);
 fprintf('INC-0 budget max %.3g; INC-omega corrected budget max %.3g.\n', ...
     max(report.INC0.aggregateTransfer),max(report.INComega.aggregateTransfer));
 end

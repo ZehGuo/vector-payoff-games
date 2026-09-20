@@ -1,5 +1,5 @@
 {
-  "provenance": "independent NumPy/RK4 transcription of paper formulas; no MATLAB or previous prototype",
+  "provenance": "independent NumPy/RK4 transcription of paper formulas; no MATLAB",
   "U_entrywise_nonnegative": true,
   "W_entrywise_nonnegative": true,
   "certificate": {
