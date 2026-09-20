@@ -12,19 +12,19 @@ generation and source categories are in [Provenance](PROVENANCE.md).
 
 - **Question:** How can a three-dimensional payoff-weight domain organize a weighted Nash image?
 - **Comparison:** Cube faces and vertices versus the corresponding faces and vertices of the solved Nash image.
-- **Look:** Match `F1`--`F6` and `C1`--`C8` across `weight -> solve M(w)x+b(w)=0 -> x*(w)`.
+- **Look:** Match `F1`--`F6` and `C1`--`C8` across $w\mapsto\bigl[M(w)x+b(w)=0\bigr]\mapsto x^*(w)$.
 - **Takeaway:** Under the paper parameters and regularity conditions, matching identifiers expose the paper's structural correspondence.
 - **Do not infer:** The finite grid or 3D view does not prove the global diffeomorphism.
 
 ![A labeled weight cube points to a labeled three-dimensional weighted Nash image; each face and vertex keeps the same identifier.](../figures/T1_cube_face_correspondence.png)
 
-*Under the paper parameters and regularity conditions, the cube of payoff weights maps through `M(w)x+b(w)=0` to the weighted Nash image. Evidence: theorem/paper identity plus clean MATLAB implementation diagnostics.*
+*Under the paper parameters and regularity conditions, the cube of payoff weights maps through $M(w)x+b(w)=0$ to the weighted Nash image. Evidence: theorem/paper identity plus clean MATLAB implementation diagnostics.*
 
 ### 2. Triangular-prism face correspondence
 
 - **Question:** Does the same structural reading extend beyond a cube?
 - **Comparison:** Triangular-prism weight domain versus its deformed weighted Nash image.
-- **Look:** Match `P1`--`P5` face labels and `P1`--`P6` vertex labels; both `M` and `b` use the same weights.
+- **Look:** Match `P1`--`P5` face labels and `P1`--`P6` vertex labels; both $M$ and $b$ use the same weights.
 - **Takeaway:** Corresponding boundary objects remain identifiable in the paper prism case.
 - **Do not infer:** A hidden face in one camera view has disappeared, or finite samples establish global bijectivity.
 
@@ -143,8 +143,8 @@ Entry: [`run_s2_degenerate_noncompact`](../experiments/run_s2_degenerate_noncomp
 ### 11. Weak-Pareto trap
 
 - **Question:** Can a trajectory satisfy a sampled instantaneous weak condition yet contain two times where both objectives of one agent are worse later?
-- **Comparison:** Agent 2's two payoff components at interior times `t1=0.020` and `t2=1.820`, plus the rate decomposition along the path.
-- **Look:** The two-time payoff table and separate `Gamma`-failure versus `Omega`-failure regions.
+- **Comparison:** Agent 2's two payoff components at interior times $t_1=0.020$ and $t_2=1.820$, plus the rate decomposition along the path.
+- **Look:** The two-time payoff table and separate $\Gamma$-failure versus $\Omega$-failure regions.
 - **Takeaway:** Under the actual legacy parameters and scaled-own-gradient rule, both agent-2 payoffs are lower at the later sampled time.
 - **Do not infer:** The weak-at-every-time margin is finite-grid evidence, not a continuous-time theorem, and the trap does not replace the nonweak game.
 
@@ -158,15 +158,15 @@ Entry: [`run_p1_payoff_properties`](../experiments/run_p1_payoff_properties.m)
 
 ### 12. Domain map
 
-- **Question:** Where do double-active, one-active, and inactive domains go under `eta`?
+- **Question:** Where do double-active, one-active, and inactive domains go under $\eta$?
 - **Comparison:** The original domain partition versus its local transformed image subsets.
-- **Look:** `D^(i,j)` status labels, outlined quadrant subsets, styled half-axes, and the origin.
+- **Look:** $D^{(i,j)}$ status labels, outlined quadrant subsets, styled half-axes, and the origin.
 - **Takeaway:** Two-dimensional domains map locally to quadrants, strips to axes, and the Nash set to the origin.
 - **Do not infer:** The colored two-dimensional images do not claim surjectivity onto entire quadrants.
 
 ![A labeled original partition maps to outlined and differently marked local quadrant subsets, styled half-axes, and one purple origin.](../figures/X1_domain_map.png)
 
-*`0` means an inactive agent; `1` or `2` names the selected objective. Evidence: the implemented paper map plus a sampled image of the displayed local window.*
+*$0$ means an inactive agent; $1$ or $2$ names the selected objective. Evidence: the implemented paper map plus a sampled image of the displayed local window.*
 
 ### 13. Fiber collapse
 
@@ -183,9 +183,9 @@ Entry: [`run_p1_payoff_properties`](../experiments/run_p1_payoff_properties.m)
 ### 14. Original, mapped, and independently integrated trajectories
 
 - **Question:** Are a pointwise image and a transformed-system solution the same trajectory?
-- **Comparison:** Independently integrated `x(t)`, pointwise `eta(x(t))`, independently integrated `z(t)`, and certificate values along both eta-space curves.
+- **Comparison:** Independently integrated $x(t)$, pointwise $\eta(x(t))$, independently integrated $z(t)$, and certificate values along both $\eta$-space curves.
 - **Look:** Solid circles versus dashed triangles and the A/B inset after the first one-active fiber interval.
-- **Takeaway:** `eta(x(t))` and `z(t)` deliberately separate; their different provenance matters for interpretation.
+- **Takeaway:** $\eta(x(t))$ and $z(t)$ deliberately separate; their different provenance matters for interpretation.
 - **Do not infer:** The transformation is not a controller or stabilizer, and Euclidean-norm growth alone is not an instability certificate.
 
 ![Four numbered panels separate the original trajectory, its pointwise image, an independently integrated transformed trajectory, and certificate values; solid circles and dashed triangles visibly differ.](../figures/X1_trajectories_lyapunov.png)
@@ -198,22 +198,22 @@ Entry: [`run_x1_transformation_stability`](../experiments/run_x1_transformation_
 
 ### 15. Design geometry
 
-- **Question:** How do target, social Pareto samples, Nash geometry, anchoring, `omega`, and behavior fit together?
+- **Question:** How do target, social Pareto samples, Nash geometry, anchoring, $\omega$, and behavior fit together?
 - **Comparison:** Centralized social Pareto versus decentralized Nash geometry, then original versus modified design objects.
-- **Look:** The numbered reading order and explicit social-Pareto/Nash legend; only `J_1^i` is modified.
+- **Look:** The numbered reading order and explicit social-Pareto/Nash legend; only $J_1^i$ is modified.
 - **Takeaway:** The target is the welfare maximizer, and the modified game redirects the observed behavior while retaining distinct welfare/Nash roles.
 - **Do not infer:** The finite endpoint is near, not equal to, the target; the social Pareto and Nash sets are not interchangeable.
 
 ![A numbered multi-panel design figure moves from social Pareto and Nash geometry through anchored domains and omega comparison to original and incentivized trajectories.](../figures/I1_design_geometry.png)
 
-*Reading order: centralized social Pareto samples versus decentralized Nash geometry, anchored domains, same-game omega comparison, then behavior. Evidence: exact algebra and clean MATLAB execution.*
+*Reading order: centralized social Pareto samples versus decentralized Nash geometry, anchored domains, same-game $\omega$ comparison, then behavior. Evidence: exact algebra and clean MATLAB execution.*
 
 ### 16. Sigma and budget topology
 
-- **Question:** How does `sigma` change the quadratic budget-boundary topology?
+- **Question:** How does $\sigma$ change the quadratic budget-boundary topology?
 - **Comparison:** Elliptic-inside, hyperbolic, and elliptic-outside regimes plus a common excluded-region explanation.
-- **Look:** Orange consistently denotes `D_bud^c`, where aggregate transfer is positive, and the determinant-root regime labels.
-- **Takeaway:** `sigma` changes the displayed budget geometry; the common exclusion explains a stronger certificate that fails for the shown setup.
+- **Look:** Orange consistently denotes $D_{\mathrm{bud}}^c$, where aggregate transfer is positive, and the determinant-root regime labels.
+- **Takeaway:** $\sigma$ changes the displayed budget geometry; the common exclusion explains a stronger certificate that fails for the shown setup.
 - **Do not infer:** Failure of the stronger containment certificate is not general impossibility.
 
 ![Budget-boundary panels compare three sigma regimes and common excluded regions, with orange consistently marking positive aggregate transfer.](../figures/I1_sigma_budget.png)
@@ -224,7 +224,7 @@ Entry: [`run_x1_transformation_stability`](../experiments/run_x1_transformation_
 
 - **Question:** What changes along the observed trajectory after the INC-0 incentive is applied?
 - **Comparison:** Original and incentivized paths, original and modified payoff changes, and complete aggregate transfer.
-- **Look:** Terminal target distance `0.0151764`, sign convention `p^1+p^2<=0`, and the three-part evidence boundary.
+- **Look:** Terminal target distance $0.0151764$, sign convention $p^1+p^2\leq 0$, and the three-part evidence boundary.
 - **Takeaway:** The incentivized path ends near the target, and sampled aggregate transfer remains nonpositive under the stated convention.
 - **Do not infer:** Full invariant-set containment remains unproved, so the display is not an unconditional theorem guarantee.
 
@@ -234,15 +234,15 @@ Entry: [`run_x1_transformation_stability`](../experiments/run_x1_transformation_
 
 ### 18. INC-omega supplement
 
-- **Question:** Why must omega-weighted terms remain in the aggregate budget identity?
+- **Question:** Why must $\omega$-weighted terms remain in the aggregate budget identity?
 - **Comparison:** Weighted modified payoffs and the correct complete identity in a separate legacy game.
-- **Look:** The prominent “different game” label and both omega-weighted terms.
+- **Look:** The prominent “different game” label and both $\omega$-weighted terms.
 - **Takeaway:** Omitting those terms changes the computed transfer substantively; the corrected identity is required.
-- **Do not infer:** This is not a one-factor omega control against INC-0.
+- **Do not infer:** This is not a one-factor $\omega$ control against INC-0.
 
 ![A different-game supplement displays weighted modified payoffs and complete aggregate transfer with both omega-weighted terms retained.](../figures/I1_INC_omega.png)
 
-*The INC-omega supplement demonstrates the complete budget identity in a different game. Evidence: exact algebra, independent arithmetic checks, and clean MATLAB execution.*
+*The INC-omega supplement demonstrates the complete budget identity in a different game. Evidence: exact algebra with both $\omega$-weighted terms, independent arithmetic checks, and clean MATLAB execution.*
 
 Entry: [`run_i1_incentive_budget`](../experiments/run_i1_incentive_budget.m)
 

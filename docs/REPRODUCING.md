@@ -58,11 +58,11 @@ The public entry is [`experiments/run_public_reproduction.m`](../experiments/run
 
 ## Scientific interpretation boundaries
 
-- T1 uses the same weight in both `M(weight)` and `b(weight)`. Its finite weight grid checks implementation diagnostics; the global diffeomorphism identity comes from the paper theorem, not from the grid.
+- T1 uses the same weight in both $M(w)$ and $b(w)$. Its finite weight grid checks implementation diagnostics; the global diffeomorphism identity comes from the paper theorem, not from the grid.
 - S1 and S2 retain the documented new constructions, case order, branch matrices, and stability criteria. S2 noncompactness uses the analytic determinant criterion; a finite plotting window is only a visualization.
 - P1 keeps the first three games as the new exact comparison family. Its trap is separate and uses the actual legacy scaled-own-gradient rule. A finite output-grid weak-property check is not a continuous-time proof.
-- X1 keeps `x(t)`, the pointwise image `eta(x(t))`, and the independently integrated `z(t)` as three different objects.
-- I1 modifies only `J_1^i`. The INC-0 same-game omega comparison and the different-game INC-omega supplement remain separate.
+- X1 keeps $x(t)$, the pointwise image $\eta(x(t))$, and the independently integrated $z(t)$ as three different objects.
+- I1 modifies only $J_1^i$. The INC-0 same-game $\omega$ comparison and the different-game INC-omega supplement remain separate.
 - A successful run, a trajectory, or a finite-grid check is execution evidence; none is, by itself, a theorem proof.
 
 ## Confirming worktree safety

@@ -65,16 +65,16 @@ For agent $i$, $J_j^i$ denotes objective $j$, and $w_j^i \geq 0$ is an
 admissible weight on that objective. A weighted scalar game asks each agent to
 maximize
 
-$$
+```math
 \sum_j w_j^i J_j^i(x).
-$$
+```
 
 $X^*(J)$ is the union of the Nash states obtained over the allowed weights. In
 the quadratic T1 examples, a weight produces a state by solving
 
-$$
+```math
 M(w)x+b(w)=0,
-$$
+```
 
 with the **same weights applied to both $M$ and $b$**. Under the paper's stated
 regularity conditions, this gives the weight-domain/Nash-image correspondence.
@@ -140,13 +140,13 @@ objective, must its total payoff improve?
 
 For dynamics $\dot{x}=f(x)$, the rate of every payoff decomposes as
 
-$$
+```math
 \frac{dJ_j^i}{dt}
 =
 \underbrace{\frac{\partial J_j^i}{\partial x^i}\dot{x}^i}_{\text{own-direction contribution}}
 +
 \underbrace{\frac{\partial J_j^i}{\partial x^{-i}}\dot{x}^{-i}}_{\text{externality}}.
-$$
+```
 
 In words: **total payoff rate = own-direction contribution + externality**.
 
