@@ -71,10 +71,10 @@ For dynamics $\dot{x}=f(x)$,
 \frac{dJ_j^i}{dt}
 =\frac{\partial J_j^i}{\partial x^i}f^i
 +\frac{\partial J_j^i}{\partial x^{-i}}f^{-i}
-=\operatorname{own}_j^i+\operatorname{externality}_j^i.
+=\mathrm{own}_j^i+\mathrm{externality}_j^i.
 ```
 
-- **Own-direction contribution** $\operatorname{own}_j^i$ measures change caused by agent
+- **Own-direction contribution** $\mathrm{own}_j^i$ measures change caused by agent
   $i$'s own motion. It is nonnegative for the selected own objective in these
   dynamics.
 - **Externality** measures change caused by the other agent's motion. It can
@@ -86,7 +86,7 @@ The P1 regions are
 
 ```math
 \Gamma_j^i
-=\{x:\operatorname{externality}_j^i\geq 0\},
+=\{x:\mathrm{externality}_j^i\geq 0\},
 \qquad
 \Omega_j^i
 =\left\{x:\frac{dJ_j^i}{dt}\geq 0\right\}.
