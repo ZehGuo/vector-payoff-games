@@ -152,12 +152,14 @@ sgtitle({'I1 design: social Pareto/Nash -> domains -> same-game omega -> behavio
 end
 
 function plotParetoNash(g)
-hold on; cols=lines(4); xx=linspace(-10,40,200); for j=1:4, owner=1+(j>2); row=g.A(owner,:,j); yy=-(row(1)*xx+g.b(owner,j))/row(2);plot(xx,yy,'Color',cols(j,:),'LineWidth',1.1,'HandleVisibility','off');end
+hold on; cols=lines(4); xx=linspace(-10,40,200); hbr=gobjects(4,1); for j=1:4, owner=1+(j>2); row=g.A(owner,:,j); yy=-(row(1)*xx+g.b(owner,j))/row(2);hbr(j)=plot(xx,yy,'Color',cols(j,:),'LineWidth',1.1);end
 pts=[]; step=.08; for w1=0:step:1,for w2=0:step:1-w1,for w3=0:step:1-w1-w2,w4=1-w1-w2-w3;w=[w1,w2,w3,w4];if sum(w>0)==0,continue;end;A=zeros(2);b=zeros(2,1);for j=1:4,A=A+w(j)*g.A(:,:,j);b=b+w(j)*g.b(:,j);end;if rcond(A)>1e-10,pts(end+1,:)=[-A\b]';end,end,end,end %#ok<AGROW>
 hp=scatter(pts(:,1),pts(:,2),8,[.2,.65,.25],'filled','MarkerFaceAlpha',.25);
 [X,Y]=meshgrid(linspace(-10,40,180),linspace(-50,25,180));mask=false(size(X));for k=1:numel(X),z=[X(k);Y(k)];[~,h]=gradients(g.A,g.b,z);mask(k)=h(1)*h(2)<=0 && h(3)*h(4)<=0;end;contourf(X,Y,double(mask),[.5,.5],'FaceColor',[.2,.35,.85],'FaceAlpha',.18,'LineStyle','none');
 hn=patch(nan,nan,[.2,.35,.85],'FaceAlpha',.18,'EdgeColor','none');
-xlim([-10,40]);ylim([-50,25]);grid on;xlabel('x^1');ylabel('x^2');legend([hp,hn],{'social Pareto samples','decentralized Nash set'},'Location','best');
+xlim([-10,40]);ylim([-50,25]);grid on;xlabel('x^1');ylabel('x^2');legend([hp,hn,hbr'], ...
+    {'social Pareto samples','decentralized Nash set','BR: agent 1 / objective 1','BR: agent 1 / objective 2', ...
+    'BR: agent 2 / objective 1','BR: agent 2 / objective 2'},'Location','best');
 end
 
 function plotDomains(g)
@@ -189,14 +191,17 @@ end
 function budgetPanel(s,sigma)
 [X,Y]=meshgrid(linspace(-20,40,240),linspace(-25,50,240));B=zeros(size(X));U=zeros(size(X));J=zeros(size(X));
 for k=1:numel(X),z=[X(k);Y(k)];U(k)=pay(s.AU,s.bU,0,z)-pay(s.AU,s.bU,0,s.x0);J(k)=pay(s.AJ,s.bJ,0,z)-pay(s.AJ,s.bJ,0,s.x0);B(k)=sigma*U(k)-J(k);end
-contourf(X,Y,double(B>0),[.5,.5],'FaceColor',[.9,.5,.15],'FaceAlpha',.35,'LineStyle','none');hold on;contour(X,Y,U,[0,0],'b','LineWidth',1.8);contour(X,Y,J,[0,0],'r','LineWidth',1.8);contour(X,Y,B,[0,0],'k--','LineWidth',1.5);scatter(s.x0(1),s.x0(2),28,'k','filled');axis equal;xlim([-20,40]);ylim([-25,50]);grid on;xlabel('x^1');ylabel('x^2');
+contourf(X,Y,double(B>0),[.5,.5],'FaceColor',[.9,.5,.15],'FaceAlpha',.35,'LineStyle','none');hold on;[~,hU]=contour(X,Y,U,[0,0],'b','LineWidth',1.8);[~,hJ]=contour(X,Y,J,[0,0],'r','LineWidth',1.8);[~,hB]=contour(X,Y,B,[0,0],'k--','LineWidth',1.5);scatter(s.x0(1),s.x0(2),28,'k','filled');axis equal;xlim([-20,40]);ylim([-25,50]);grid on;xlabel('x^1');ylabel('x^2');
 text(.02,.03,'orange: aggregate transfer > 0','Units','normalized','FontSize',8,'BackgroundColor','w','Margin',2);
+text(.98,.98,{'blue: U(x)-U(x_0)=0','red: J_{sum}(x)-J_{sum}(x_0)=0', ...
+    'black dashed: aggregate transfer = 0'},'Units','normalized','HorizontalAlignment','right', ...
+    'VerticalAlignment','top','FontSize',7,'BackgroundColor','w','Margin',2);
 end
 
 function commonExclusionPanel(s)
 [X,Y]=meshgrid(linspace(-20,40,240),linspace(-25,50,240));U=zeros(size(X));J=zeros(size(X));B1=zeros(size(X));B2=zeros(size(X));
 for k=1:numel(X),z=[X(k);Y(k)];U(k)=pay(s.AU,s.bU,0,z)-pay(s.AU,s.bU,0,s.x0);J(k)=pay(s.AJ,s.bJ,0,z)-pay(s.AJ,s.bJ,0,s.x0);B1(k)=3*U(k)-J(k);B2(k)=.551*U(k)-J(k);end
-contourf(X,Y,double(B1>0&B2>0),[.5,.5],'FaceColor',[.95,.75,.15],'FaceAlpha',.38,'LineStyle','none');hold on;contourf(X,Y,double(U>=0&J<0),[.5,.5],'FaceColor',[.2,.65,.3],'FaceAlpha',.55,'LineStyle','none');contour(X,Y,U,[0,0],'b','LineWidth',1.6);contour(X,Y,J,[0,0],'r','LineWidth',1.6);scatter(s.x0(1),s.x0(2),28,'k','filled');axis equal;xlim([-20,40]);ylim([-25,50]);grid on;xlabel('x^1');ylabel('x^2');text(.02,.98,{'yellow: intersection of the two budget complements','green: welfare-improving but weighted-payoff-decreasing set'},'Units','normalized','VerticalAlignment','top','Interpreter','none','FontSize',8,'BackgroundColor','w','Margin',2);
+contourf(X,Y,double(B1>0&B2>0),[.5,.5],'FaceColor',[.95,.75,.15],'FaceAlpha',.38,'LineStyle','none');hold on;contourf(X,Y,double(U>=0&J<0),[.5,.5],'FaceColor',[.2,.65,.3],'FaceAlpha',.55,'LineStyle','none');contour(X,Y,U,[0,0],'b','LineWidth',1.6);contour(X,Y,J,[0,0],'r','LineWidth',1.6);scatter(s.x0(1),s.x0(2),28,'k','filled');axis equal;xlim([-20,40]);ylim([-25,50]);grid on;xlabel('x^1');ylabel('x^2');text(.02,.98,{'yellow: common budget-complement intersection','green: welfare up / weighted payoff down','blue/red: Delta U=0 / Delta J_{sum}=0'},'Units','normalized','VerticalAlignment','top','Interpreter','tex','FontSize',7,'BackgroundColor','w','Margin',2);
 end
 
 function plotBeforeAfter(r,path)

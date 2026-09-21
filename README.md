@@ -8,15 +8,19 @@ objectives, but no preference between those objectives is fixed in advance?
 In a standard scalar-payoff game, each agent optimizes one payoff, and the
 analysis often focuses on a Nash equilibrium of that game.
 
-Here, each agent has several payoff components. To obtain a scalar game, the
-components are combined using objective weights. Different admissible weights
-represent different preferences and can produce different Nash equilibria.
+Here, each agent has several payoff components. In the strictly concave
+quadratic setting studied by the source work, the paper shows that the vector
+Nash set can be characterized through scalar games: combine each agent's
+components using admissible objective weights, solve the resulting game, and
+take the union over the weights. The weights are scalarization parameters; they
+need not be interpreted as measured, permanent real-world preferences.
 
-The central object is therefore the **Nash equilibrium set**: the collection of
-decentralized equilibrium states generated as the admissible preference weights
-vary. The repository asks what this set looks like, whether decentralized
-behavior approaches or leaves it, how that behavior affects payoffs, what a
-change of representation preserves, and how incentives can alter the behavior.
+The central object in this characterization is the **Nash equilibrium set**:
+the collection of decentralized equilibrium states generated as the admissible
+preference weights vary. The repository asks what this set looks like, whether
+decentralized behavior approaches or leaves it, how that behavior affects
+payoffs, what a change of representation preserves, and how incentives can
+alter the behavior.
 
 ```text
 Multiple objectives
@@ -36,8 +40,13 @@ Representation       X1
 Incentive design     I1
 ```
 
-**Start here:** [follow the six-part results guide](docs/RESULTS.md) ·
+The arrows are a **thematic reading order**, not a claim that all six modules
+use the same game or parameters. See the
+[beginner guide](docs/BEGINNER_GUIDE.md) for the module/source/model map.
+
+**Start here:** [read the beginner guide](docs/BEGINNER_GUIDE.md) ·
 [learn the notation](docs/CONCEPTS_AND_NOTATION.md) ·
+[follow the six-part results guide](docs/RESULTS.md) ·
 [reproduce all six experiments](docs/REPRODUCING.md)
 
 ## Three objects that should not be confused
@@ -46,7 +55,8 @@ Incentive design     I1
 |---|---|---|
 | **Nash set** | The decentralized equilibrium states obtained from different admissible preference weights. | Where can individually optimal responses balance? |
 | **Dynamics** | The state trajectory generated when agents move according to a selected pseudo-gradient and branch rule. | Does behavior approach, enter, or leave the Nash set? |
-| **Social Pareto / welfare target** | A centralized comparison based on the agents' payoffs or a chosen welfare function. | Which states are desirable from a collective viewpoint? |
+| **Social Pareto set** | The states not dominated when the selected collection of payoffs is compared centrally. | Which states cannot improve one compared payoff without worsening another? |
+| **Welfare target** | A maximizer of one explicitly chosen scalar welfare function $U$. | Which state does this particular welfare choice select? |
 
 **A Nash set is not a social Pareto set.** Nash states describe decentralized
 mutual best responses under selected preferences. A social Pareto set or welfare
@@ -61,9 +71,9 @@ welfare optimum.*
 
 ## From preference weights to a Nash set
 
-For agent $i$, $J_j^i$ denotes objective $j$, and $w_j^i \geq 0$ is an
-admissible weight on that objective. A weighted scalar game asks each agent to
-maximize
+For agent $i$, $J_j^i$ denotes objective $j$. An admissible weight vector has
+$w_j^i \geq 0$ and $\sum_j w_j^i=1$; boundary weights are allowed, but the
+all-zero vector is not. A weighted scalar game asks each agent to maximize
 
 ```math
 \sum_j w_j^i J_j^i(x).
@@ -76,12 +86,15 @@ the quadratic T1 examples, a weight produces a state by solving
 M(w)x+b(w)=0,
 ```
 
-with the **same weights applied to both $M$ and $b$**. Under the paper's stated
-regularity conditions, this gives the weight-domain/Nash-image correspondence.
-The finite grids in this repository check the implementation; they do not prove
-the global one-to-one/onto statement. See
+with the **same weights applied to both $M$ and $b$**. In dissertation
+Proposition 2.1, invertibility gives the smooth surjective construction and a
+compact connected image. Theorem 2.4 adds the recorded rank condition to obtain
+the diffeomorphism/simplicial result used by the cube and prism examples. The
+finite grids in this repository check the implementation; they do not prove
+those global statements. See
 [Concepts and notation](docs/CONCEPTS_AND_NOTATION.md) for the complete symbol
-map.
+map and [Sources and claims](docs/SOURCES_AND_CLAIMS.md) for exact source
+locators.
 
 ![A compact key pairs the six cube faces and eight vertices by matching identifiers from the weight cube to the weighted Nash image.](docs/assets/t1_s1_s2/T1_cube_correspondence_card_900.png)
 
@@ -156,8 +169,8 @@ This decomposition is the bridge between the decentralized dynamics and their
 welfare effects.
 
 The first three P1 games keep the trajectory and own-gradient structure fixed
-while changing only linear externalities. They are a new exact comparison
-family: nonweak, all-payoff-nondecreasing, and weak-but-not-all. A fourth,
+while changing only linear externalities. They are a new analytically solved
+comparison family: nonweak, all-payoff-nondecreasing, and weak-but-not-all. A fourth,
 separate experiment uses the actual legacy scaled-own-gradient rule to exhibit
 a sampled two-time weak-Pareto trap.
 
@@ -172,8 +185,10 @@ externality from the other agent's motion is the missing term.*
 problem, and what information can that representation lose?
 
 The original problem asks whether $x(t)$ approaches the Nash set. The
-transformation $z=\eta(x)$ maps the Nash set to the origin, allowing the
-set-stability question to be studied in transformed coordinates.
+transformation $z=\eta(x)$ maps the Nash set to the origin. Under the paper's
+assumptions, stability of the transformed origin provides a sufficient route to
+stability of the original Nash set; non-bijectivity means this is not presented
+as a general equivalence.
 
 The key limitation is that $\eta$ is non-bijective. Different original states
 may have the same image, so an inverse image can be a set-valued fiber. The
@@ -230,9 +245,10 @@ caption, alt text, evidence statement, and “do not infer” boundary in
   map, and “Three objects that should not be confused.”
 - **3 minutes:** add the six research questions, the P1 rate decomposition, the
   X1 fiber limitation, and the I1 evidence boundary.
-- **15 minutes:** follow all six experiment groups in
+- **15-minute overview:** scan all six experiment groups in
   [Results](docs/RESULTS.md), then use the linked entries, figures, and
-  verification records for the groups that matter to you.
+  verification records for the groups that matter to you. Full technical
+  understanding takes longer and requires the cited source conditions.
 
 ## Reproduce the public outputs
 
@@ -254,7 +270,9 @@ schema, and interpretation boundaries.
 
 - `experiments/`: six MATLAB experiment entries and the safe all-in-one runner.
 - `figures/`: 18 tracked MATLAB reference figures used by the results guide.
-- `docs/`: concepts, results, reproduction instructions, provenance, and papers.
+- `docs/`: beginner guidance, concepts, results, reproduction instructions,
+  provenance, and publication/citation links. Publisher papers are not stored
+  in the repository.
 - `verification/`: independent numerical checks and compact reference outputs.
 - `results/`: generated output location; ignored by Git.
 
@@ -266,6 +284,9 @@ illustration distinct. Paper configurations, legacy configurations, new
 constructions, and independent renderers are labeled rather than blended. Read
 [Provenance](docs/PROVENANCE.md) before reusing a figure or making a stronger
 claim.
+
+For a module-by-module theorem, example, page, and claim-boundary crosswalk,
+read [Sources and claims](docs/SOURCES_AND_CLAIMS.md).
 
 `source_material/`, `reference/`, and `results/` are intentionally ignored local
 directories. A new clone does not contain local PDFs, the legacy archive,
