@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import csv
+import argparse
 import json
 from pathlib import Path
 
@@ -12,6 +13,23 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 OUT_JSON = ROOT / "verification" / "x1_checks.json"
 OUT_CSV = ROOT / "verification" / "x1_certificate_margins.csv"
+
+
+def configure_outputs() -> None:
+    global OUT_JSON, OUT_CSV
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--update-reference", action="store_true",
+                        help="write tracked verification baselines instead of ignored run output")
+    parser.add_argument("--output-dir", type=Path,
+                        help="custom output directory (cannot be combined with --update-reference)")
+    args = parser.parse_args()
+    if args.update_reference and args.output_dir:
+        parser.error("--update-reference and --output-dir cannot be combined")
+    if args.update_reference:
+        return
+    out = args.output_dir or (ROOT / "results" / "verification" / "x1")
+    OUT_JSON = out / "x1_checks.json"
+    OUT_CSV = out / "x1_certificate_margins.csv"
 
 A = np.array([
     [[-2, -1], [-1, -3]],
@@ -115,6 +133,7 @@ def certificate_rows():
 
 
 def main():
+    OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
     rows = certificate_rows()
     worst_decay = max(r["max_decay_eigenvalue"] for r in rows)
     min_positive = min(r["min_positivity_eigenvalue"] for r in rows)
@@ -193,4 +212,5 @@ def main():
 
 
 if __name__ == "__main__":
+    configure_outputs()
     main()

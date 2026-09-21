@@ -1,8 +1,17 @@
 # Related publications
 
+[Back to README](../README.md) · [Sources and claims](SOURCES_AND_CLAIMS.md) · [Results](RESULTS.md)
+
 Please cite the software release itself using [`CITATION.cff`](../CITATION.cff).
 When a result, figure, or experiment module is used, also cite the publication
 or publications most directly associated with that module.
+
+The theorem numbering used by the repository often follows the synthesis in
+Zehui Guo, *Stability and Incentive Design for Noncooperative Dynamical Systems
+With Vector-valued Payoff Functions*, PhD dissertation, Institute of Science
+Tokyo, January 2025. The dissertation PDF is not redistributed here. Exact
+chapter, theorem, example, and page locators are listed in
+[Sources and claims](SOURCES_AND_CLAIMS.md).
 
 | Modules | Publication | Public record |
 |---|---|---|

@@ -1,5 +1,7 @@
 # Reproducing the six experiments safely
 
+[Back to README](../README.md) · [Beginner guide](BEGINNER_GUIDE.md) · [Results](RESULTS.md) · [Independent verification](../verification/README.md)
+
 **From the repository root, run one public entry; by default every generated file goes only to `results/public`, each of the six experiments writes figures, CSV data, and a MAT report, and the tracked worktree remains unchanged before and after the run.**
 
 This page is for a first-time reader who has cloned the repository and installed MATLAB. Reading the papers is not required to run the six experiments.
@@ -8,8 +10,17 @@ This page is for a first-time reader who has cloned the repository and installed
 
 - Tested: **MATLAB R2025b Update 7** on macOS.
 - Other MATLAB releases have not been verified.
+- The current entries call base MATLAB functions such as `ode45`, `eig`,
+  `convhull`, tables, and graphics export; static inspection found no add-on
+  toolbox call. This is not a compatibility claim for older MATLAB, MATLAB
+  Online, Windows, Linux, or GNU Octave, which remain untested.
 - Start in the repository root (the directory containing `experiments/`, `docs/`, and `README.md`).
 - The default output directory, `results/public`, must be absent or empty. The runner refuses to mix a new run with old output.
+
+On the recorded macOS/MATLAB run, the six scientific tasks took about 165
+seconds in total and the complete output directory used about 11 MB. Startup,
+graphics, hardware, and release differences can change both values; allow
+roughly 3–5 minutes as an orientation, not a performance guarantee.
 
 The local directories `source_material/`, `reference/`, and `results/` are intentionally excluded from Git. A new clone therefore does not contain the source PDFs, the legacy archive, or previous generated results. None of those local-only materials is needed by the six experiment runners.
 
@@ -37,6 +48,51 @@ matlab -batch "addpath('experiments'); run_public_reproduction('results/public-s
 
 A custom path inside the repository is accepted only below the Git-ignored `results/` directory. A path outside the repository is also allowed. The wrapper checks that it is called from the repository root, manages the experiment path for the run, and reports the exact task (`T1`, `S1`, `S2`, `P1`, `X1`, or `I1`) if a task fails.
 
+### What success looks like
+
+Each task prints `[TASK] complete (...)`. A successful wrapper ends with:
+
+```text
+Public reproduction complete: 18 figures and 21 nonfigure experiment artifacts.
+Human-readable output index: .../PUBLIC_OUTPUT_INDEX.md
+Machine-readable output index: .../public_output_index.csv
+```
+
+The command must also exit successfully. File existence proves that the
+declared entry ran and created its schema; it does not prove a paper theorem.
+Numerical and theorem-specific checks are described in the generated CSV/MAT
+reports, [Independent verification](../verification/README.md), and
+[Sources and claims](SOURCES_AND_CLAIMS.md).
+
+### If a run fails
+
+The partially written directory is intentionally left in place for diagnosis.
+Keep or rename it if you want to inspect the completed tasks, then rerun the
+wrapper with a **new absent or empty** output directory. The public wrapper does
+not resume into a nonempty directory. Do not point it at the repository root or
+manually mix partial and fresh output. `git status --short` can be compared
+before and after the failed run just as for a successful run.
+
+### Running one experiment
+
+The safest public contract is the all-in-one wrapper. For focused diagnosis,
+the individual entries can be directed to ignored task directories as follows:
+
+```matlab
+addpath('experiments')
+run_t1_topology_applications('results/manual/t1','results/manual/t1/figures')
+run_s1_five_cases('results/manual/s1')
+run_s2_degenerate_noncompact('results/manual/s2')
+run_p1_payoff_properties('results/manual/p1')
+run_x1_transformation_stability('results/manual/x1')
+run_i1_incentive_budget('results/manual/i1','results/manual/i1/figures')
+```
+
+These entries do not apply the wrapper's empty-root/schema checks. Supplying
+explicit paths avoids writing to tracked figure locations; T1 and I1 receive a
+separate `figures/` directory because their public runner signatures separate
+data and figure destinations.
+
 ## Output index and schema
 
 After a successful default run, open `results/public/PUBLIC_OUTPUT_INDEX.md`. It lists every generated experiment artifact, byte size, and minimal per-task report metadata. `results/public/public_output_index.csv` contains the same 39-row experiment-artifact index for programs, and `results/public/public_reproduction_report.mat` stores the wrapper report plus the six returned reports.
@@ -54,13 +110,27 @@ The six experiments produce 18 figure classes and 21 nonfigure experiment-artifa
 
 Paths after the first entry in a table cell use the same task directory. T1 and I1 receive their `figures/` directories explicitly, so every generated artifact remains below the selected output root.
 
+The count `18 + 21 = 39` covers scientific experiment artifacts. The wrapper
+also creates three navigation/report files of its own:
+`PUBLIC_OUTPUT_INDEX.md`, `public_output_index.csv`, and
+`public_reproduction_report.mat`.
+
+For a first inspection, open `PUBLIC_OUTPUT_INDEX.md`, then compare the figures
+for the module you care about with its numbered section in
+[Results](RESULTS.md). Open the module's small summary/diagnostic CSV before its
+large sample CSV. In MATLAB, `whos('-file', path)` lists a MAT file's variables,
+and `load(path)` loads them for inspection. Generated and tracked reference
+figure filenames occasionally differ in capitalization or descriptive wording;
+the task and numbered Results section, not byte-identical filenames, define the
+correspondence.
+
 The public entry is [`experiments/run_public_reproduction.m`](../experiments/run_public_reproduction.m). The six scientific entries it calls, in order, are [T1](../experiments/run_t1_topology_applications.m), [S1](../experiments/run_s1_five_cases.m), [S2](../experiments/run_s2_degenerate_noncompact.m), [P1](../experiments/run_p1_payoff_properties.m), [X1](../experiments/run_x1_transformation_stability.m), and [I1](../experiments/run_i1_incentive_budget.m).
 
 ## Scientific interpretation boundaries
 
 - T1 uses the same weight in both $M(w)$ and $b(w)$. Its finite weight grid checks implementation diagnostics; the global diffeomorphism identity comes from the paper theorem, not from the grid.
 - S1 and S2 retain the documented new constructions, case order, branch matrices, and stability criteria. S2 noncompactness uses the analytic determinant criterion; a finite plotting window is only a visualization.
-- P1 keeps the first three games as the new exact comparison family. Its trap is separate and uses the actual legacy scaled-own-gradient rule. A finite output-grid weak-property check is not a continuous-time proof.
+- P1 keeps the first three games as the new analytically solved comparison family. Its trap is separate and uses the actual legacy scaled-own-gradient rule. A finite output-grid weak-property check is not a continuous-time proof.
 - X1 keeps $x(t)$, the pointwise image $\eta(x(t))$, and the independently integrated $z(t)$ as three different objects.
 - I1 modifies only $J_1^i$. The INC-0 same-game $\omega$ comparison and the different-game INC-omega supplement remain separate.
 - A successful run, a trajectory, or a finite-grid check is execution evidence; none is, by itself, a theorem proof.

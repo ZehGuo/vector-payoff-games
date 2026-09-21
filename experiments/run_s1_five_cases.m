@@ -1,5 +1,5 @@
 function report = run_s1_five_cases(outputDir,assetDir)
-%RUN_S1_FIVE_CASES Rebuild the five two-agent stability cases from T Remark 3.9.
+%RUN_S1_FIVE_CASES Build five theorem-guided cases from dissertation Remark 3.9.
 %
 %   REPORT = RUN_S1_FIVE_CASES() constructs four stable slope configurations
 %   and one unstable configuration, checks every double-active branch, and

@@ -10,6 +10,7 @@ and the mixed-determinant noncompact certificate from thesis Proposition 3.1.
 from __future__ import annotations
 
 import csv
+import argparse
 import json
 import math
 from pathlib import Path
@@ -17,6 +18,23 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUT_JSON = ROOT / "verification" / "s2_checks.json"
 OUT_CSV = ROOT / "verification" / "s2_independent_branch_diagnostics.csv"
+
+
+def configure_outputs() -> None:
+    global OUT_JSON, OUT_CSV
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--update-reference", action="store_true",
+                        help="write tracked verification baselines instead of ignored run output")
+    parser.add_argument("--output-dir", type=Path,
+                        help="custom output directory (cannot be combined with --update-reference)")
+    args = parser.parse_args()
+    if args.update_reference and args.output_dir:
+        parser.error("--update-reference and --output-dir cannot be combined")
+    if args.update_reference:
+        return
+    out = args.output_dir or (ROOT / "results" / "verification" / "s2")
+    OUT_JSON = out / "s2_checks.json"
+    OUT_CSV = out / "s2_independent_branch_diagnostics.csv"
 
 DEGENERATE = [
     ("D1", "stable-CW", (.8, .3), (-.6, -.2), (0., 0.), (1., -1.), True),
@@ -186,6 +204,7 @@ def write_outputs(summaries, rows, witness):
 
 
 if __name__ == "__main__":
+    configure_outputs()
     summaries, rows, witness = analyze()
     write_outputs(summaries, rows, witness)
     print(f"S2 independent verification passed: {len(summaries)} games, {len(rows)} branches")

@@ -11,6 +11,7 @@ independent comparison figures with Pillow when available.
 from __future__ import annotations
 
 import csv
+import argparse
 import json
 import math
 from pathlib import Path
@@ -19,6 +20,24 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT_JSON = ROOT / "verification" / "s1_checks.json"
 OUT_CSV = ROOT / "verification" / "s1_independent_branch_diagnostics.csv"
 FIG_DIR = ROOT / "results" / "s1" / "independent"
+
+
+def configure_outputs() -> None:
+    global OUT_JSON, OUT_CSV, FIG_DIR
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--update-reference", action="store_true",
+                        help="write tracked verification baselines instead of ignored run output")
+    parser.add_argument("--output-dir", type=Path,
+                        help="custom output directory (cannot be combined with --update-reference)")
+    args = parser.parse_args()
+    if args.update_reference and args.output_dir:
+        parser.error("--update-reference and --output-dir cannot be combined")
+    if args.update_reference:
+        return
+    out = args.output_dir or (ROOT / "results" / "verification" / "s1")
+    OUT_JSON = out / "s1_checks.json"
+    OUT_CSV = out / "s1_independent_branch_diagnostics.csv"
+    FIG_DIR = out / "figures"
 
 CASES = [
     dict(case=1, label="stable-CW", s1=(0.8, 0.3), s2=(-0.6, -0.2), stable=True,
@@ -407,6 +426,7 @@ def write_outputs(summaries, rows):
 
 
 if __name__ == "__main__":
+    configure_outputs()
     summaries_, rows_ = analyze()
     rendered_ = write_outputs(summaries_, rows_)
     print(f"S1 algebra checks passed: {len(summaries_)} cases, {len(rows_)} branches")

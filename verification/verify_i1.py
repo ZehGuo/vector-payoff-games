@@ -9,6 +9,7 @@ trajectory observations.
 from __future__ import annotations
 
 import csv
+import argparse
 import json
 import math
 from pathlib import Path
@@ -18,6 +19,23 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 OUT_JSON = ROOT / "verification/i1_checks.json"
 OUT_CSV = ROOT / "verification/reference-results/i1_condition_checks.csv"
+
+
+def configure_outputs() -> None:
+    global OUT_JSON, OUT_CSV
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--update-reference", action="store_true",
+                        help="write tracked verification baselines instead of ignored run output")
+    parser.add_argument("--output-dir", type=Path,
+                        help="custom output directory (cannot be combined with --update-reference)")
+    args = parser.parse_args()
+    if args.update_reference and args.output_dir:
+        parser.error("--update-reference and --output-dir cannot be combined")
+    if args.update_reference:
+        return
+    out = args.output_dir or (ROOT / "results" / "verification" / "i1")
+    OUT_JSON = out / "i1_checks.json"
+    OUT_CSV = out / "i1_condition_checks.csv"
 
 
 def q(A, b, x):
@@ -202,6 +220,7 @@ def sigma_checks():
 
 
 def main():
+    OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
     results=[analyze(INC0),analyze(INCW)]
     checks=dict(payoff_order=["J_1^1","J_2^1","J_1^2","J_2^2"],
                 rule="nearest-BR", experiments=results, sigma=sigma_checks(),
@@ -225,4 +244,5 @@ def main():
 
 
 if __name__ == "__main__":
+    configure_outputs()
     main()

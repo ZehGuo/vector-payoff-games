@@ -8,6 +8,11 @@ generation and source categories are in [Provenance](PROVENANCE.md).
 
 ## T1 — weight domains and weighted Nash images
 
+**Source and claim status:** Dissertation Chapter 2 supplies the weighted-game
+construction, Proposition 2.1, Theorem 2.4, and Examples 2.9–2.11. Cube, prism,
+and production–pollution use those source formulas; the nonquadratic panel is a
+repository schematic. [Exact locators and boundaries](SOURCES_AND_CLAIMS.md#claim-map).
+
 ### 1. Cube face correspondence
 
 - **Question:** How can a three-dimensional payoff-weight domain organize a weighted Nash image?
@@ -24,7 +29,7 @@ generation and source categories are in [Provenance](PROVENANCE.md).
 
 - **Question:** Does the same structural reading extend beyond a cube?
 - **Comparison:** Triangular-prism weight domain versus its deformed weighted Nash image.
-- **Look:** Match `P1`--`P5` face labels and `P1`--`P6` vertex labels; both $M$ and $b$ use the same weights.
+- **Look:** Match `F1`--`F5` face labels and `V1`--`V6` vertex labels; both $M$ and $b$ use the same weights.
 - **Takeaway:** Corresponding boundary objects remain identifiable in the paper prism case.
 - **Do not infer:** A hidden face in one camera view has disappeared, or finite samples establish global bijectivity.
 
@@ -60,6 +65,11 @@ Entry: [`run_t1_topology_applications`](../experiments/run_t1_topology_applicati
 
 ## S1 — stable and unstable piecewise dynamics
 
+**Source and claim status:** The branch/cone vocabulary and classifications
+depend on dissertation Lemma 3.6, Remarks 3.7–3.9, and Theorem 3.10. All five
+displayed parameter sets are new theorem-guided constructions, not exact thesis
+Figure 3.5 parameters. [Exact locators and boundaries](SOURCES_AND_CLAIMS.md#claim-map).
+
 ### 5. Five-case overview
 
 - **Question:** How do branch geometry and active cones distinguish stability cases around a compact Nash set?
@@ -88,6 +98,11 @@ Entry: [`run_s1_five_cases`](../experiments/run_s1_five_cases.m)
 
 ## S2 — rank degeneracy and noncompactness
 
+**Source and claim status:** Rank-degenerate classifications use dissertation
+Assumption 4 and Theorem 3.11. Noncompactness uses Assumption 1 and Proposition
+3.1. All eight configurations are new; Theorem 3.11 does not classify the three
+mixed-sign noncompact systems. [Exact locators and boundaries](SOURCES_AND_CLAIMS.md#claim-map).
+
 ### 7. Rank-degenerate five cases
 
 - **Question:** What remains of the five stability identities when a same-agent BR pair pinches at a Nash point?
@@ -112,21 +127,33 @@ Entry: [`run_s1_five_cases`](../experiments/run_s1_five_cases.m)
 
 *Each new construction has an analytic mixed-sign determinant certificate; dashed trajectories and the finite plot window are illustrations. Evidence: exact algebra plus clean MATLAB rendering.*
 
+The three configuration names are repository-side visual shorthand, not
+classification terms from the dissertation. Each purple arrow is a sampled
+feasible recession direction used to make the unbounded geometry visible; the
+analytic conclusion comes from Proposition 3.1 and the determinant pattern,
+not from the arrow-search sample.
+
 Entry: [`run_s2_degenerate_noncompact`](../experiments/run_s2_degenerate_noncompact.m)
 
 ## P1 — own improvement, externality, and total payoff
 
+**Source and claim status:** Dissertation Chapter 4 supplies the payoff-rate and
+positive-externality results. The first three games are new analytically solved
+comparisons, not a source-figure reconstruction. The trap uses a source-labelled
+legacy configuration and rule, with finite-grid evidence where stated.
+[Exact locators and boundaries](SOURCES_AND_CLAIMS.md#claim-map).
+
 ### 9. Three payoff properties
 
 - **Question:** Can the same trajectory exhibit different welfare properties when only externalities change?
-- **Comparison:** Nonweak, all-payoff-nondecreasing, and weak-but-not-all games in one new exact family.
-- **Look:** The fixed phase path and the sign judgments for the four total payoff rates in each row.
+- **Comparison:** Nonweak, all-payoff-nondecreasing, and weak-but-not-all games in one new analytically solved family.
+- **Look:** The fixed phase path and the sign judgments for the four total payoff rates in each row. Some payoff/rate curves coincide exactly; fewer visible traces do not mean missing data.
 - **Takeaway:** Own-gradient structure does not determine total payoff change; linear externality terms separate the three properties.
 - **Do not infer:** This is not an exact reproduction of thesis Fig. 4.3, and the separate trap is not one of these three identities.
 
 ![Three rows hold one trajectory family fixed while payoff and rate panels distinguish nonweak, all-payoff-nondecreasing, and weak-but-not-all behavior.](../figures/P1_three_payoff_properties.png)
 
-*Three new exact comparison games isolate the three payoff properties under one trajectory and own-gradient structure. Evidence: exact continuous-time algebra and clean MATLAB rendering.*
+*Three new analytically solved comparison games isolate the three payoff properties under one trajectory and own-gradient structure. Coincident curves are retained in the data even when one trace visually covers another. Evidence: exact continuous-time algebra and clean MATLAB rendering.*
 
 ### 10. Rate decomposition
 
@@ -152,9 +179,20 @@ Entry: [`run_s2_degenerate_noncompact`](../experiments/run_s2_degenerate_noncomp
 
 *A cross-time weak-Pareto trap under the actual legacy scaled-own-gradient rule. Evidence: clean MATLAB execution and an independent finite-grid RK4 check.*
 
+The displayed $t_1$ and $t_2$ are a witness pair selected from the sampled
+interior trajectory after searching for an earlier/later pair with both
+agent-2 payoffs lower at the later time. They are not theorem constants or
+pre-specified source times.
+
 Entry: [`run_p1_payoff_properties`](../experiments/run_p1_payoff_properties.m)
 
 ## X1 — non-bijective representation
+
+**Source and claim status:** The paper's transformation (43), transformed
+dynamics (50), Theorem 1, Proposition 3, and numerical example provide the
+source identity. Theorem 1 gives a sufficient stability route under its
+assumptions, not a general equivalence. [Exact locators and retained source
+discrepancies](SOURCES_AND_CLAIMS.md#claim-map).
 
 ### 12. Domain map
 
@@ -166,7 +204,7 @@ Entry: [`run_p1_payoff_properties`](../experiments/run_p1_payoff_properties.m)
 
 ![A labeled original partition maps to outlined and differently marked local quadrant subsets, styled half-axes, and one purple origin.](../figures/X1_domain_map.png)
 
-*$0$ means an inactive agent; $1$ or $2$ names the selected objective. Evidence: the implemented paper map plus a sampled image of the displayed local window.*
+*$0$ means an inactive agent; $1$ or $2$ names the selected objective. Inactive means the two own-gradients do not share a strict sign, so that agent's update and transformed coordinate are zero. Evidence: the implemented paper map plus a sampled image of the displayed local window.*
 
 ### 13. Fiber collapse
 
@@ -190,11 +228,17 @@ Entry: [`run_p1_payoff_properties`](../experiments/run_p1_payoff_properties.m)
 
 ![Four numbered panels separate the original trajectory, its pointwise image, an independently integrated transformed trajectory, and certificate values; solid circles and dashed triangles visibly differ.](../figures/X1_trajectories_lyapunov.png)
 
-*Four distinct objects are shown, including two separate fixed-step RK4 integrations. Evidence: independent integrations, pointwise map evaluation, and verification of the printed four-branch certificate.*
+*Four distinct objects are shown, including two separate fixed-step RK4 integrations. The certificate checks positivity of a piecewise-quadratic $V$ and strict branchwise decay; it is not a Euclidean-norm test. Evidence: independent integrations, pointwise map evaluation, and verification of the printed four-branch certificate.*
 
 Entry: [`run_x1_transformation_stability`](../experiments/run_x1_transformation_stability.m)
 
 ## I1 — conditional incentive design
+
+**Source and claim status:** Dissertation Chapter 5 and the weak-Pareto
+incentive article supply the incentive identities and conditional theorem. The
+displayed algebra and sampled paths are configuration checks; missing full
+invariant-set containment prevents an unconditional theorem claim. INC-omega
+is a different game from INC-0. [Exact locators and boundaries](SOURCES_AND_CLAIMS.md#claim-map).
 
 ### 15. Design geometry
 
@@ -224,9 +268,9 @@ Entry: [`run_x1_transformation_stability`](../experiments/run_x1_transformation_
 
 - **Question:** What changes along the observed trajectory after the INC-0 incentive is applied?
 - **Comparison:** Original and incentivized paths, original and modified payoff changes, and complete aggregate transfer.
-- **Look:** Terminal target distance $0.0151764$, sign convention $p^1+p^2\leq 0$, and the three-part evidence boundary.
+- **Look:** Terminal Euclidean target distance $0.0151764$ after the displayed finite horizon (initial distance $6.72105$), sign convention $p^1+p^2\leq 0$, and the three-part evidence boundary.
 - **Takeaway:** The incentivized path ends near the target, and sampled aggregate transfer remains nonpositive under the stated convention.
-- **Do not infer:** Full invariant-set containment remains unproved, so the display is not an unconditional theorem guarantee.
+- **Do not infer:** Full invariant-set containment remains unproved, so the display is not an unconditional theorem guarantee; one small finite-horizon endpoint distance is not a proof of asymptotic convergence.
 
 ![Original and incentivized trajectories and payoff changes are paired with a complete aggregate-transfer trace that remains nonpositive on sampled times.](../figures/I1_before_after.png)
 

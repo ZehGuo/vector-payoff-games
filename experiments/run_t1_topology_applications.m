@@ -183,11 +183,11 @@ end
 end
 
 function plotPrism(p,out,path)
-colors=faceColors(); names={'P1 q=0','P2 q=1','P3 lambda_1=0','P4 lambda_2=0','P5 lambda_3=0'};
+colors=faceColors(); names={'F1 q=0','F2 q=1','F3 lambda_1=0','F4 lambda_2=0','F5 lambda_3=0'};
 fig=figure('Color','w','Position',[70,70,1500,720]);tl=tiledlayout(1,2,'Padding','compact','TileSpacing','compact');
-ax1=nexttile(tl);hold(ax1,'on');drawPrismFaces(ax1,@(z)z,colors);drawFeatures(ax1,out.verticesWeight,out.edges,'P');labelPrismFaces(ax1,@(z)z);
+ax1=nexttile(tl);hold(ax1,'on');drawPrismFaces(ax1,@(z)z,colors);drawFeatures(ax1,out.verticesWeight,out.edges,'V');labelPrismFaces(ax1,@(z)z);
 axis(ax1,'equal');grid(ax1,'on');view(ax1,35,23);xlabel(ax1,'lambda_1');ylabel(ax1,'lambda_2');zlabel(ax1,'q');title(ax1,'weight domain Delta^2 x Delta^1');
-ax2=nexttile(tl);hold(ax2,'on');drawPrismFaces(ax2,@(z)prismPoint(p,z),colors);drawFeatures(ax2,out.verticesState,out.edges,'P');labelPrismFaces(ax2,@(z)prismPoint(p,z));
+ax2=nexttile(tl);hold(ax2,'on');drawPrismFaces(ax2,@(z)prismPoint(p,z),colors);drawFeatures(ax2,out.verticesState,out.edges,'V');labelPrismFaces(ax2,@(z)prismPoint(p,z));
 axis(ax2,'equal');grid(ax2,'on');view(ax2,35,23);xlabel(ax2,'x_1^1');ylabel(ax2,'x_2^1');zlabel(ax2,'x^2');title(ax2,'weighted Nash image X*(J)');
 addFaceLegend(ax2,colors(1:5,:),names);title(tl,'Triangular-prism face and vertex correspondence');
 annotation(fig,'textbox',[.405,.01,.19,.07],'String',{'weight (lambda,q)  ->  solve','M(w)x+b(w)=0  ->  x*(w)'}, ...
@@ -198,7 +198,7 @@ end
 function labelPrismFaces(ax,map)
 centers=[1/3,1/3,0;1/3,1/3,1;0,.5,.5;.5,0,.5;.5,.5,.5];
 for k=1:5
-    x=map(centers(k,:)); text(ax,x(1),x(2),x(3),sprintf(' P%d',k), ...
+    x=map(centers(k,:)); text(ax,x(1),x(2),x(3),sprintf(' F%d',k), ...
         'FontSize',9,'FontWeight','bold','Color',[.08,.08,.08],'BackgroundColor','w','Margin',1);
 end
 end
@@ -253,10 +253,12 @@ t=linspace(-1.35,1.35,300);left=-1.15+.22*t.^2;right=.65+.34*t.^2;lower=-.85+.36
 mask=X>=(-1.15+.22*Y.^2) & X<=(.65+.34*Y.^2) & ...
      Y>=(-.85+.36*X.^2) & Y<=(.9-.30*X.^2);
 contourf(ax,X,Y,double(mask),[.5,.5],'FaceColor',[.55,.2,.7],'FaceAlpha',.28,'LineStyle','none');
-plot(ax,left,t,'-','Color',[.80,.13,.18],'LineWidth',2);plot(ax,right,t,'--','Color',[.80,.13,.18],'LineWidth',2);plot(ax,t,lower,'-.','Color',[0,.40,.72],'LineWidth',2);plot(ax,t,upper,':','Color',[0,.40,.72],'LineWidth',2.4);
+hl1=plot(ax,left,t,'-','Color',[.80,.13,.18],'LineWidth',2);hl2=plot(ax,right,t,'--','Color',[.80,.13,.18],'LineWidth',2);hl3=plot(ax,t,lower,'-.','Color',[0,.40,.72],'LineWidth',2);hl4=plot(ax,t,upper,':','Color',[0,.40,.72],'LineWidth',2.4);
 axis(ax,'equal');xlim(ax,[-1.5,1.45]);ylim(ax,[-1.5,1.5]);axis(ax,'off');title(ax,'Schematic nonquadratic Nash geometry');
 text(ax,.03,.96,'SCHEMATIC ONLY','Units','normalized','FontWeight','bold','Color',[.36,.08,.45]);
 text(ax,-1.25,-1.58,'Curved own-gradient zero sets can bound a weighted Nash image','FontSize',10);
+legend(ax,[hl1,hl2,hl3,hl4],{'agent 1 / objective 1 boundary','agent 1 / objective 2 boundary', ...
+    'agent 2 / objective 1 boundary','agent 2 / objective 2 boundary'},'Location','southoutside');
 exportgraphics(fig,path,'Resolution',180);close(fig);
 end
 
@@ -266,8 +268,8 @@ if strcmp(kind,'cube')
     vertexText='C1-C8: identical labels on weight and Nash vertices';
     heading='Cube correspondence key';
 else
-    faceRows={'P1/P2: q=0/1','P3: lambda_1=0','P4: lambda_2=0','P5: lambda_3=0'};
-    vertexText='P1-P6: identical labels on weight and Nash vertices';
+    faceRows={'F1/F2: q=0/1','F3: lambda_1=0','F4: lambda_2=0','F5: lambda_3=0'};
+    vertexText='V1-V6: identical labels on weight and Nash vertices';
     heading='Triangular-prism correspondence key';
 end
 fig=figure('Color','w','Visible','off','Position',[60,60,760,760]);ax=axes(fig);hold(ax,'on');axis(ax,'off');
@@ -294,9 +296,9 @@ rows={ ...
  'cube','F1','w_1=0','remove J_1^1; keep J_2^1','2';'cube','F2','w_1=1','remove J_2^1; keep J_1^1','2'; ...
  'cube','F3','w_2=0','remove J_1^2; keep J_2^2','2';'cube','F4','w_2=1','remove J_2^2; keep J_1^2','2'; ...
  'cube','F5','w_3=0','remove J_1^3; keep J_2^3','2';'cube','F6','w_3=1','remove J_2^3; keep J_1^3','2'; ...
- 'prism','P1','q=0','remove J_1^2; keep J_2^2','2';'prism','P2','q=1','remove J_2^2; keep J_1^2','2'; ...
- 'prism','P3','lambda_1=0','remove J_1^1','2';'prism','P4','lambda_2=0','remove J_2^1','2'; ...
- 'prism','P5','lambda_3=0','remove J_3^1','2'};
+ 'prism','F1','q=0','remove J_1^2; keep J_2^2','2';'prism','F2','q=1','remove J_2^2; keep J_1^2','2'; ...
+ 'prism','F3','lambda_1=0','remove J_1^1','2';'prism','F4','lambda_2=0','remove J_2^1','2'; ...
+ 'prism','F5','lambda_3=0','remove J_3^1','2'};
 fid=fopen(path,'w');c=onCleanup(@()fclose(fid));fprintf(fid,'domain,face,weight_condition,subgame_interpretation,dimension\n');
 for k=1:size(rows,1),fprintf(fid,'%s,%s,%s,%s,%s\n',rows{k,:});end
 end
@@ -304,10 +306,10 @@ end
 function writeFeatureCsv(vpath,epath,cube,prism)
 fid=fopen(vpath,'w');c=onCleanup(@()fclose(fid));fprintf(fid,'domain,vertex,weight_1,weight_2,weight_3,state_1,state_2,state_3\n');
 for k=1:8,fprintf(fid,'cube,C%d,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g\n',k,cube.verticesWeight(k,:),cube.verticesState(k,:));end
-for k=1:6,fprintf(fid,'prism,P%d,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g\n',k,prism.verticesWeight(k,:),prism.verticesState(k,:));end
+for k=1:6,fprintf(fid,'prism,V%d,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g\n',k,prism.verticesWeight(k,:),prism.verticesState(k,:));end
 clear c;fid=fopen(epath,'w');c=onCleanup(@()fclose(fid));fprintf(fid,'domain,edge,vertex_a,vertex_b\n');
 for k=1:size(cube.edges,1),fprintf(fid,'cube,E%d,C%d,C%d\n',k,cube.edges(k,:));end
-for k=1:size(prism.edges,1),fprintf(fid,'prism,E%d,P%d,P%d\n',k,prism.edges(k,:));end
+for k=1:size(prism.edges,1),fprintf(fid,'prism,E%d,V%d,V%d\n',k,prism.edges(k,:));end
 end
 
 function writeDiagnostics(path,cube,prism,a)

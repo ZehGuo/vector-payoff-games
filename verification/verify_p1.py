@@ -10,6 +10,7 @@ continuous-time proof.
 from __future__ import annotations
 
 import csv
+import argparse
 import json
 import math
 from pathlib import Path
@@ -19,6 +20,24 @@ FIG = ROOT / "results" / "p1" / "independent"
 OUT_JSON = ROOT / "verification" / "p1_checks.json"
 OUT_CSV = ROOT / "verification" / "reference-results" / "p1_diagnostics.csv"
 ORDER = ["J_1^1", "J_2^1", "J_1^2", "J_2^2"]
+
+
+def configure_outputs() -> None:
+    global FIG, OUT_JSON, OUT_CSV
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--update-reference", action="store_true",
+                        help="write tracked verification baselines instead of ignored run output")
+    parser.add_argument("--output-dir", type=Path,
+                        help="custom output directory (cannot be combined with --update-reference)")
+    args = parser.parse_args()
+    if args.update_reference and args.output_dir:
+        parser.error("--update-reference and --output-dir cannot be combined")
+    if args.update_reference:
+        return
+    out = args.output_dir or (ROOT / "results" / "verification" / "p1")
+    FIG = out / "figures"
+    OUT_JSON = out / "p1_checks.json"
+    OUT_CSV = out / "p1_diagnostics.csv"
 
 
 def common_game(name, ext, prop):
@@ -322,6 +341,7 @@ def render_trap(run, witness):
 
 
 def write_outputs(runs, summaries):
+    OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
     witness=summaries[3]["trap_witness"]
     payload=dict(
         status="pass",
@@ -354,7 +374,8 @@ def write_outputs(runs, summaries):
 
 
 if __name__ == "__main__":
+    configure_outputs()
     runs_,summaries_=analyze();write_outputs(runs_,summaries_)
     w=summaries_[3]["trap_witness"]
-    print("P1 checks passed: 3 exact property games + actual-rule trap")
+    print("P1 checks passed: 3 analytically solved property games + actual-rule trap")
     print(f"Interior trap witness t1={w['t1']:.3f} < t2={w['t2']:.3f}; delta={w['delta']}")
