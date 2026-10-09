@@ -1,0 +1,103 @@
+%% Chapter 5 - Where can the manager afford the incentive?  The region D_bud(sigma)
+% Thesis: Section 5.3, eqs. (5.18)-(5.24) and Fig. 5.4.
+%
+% The manager adds incentives p^i(x) (tax if negative, subsidy if positive)
+% to the money-type payoff J^i_1 of each agent.  Two budget rules:
+%   p^1(x0) = p^2(x0) = 0      (nobody gains or loses at the start, (5.5))
+%   p^1(x) + p^2(x) <= 0       (the manager never pays out net money, (5.6)).
+% With the design (5.18)-(5.19), the total incentive is
+%   p^1 + p^2 = sigma (U(x) - U(x0)) - (J_sum(x) - J_sum(x0)),        (5.23)
+% where U = sum eta^i_j J^i_j is the manager's social welfare (weights eta),
+% J_sum = J^1_1 + w^1 J^1_2 + J^2_1 + w^2 J^2_2, and sigma > 0 scales the
+% incentive.  The trajectory must stay in
+%   D_bud(sigma) = { x : p^1(x) + p^2(x) <= 0 }.                       (5.24)
+% Its boundary is a conic whose type changes with sigma: ellipse (inside),
+% hyperbola, then ellipse again (outside).  This script finds the two
+% switching values of sigma (thesis: 0.4097 and 0.5266).
+
+clear; close all;
+addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));
+fprintf('\n== Chapter 5: budget region D_bud(sigma) (Fig. 5.4) ==\n');
+
+%% 1. Same game as Fig. 5.1, manager weights eta, and w^1 = w^2 = 1
+A = {[-2 1; 1 -3], [-2 -1; -1 -10]; [-4 1; 1 -4], [-5 -1; -1 -2]};
+b = {[5; -5], [20; 124]; [90; 0], [72; 0]};
+eta = [1 3; 1 3];             % eta^i_j: priority of payoff J^i_j for the manager
+w = [1; 1];                   % omega^i in (5.20)
+x0 = [18.5; -8.71];
+
+% Quadratic data of U and J_sum:  f(x) = 1/2 x'H x + g'x
+HU = 0; gU = 0;
+for i = 1:2
+    for j = 1:2
+        HU = HU + eta(i,j) * A{i,j};
+        gU = gU + eta(i,j) * b{i,j};
+    end
+end
+HJ = A{1,1} + w(1) * A{1,2} + A{2,1} + w(2) * A{2,2};
+gJ = b{1,1} + w(1) * b{1,2} + b{2,1} + w(2) * b{2,2};
+quad = @(H, g, X) 0.5 * sum(X .* (H * X), 1) + g' * X;
+U = @(X) quad(HU, gU, X) - quad(HU, gU, x0);          % U(x) - U(x0)
+Jsum = @(X) quad(HJ, gJ, X) - quad(HJ, gJ, x0);       % J_sum(x) - J_sum(x0)
+budget = @(X, sigma) sigma * U(X) - Jsum(X);          % p^1 + p^2, eq. (5.23)
+
+xhat = -HU \ gU;              % target state: maximizer of U, eq. (5.8)
+fprintf('   target state x_hat = (%.4f, %.4f)\n', xhat);
+
+%% 2. The conic type of the boundary changes where det(sigma*HU - HJ) = 0
+% det(sigma*HU - HJ) = 0  <=>  sigma is an eigenvalue of HU^{-1} HJ.
+sigmaSwitch = sort(eig(HU \ HJ))';
+check('sigma where the boundary changes type matches the thesis (0.4097, 0.5266)', ...
+      max(abs(sigmaSwitch - [0.4097 0.5266])) < 5e-5, sprintf('computed %s', mat2str(sigmaSwitch, 6)));
+
+% Below the first value the region is the INSIDE of an ellipse (budget function
+% convex), above the second it is the OUTSIDE of an ellipse (concave).
+isConvex = @(s) all(eig(s * HU - HJ) > 0);
+isConcave = @(s) all(eig(s * HU - HJ) < 0);
+check('sigma = 0.3: inside of an ellipse; 0.45: hyperbola; 0.8: outside of an ellipse', ...
+      isConvex(0.3) && ~isConvex(0.45) && ~isConcave(0.45) && isConcave(0.8));
+
+%% 3. Claim below Fig. 5.4: D(U,x0) \ D(J_sum,x0) never meets D_bud(sigma)
+% (eqs. (5.12)-(5.13): there the budget would have to be positive.)
+[X1, X2] = meshgrid(linspace(-15, 45, 500), linspace(-25, 35, 500));
+X = [X1(:)'; X2(:)'];
+green = U(X) >= 0 & Jsum(X) < 0;          % D(U,x0) minus D(J_sum,x0)
+sigmas = [0.1 0.2 0.3 0.4 0.42 0.45 0.5 0.52 0.6 0.8 1 3 10];
+clash = false;
+for s = sigmas
+    clash = clash || any(green & budget(X, s) <= 0);
+end
+check('D(U,x0) \ D(J_sum,x0) and D_bud(sigma) never overlap', ~clash, ...
+      sprintf('%d values of sigma', numel(sigmas)));
+
+%% 4. Figure in the style of Fig. 5.4
+groups = {linspace(0.1, 0.4, 7), linspace(0.42, 0.52, 6), linspace(0.6, 1, 5)};
+titles = {sprintf('(a) 0 < \\sigma < %.4f: inside of ellipses', sigmaSwitch(1)), ...
+          sprintf('(b) %.4f \\leq \\sigma \\leq %.4f: hyperbolas', sigmaSwitch), ...
+          sprintf('(c) \\sigma > %.4f: outside of ellipses', sigmaSwitch(2))};
+fig = figure('Position', [50 50 1400 440]);
+for p = 1:3
+    subplot(1, 3, p); hold on
+    image(X1(1, :), X2(:, 1), repmat(reshape([0.55 0.80 0.60], 1, 1, 3), size(X1)), ...
+          'AlphaData', 0.7 * reshape(green, size(X1)));
+    set(gca, 'YDir', 'normal');
+    contour(X1, X2, reshape(U(X), size(X1)), [0 0], 'Color', [0.1 0.2 0.7], 'LineWidth', 2);
+    contour(X1, X2, reshape(Jsum(X), size(X1)), [0 0], 'Color', [0.85 0.1 0.1], 'LineWidth', 2);
+    cmap = parula(numel(groups{p}) + 2);
+    for k = 1:numel(groups{p})
+        contour(X1, X2, reshape(budget(X, groups{p}(k)), size(X1)), [0 0], '--', ...
+                'Color', cmap(k + 1, :), 'LineWidth', 1);
+    end
+    plot(xhat(1), xhat(2), 'b*', 'MarkerSize', 8);
+    plot(x0(1), x0(2), 'ro', 'MarkerFaceColor', 'r');
+    text(xhat(1) + 1, xhat(2) + 2, '$\hat{x}^*$', 'Interpreter', 'latex', 'FontSize', 13);
+    text(x0(1) + 1, x0(2) - 2.5, '$x_0$', 'Interpreter', 'latex', 'FontSize', 13);
+    xlabel('x^1'); ylabel('x^2'); axis([-15 45 -25 35]); box on
+    title(titles{p});
+    colormap(gca, cmap(2:end-1, :));
+    cb = colorbar('southoutside');
+    clim([groups{p}(1) groups{p}(end)]);
+    cb.Label.String = '\sigma (dashed curves: boundary of D_{bud}(\sigma))';
+end
+sgtitle({'Chapter 5: blue = boundary of D(U,x_0), red = boundary of D(J_{sum},x_0), green = D(U,x_0) minus D(J_{sum},x_0)'});
+save_figure(fig, 'ch5_budget_region');
