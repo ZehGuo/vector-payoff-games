@@ -1,14 +1,14 @@
 function x = weighted_nash_point(grad, lambda)
-%WEIGHTED_NASH_POINT  Nash equilibrium of the weighted (scalar) game, eq. (2.11).
+%WEIGHTED_NASH_POINT  Equilibrium of the game in which every player adds up
+%   its payoffs with fixed weights.
 %
-%   For fixed weights, agent i maximizes  sum_j lambda{i}(j) * J^i_j(x).
-%   Its first-order condition is  sum_j lambda{i}(j) * (M^i_j x + v^i_j) = 0,
-%   where  M^i_j x + v^i_j  is the own gradient dJ^i_j/dx^i (r_i rows).
-%   Stacking all agents gives the linear system  Lambda(lambda)(A x + b) = 0,
-%   whose solution is  x*(lambda) = -(Lambda A)^{-1} Lambda b.
+%   Player i maximizes  sum_j lambda{i}(j) * J^i_j(x).  Its best state
+%   satisfies  sum_j lambda{i}(j) * (M^i_j x + v^i_j) = 0,  where
+%   M^i_j x + v^i_j is the own gradient dJ^i_j/dx^i.  Stacking the
+%   conditions of all players gives one linear system, solved here.
 %
 %   grad{i}{j}.M : r_i-by-r matrix,  grad{i}{j}.v : r_i-by-1 vector
-%   lambda{i}    : weight vector of agent i (nonnegative, sums to 1)
+%   lambda{i}    : weights of player i (nonnegative, summing to 1)
 
 M = [];
 v = [];

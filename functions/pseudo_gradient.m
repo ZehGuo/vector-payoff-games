@@ -1,17 +1,16 @@
 function [F, branch] = pseudo_gradient(G, X)
-%PSEUDO_GRADIENT  Vector field of the agents' myopic dynamics, thesis eq. (3.8).
+%PSEUDO_GRADIENT  How the players move: the velocity x' = F(x).
 %
-%   Each agent i looks at its two own gradients g1 = dJ^i_1/dx^i and
-%   g2 = dJ^i_2/dx^i:
-%     * if they have opposite signs (or one is zero), agent i cannot improve
-%       both payoffs by moving, i.e. it is already Pareto-optimal for itself,
-%       so it stays put:  f^i = 0;
-%     * otherwise both payoffs improve in the same direction, and agent i
-%       follows the payoff whose best-response line BR^i_j is CLOSER to its
-%       current state:  f^i = alpha^i_j * g_j.
+%   Each player i looks at how its two payoffs change when it moves itself
+%   (its two "own gradients" g1 and g2):
+%     * opposite signs (or one is zero): moving cannot improve both payoffs,
+%       so the player stays put, F^i = 0;
+%     * same sign: both payoffs improve in the same direction.  The player
+%       follows the payoff whose best-response line is CLOSER to its current
+%       state:  F^i = alpha^i_j * g_j.
 %
 %   X is 2-by-N; F is 2-by-N.  branch(i,n) = 0, 1 or 2 tells which payoff
-%   agent i follows at X(:,n) (0 = not moving).
+%   player i follows at X(:,n) (0 = not moving).
 
 F = zeros(size(X));
 branch = zeros(size(X));
@@ -19,8 +18,8 @@ for i = 1:2
     g1 = own_gradient(G, i, 1, X);
     g2 = own_gradient(G, i, 2, X);
 
-    % Distance from x^i to BR^i_j, measured along agent i's own axis.
-    % Eq. (3.9): g_j = A^{ij}_{ii} (x^i - BR^i_j(x^-i)).
+    % Distance from x^i to the best-response line of payoff j, measured
+    % along player i's own axis:  g_j = A^{ij}_{ii} * (x^i - best response).
     d1 = abs(g1 / G.A{i, 1}(i, i));
     d2 = abs(g2 / G.A{i, 2}(i, i));
 

@@ -1,5 +1,5 @@
 function nFail = check(description, passed, detail)
-%CHECK  Print one PASS/FAIL line comparing a computed result with the thesis.
+%CHECK  Print one PASS/FAIL line comparing a computed result with the papers.
 %
 %   check('text', condition, 'optional detail')  prints and records a check.
 %   check('reset')    clears the record.

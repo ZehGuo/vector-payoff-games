@@ -1,41 +1,48 @@
-%% Chapter 3 - Is the Nash equilibrium set stable under myopic dynamics?
-% Thesis: Section 3.4, Figs. 3.5, 3.6, 3.7 (Proposition 3.1, Theorems 3.10, 3.11).
+%% Do the players settle down?  Stability of the equilibrium set
+% Papers: Z. Guo, T. Hayakawa, Y. Yan, "Nash equilibrium of 2-agent game with
+%         quadratic vector payoff functions and its stability", IFAC World
+%         Congress 2023, https://doi.org/10.1016/j.ifacol.2023.10.1395
+%         Z. Guo, T. Hayakawa, Y. Yan, "Stability and stabilization of Nash
+%         equilibrium for noncooperative systems with vector-valued payoff
+%         functions", IEEE CDC 2023, https://doi.org/10.1109/CDC49753.2023.10384265
 %
-% Two agents, scalar states, two payoffs each.  Each agent moves along the
-% pseudo-gradient (3.8): it moves only if it can raise both payoffs, and then
-% follows the payoff whose best-response line is closer.  The four lines
-% BR^i_j cut the plane into regions; in each region the motion is linear.
+% Two players, one number each, two payoffs each.  A player moves only if it
+% can raise both payoffs, and then follows the payoff whose best-response
+% line is closer (see functions/pseudo_gradient.m).  The four best-response
+% lines cut the plane into regions; inside each region the motion is linear.
 %
-% Main result (Theorems 3.10 and 3.11).  Let A_{j1j2} = [row_1(A^{1 j1}); row_2(A^{2 j2})].
-%   * all four det(A_{j1j2}) > 0  ->  X*(J) is compact and asymptotically stable;
-%   * all four det(A_{j1j2}) < 0  ->  X*(J) is compact but unstable;
-%   * mixed signs                 ->  X*(J) is not compact (Proposition 3.1).
-% Remark 3.9 lists five slope orderings of the lines: four stable, one unstable.
+% Main result.  Pick one payoff per player and stack their gradient rows into
+% a 2x2 matrix.  There are four such matrices.
+%   * all four determinants > 0  ->  the equilibrium set is bounded and
+%                                    nearby trajectories converge to it (stable);
+%   * all four determinants < 0  ->  bounded, but trajectories move away (unstable);
+%   * mixed signs                ->  the equilibrium set is unbounded.
+% The four lines can be arranged in five essentially different ways: four
+% are stable, one is unstable.
 %
 % For every example this script (1) PREDICTS stability from the determinant
-% signs and (2) SIMULATES trajectories that start close to X*(J), then checks
-% that the simulation agrees with the prediction.
+% signs and (2) SIMULATES trajectories that start close to the set, then
+% checks that the simulation agrees with the prediction.
 
 clear; close all;
 addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));
-fprintf('\n== Chapter 3: stability of the Nash set (Figs. 3.5-3.7) ==\n');
+fprintf('\n== Stability of the equilibrium set ==\n');
 
-% Each example is given by its four best-response lines, written as own
-% gradients  dJ^i_j/dx^i = row * x + b  (rows and offsets from the original
-% simulation scripts), and the sensitivities alpha^i_j.
+% Each example is given by its four best-response lines, written as
+% dJ^i_j/dx^i = row * x + b, and the speeds alpha^i_j of the players.
 
-%% Fig. 3.5: interior of X*(J) connected (Assumption 3)
+%% Examples where the equilibrium set is one solid piece
 fig35 = {
-    % agent 1 payoff 1, payoff 2      | agent 2 payoff 1, payoff 2        | alpha (2x2)        | window
+    % player 1 payoff 1, payoff 2     | player 2 payoff 1, payoff 2       | alpha (2x2)        | window
     {[-3 -1], 25,   [-2 1], 0,         [-1/2 -1], 6,   [1/2 -1], 5,      0.01 * ones(2),      [0.5 10 0 11]}
     {[-3 1], 5,     [-4 1], 10,        [1/2 -1], 5,    [1/4 -1], 21/4,   [1/3 1/4; 2 2],      [0.5 10 0 11]}
     {[-2 -1], 20,   [-3 -1], 25,       [1/2 -1], 5,    [1/4 -1], 21/4,   [1/2 1/3; 2 2],      [0.5 10 0 11]}
     {[-3 -1], 25,   [-2 1], 0,         [1/2 -1], 5,    [1/4 -1], 21/4,   [1 1; 2 2],          [0.5 10 0 11]}
     {[-1/4 1], -35/4, [-1/2 1], -15/2, [4 -1], 3/2,    [3 -1], 5/2,      [4 2; 1 1],          [0.5 6 2 11]}
 };
-plot_case_family(fig35, 'Fig. 3.5 (Assumption 3: X* has a connected interior)', 'ch3_stability_five_cases');
+plot_case_family(fig35, 'Equilibrium set in one piece: four stable arrangements and one unstable', 'stability_one_piece');
 
-%% Fig. 3.6: interior of X*(J) NOT connected (Assumption 4)
+%% Examples where the equilibrium set is two pieces touching at a point
 fig36 = {
     {[-3 -1], 17,    [-2 1], 3,         [-1/2 -1], 6,   [1/2 -1], 5,      0.01 * ones(2),      [0.5 10 0 11]}
     {[-3 1], 11,     [-4 1], 17,        [1/2 -1], 5,    [1/4 -1], 21/4,   [1/3 1/4; 2 2],      [3 8 4 9]}
@@ -43,22 +50,20 @@ fig36 = {
     {[-3 -1], 57/2,  [-2 1], 13/2,      [1/2 -1], 5,    [1/4 -1], 21/4,   [1 1; 2 2],          [0.5 10 0 11]}
     {[-1/4 1], -67/4, [-1/2 1], -31/2,  [4 -1], 3/2,    [3 -1], 5/2,      [4 2; 1 1],          [3 6 15 20]}
 };
-plot_case_family(fig36, 'Fig. 3.6 (Assumption 4: X* is two pieces touching at a point)', 'ch3_stability_assumption4');
+plot_case_family(fig36, 'Equilibrium set in two pieces touching at a point', 'stability_two_pieces');
 
-%% Fig. 3.7: X*(J) unbounded (determinant signs mixed)
-% The original scripts for Fig. 3.7 are not available; these three examples
-% are NEW constructions with mixed determinant signs (see NOTES.md).
+%% Examples where the determinant signs are mixed: the set is unbounded
 fig37 = {
     {[-1 2], 0,     [-1 -0.5], 2,      [1 -1], 1,      [0.2 -1], -3,     ones(2),  [-10 10 -20 20]}
     {[-1 0.5], 1,   [-1 3], -2,        [0.5 -1], 0,    [-1 -1], 4,       ones(2),  [-10 10 -20 20]}
     {[-1 -2], 0,    [-1 1.5], 3,       [-1 -1], -1,    [1 -1], 2,        ones(2),  [-10 10 -20 20]}
 };
-plot_case_family(fig37, 'Fig. 3.7 (new examples: X* is unbounded)', 'ch3_unbounded_cases');
+plot_case_family(fig37, 'Mixed determinant signs: the equilibrium set is unbounded', 'stability_unbounded');
 
 
 %% ------------------------------------------------------------------------
 function plot_case_family(cases, figTitle, fileName)
-% Analyse every case of one thesis figure and draw them side by side.
+% Analyse every example of one group and draw them side by side.
 fprintf('\n-- %s --\n', figTitle);
 nCases = numel(cases);
 fig = figure('Position', [50 50 380 * min(nCases, 3) 360 * ceil(nCases / 3)]);
@@ -70,13 +75,13 @@ for k = 1:nCases
     verdict = analyse_case(G, win, sprintf('(%c)', 'a' + k - 1));
     title(sprintf('(%c) %s', 'a' + k - 1, verdict));
 end
-sgtitle({figTitle, ['\fontsize{9}red = agent 1, blue = agent 2, solid = payoff 1, dashed = payoff 2, ' ...
-         'green dotted = switching lines, purple = X^*(J), black = simulated trajectories']});
+sgtitle({figTitle, ['\fontsize{9}red = player 1, blue = player 2, solid = payoff 1, dashed = payoff 2, ' ...
+         'green dotted = switching lines, purple = equilibrium set, black = simulated trajectories']});
 save_figure(fig, fileName);
 end
 
 function verdict = analyse_case(G, win, label)
-% Predict stability from det(A_{j1j2}), simulate, and draw one panel.
+% Predict stability from the four determinants, simulate, and draw one panel.
 
 % --- Prediction from the theory ------------------------------------------
 d = zeros(2);
@@ -86,21 +91,21 @@ for j1 = 1:2
     end
 end
 if all(d(:) > 0)
-    verdict = 'stable';            % Theorems 3.10 / 3.11
+    verdict = 'stable';
 elseif all(d(:) < 0)
     verdict = 'unstable';
 else
-    verdict = 'unbounded';         % Proposition 3.1: X* not compact
+    verdict = 'unbounded';
 end
 
-% --- Vector field and Nash set -------------------------------------------
+% --- Vector field and equilibrium set -------------------------------------
 [X1, X2] = meshgrid(linspace(win(1), win(2), 60), linspace(win(3), win(4), 60));
 F = pseudo_gradient(G, [X1(:)'; X2(:)']);
 plot_game(G, win(1:2), win(3:4), ~strcmp(verdict, 'unbounded'));
 hs = streamslice(X1, X2, reshape(F(1, :), size(X1)), reshape(F(2, :), size(X1)), 1.2);
 set(hs, 'Color', [0.55 0.6 0.75]);
 
-% Sample X*(J) finely (used for the distance d_H(x, X*)).
+% Sample the equilibrium set finely (to measure distances to it).
 [S1, S2] = meshgrid(linspace(win(1), win(2), 700), linspace(win(3), win(4), 700));
 S = [S1(:)'; S2(:)'];
 S = S(:, in_nash_set(G, S));
@@ -119,13 +124,13 @@ switch verdict
             plot(Xt(1, :), Xt(2, :), 'k-', 'LineWidth', 1.3);
             plot(starts(1, n), starts(2, n), 'ko', 'MarkerFaceColor', 'w');
         end
-        % Proposition 3.1 check: X* reaches arbitrarily far (sample a huge circle).
+        % The set reaches arbitrarily far: test points on a huge circle.
         th = linspace(0, 2 * pi, 3600);
         farHit = any(in_nash_set(G, 1e4 * [cos(th); sin(th)]));
-        check([label ' mixed det signs and X* reaches ||x|| = 1e4 (not compact)'], farHit, ...
+        check([label ' mixed determinant signs and the set reaches ||x|| = 1e4 (unbounded)'], farHit, ...
               sprintf('dets = %s', mat2str(d(:)', 3)));
     otherwise
-        % Start 12 points at distance ~ delta from X*, spread around the set.
+        % Start 12 points at distance ~ delta from the set, spread around it.
         delta = 0.03 * span;
         starts = ring_points(S, delta, 12);
         dEnd = zeros(1, 12); dMax = zeros(1, 12);
@@ -136,13 +141,13 @@ switch verdict
             plot(Xt(1, :), Xt(2, :), 'k-', 'LineWidth', 1.3);
             plot(starts(1, n), starts(2, n), 'ko', 'MarkerFaceColor', 'w', 'MarkerSize', 4);
         end
-        grid = 1.5 * span / 700;    % sampling resolution of X*
+        grid = 1.5 * span / 700;    % sampling resolution of the set
         if strcmp(verdict, 'stable')
             ok = all(dEnd < grid) && all(dMax < 3 * delta);
-            msg = 'stable: all start near X* and converge to it';
+            msg = 'stable: all start near the set and converge to it';
         else
             ok = any(dEnd > 5 * delta);
-            msg = 'unstable: some trajectory starting near X* moves away';
+            msg = 'unstable: some trajectory starting near the set moves away';
         end
         check(sprintf('%s dets %s -> predicted %s; simulation agrees', label, mat2str(d(:)', 3), msg), ok, ...
               sprintf('start dist %.2f, end dist max %.3f, worst excursion %.2f', delta, max(dEnd), max(dMax)));
@@ -168,7 +173,7 @@ end
 
 function G = game_from_rows(r11, b11, r12, b12, r21, b21, r22, b22, alpha)
 % Build a game whose own gradients are dJ^i_j/dx^i = r^i_j * x + b^i_j.
-% Only these rows drive the dynamics (3.8); the remaining Hessian entry is
+% Only these rows drive the motion; the remaining matrix entry is
 % set to -1 so that each payoff is a valid concave quadratic.
 G.A = {[r11; r11(2) -1], [r12; r12(2) -1];
        [-1 r21(1); r21], [-1 r22(1); r22]};

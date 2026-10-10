@@ -1,5 +1,5 @@
 function J = payoff_value(G, i, j, X)
-%PAYOFF_VALUE  Value of payoff j of agent i:  J^i_j(x) = 1/2 x'Ax + b'x + c.
+%PAYOFF_VALUE  Value of payoff j of player i:  J^i_j(x) = 1/2 x'Ax + b'x + c.
 %   X is 2-by-N (one state per column); J is 1-by-N.
 
 A = G.A{i, j};

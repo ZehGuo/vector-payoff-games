@@ -1,10 +1,9 @@
 function tf = in_nash_set(G, X, tol)
-%IN_NASH_SET  Test whether states belong to the Nash equilibrium set X*(J).
+%IN_NASH_SET  Is each state an equilibrium (2 players, 2 payoffs each)?
 %
-%   Thesis eq. (2.28) / (4.1): x is a Nash equilibrium of the 2-agent,
-%   2-payoff game if, for BOTH agents, the two own gradients do not have the
-%   same strict sign, i.e. no agent can raise both of its payoffs by moving
-%   alone.  X is 2-by-N; tf is a 1-by-N logical.
+%   x is an equilibrium when, for BOTH players, the two own gradients do not
+%   have the same strict sign: no player can raise both of its payoffs by
+%   moving alone.  X is 2-by-N; tf is a 1-by-N logical.
 %   tol (optional, default 0) absorbs round-off for points lying exactly on
 %   a best-response line.
 

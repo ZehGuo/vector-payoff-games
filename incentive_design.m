@@ -1,34 +1,35 @@
-%% Chapter 5 - Designing taxes/subsidies that guarantee weak Pareto improvement
-% Thesis: Section 5.3-5.4, eqs. (5.27)-(5.28), Theorem 5.4, Figs. 5.5 and 5.6.
+%% Designing taxes and subsidies so that everybody gains, at no cost
+% Paper: Z. Guo, T. Hayakawa, "Two-agent noncooperative dynamical systems with
+%        quadratic vector-valued payoff functions and weak Pareto improvement",
+%        IEEE Control Systems Letters, 2024, https://doi.org/10.1109/LCSYS.2024.3522596
 %
-% The manager picks priorities eta^i_j, which define a social welfare
-% U(x) = sum eta^i_j J^i_j(x) and a target state x_hat = argmax U (5.7)-(5.8).
-% Incentives can only be added to the money-type payoff J^i_1 of each agent.
-% With the design (5.27) and the simplest parameter choice of the thesis
-% (omega^i = 0, Q_i = 0), the incentivized money payoff becomes
-%   tilde J^i_1(x) = zeta_i * sigma * (U(x) - U(x0)) + J^i_1(x0),        (5.28)
-% i.e. agent i receives the share zeta_i of the (scaled) social welfare gain.
+% A manager picks priorities eta^i_j, which define a social welfare
+% U(x) = sum eta^i_j J^i_j(x) and a target state x_hat where U is largest.
+% Incentives can only be added to the money-type payoff J^i_1 of each player.
+% In the simplest version of the design, the money payoff with incentive is
+%   tilde J^i_1(x) = zeta_i * sigma * (U(x) - U(x0)) + J^i_1(x0),
+% i.e. player i is paid the share zeta_i of the (scaled) social welfare gain.
 % The incentive itself is p^i(x) = tilde J^i_1(x) - J^i_1(x).
-% Theorem 5.4: if the conditions (5.29) hold, the incentivized trajectory is
-% weakly Pareto improving, nobody falls into the trap, the budget
-% p^1 + p^2 <= 0 holds, and the Nash set of the new game is stable.
+% If a few conditions hold (checked below), the trajectory with incentives
+% is weakly Pareto improving, nobody falls into the trap, the manager never
+% pays out net money, and the players settle near the target.
 
 clear; close all;
 addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));
-fprintf('\n== Chapter 5: incentive design (Figs. 5.5, 5.6) ==\n');
+fprintf('\n== Incentive design ==\n');
 
-%% 1. Original game (Section 5.4) and the manager's choices
+%% 1. The game and the manager's choices
 G.A = {[-4 1; 1 -10],   [-4 -1; -1 -3];
        [-16 8; 8 -16],  [-5 -1; -1 -2]};
 G.b = {[5; -440], [30; -20];
        [360; 0],  [58.5; 0]};
-G.alpha = ones(2);              % agents' sensitivities (Theorem 5.4: any alpha > 0)
+G.alpha = ones(2);              % players' speeds (the guarantee holds for any alpha > 0)
 eta = [0.7 4; 1 2];             % manager's priorities eta^i_j
 x0 = [16; -15];
 sigma = 0.05;                   % incentive scale
 zeta = [0.3; 0.7];              % shares of the welfare gain, zeta_1 + zeta_2 = 1
 
-% Social welfare U(x) = 1/2 x'HU x + gU'x and the target state x_hat (5.8)
+% Social welfare U(x) = 1/2 x'HU x + gU'x and the target state x_hat
 HU = 0; gU = 0;
 for i = 1:2
     for j = 1:2
@@ -40,7 +41,7 @@ xhat = -HU \ gU;
 Ufun = @(X) 0.5 * sum(X .* (HU * X), 1) + gU' * X;
 fprintf('   target state x_hat = (%.4f, %.4f)\n', xhat);
 
-%% 2. Incentivized game: replace J^i_1 by tilde J^i_1 of eq. (5.28)
+%% 2. Game with incentives: replace J^i_1 by tilde J^i_1
 Gt = G;
 Gt.c = zeros(2);               % constants c^i_j (zero in the original game)
 for i = 1:2
@@ -50,23 +51,24 @@ for i = 1:2
 end
 incentive = @(i, X) payoff_value(Gt, i, 1, X) - payoff_value(G, i, 1, X);   % p^i(x)
 
-%% 3. Conditions of Theorem 5.4
-% Assumption 6: unincentivized payoffs concave in own state, det(A_22) > 0.
-% (5.29a): det(tilde A_{j1j2}) > 0 for (1,1), (1,2), (2,1).
+%% 3. Conditions of the guarantee
+% With incentives, all four determinants of the new game are positive (so its
+% equilibrium set is bounded and stable), and every payoff is concave in the
+% player's own number.
 dt = zeros(2);
 for j1 = 1:2
     for j2 = 1:2
         dt(j1, j2) = det([Gt.A{1,j1}(1,:); Gt.A{2,j2}(2,:)]);
     end
 end
-check('Assumption 6 and (5.29a): all det(tilde A_{j1j2}) > 0, own concavity', ...
+check('all four determinants positive and payoffs concave', ...
       all(dt(:) > 0) && G.A{1,2}(1,1) < 0 && G.A{2,2}(2,2) < 0 && Gt.A{1,1}(1,1) < 0 && Gt.A{2,1}(2,2) < 0, ...
       sprintf('dets = %s', mat2str(dt(:)', 3)));
 % With omega = 0 the new best-response lines of payoff 1 pass through x_hat,
-% so the target is a Nash equilibrium of the incentivized game (Remark 5.3).
-check('x_hat is a Nash equilibrium of the incentivized game', ...
+% so the target is an equilibrium of the game with incentives.
+check('x_hat is an equilibrium of the game with incentives', ...
       abs(own_gradient(Gt, 1, 1, xhat)) < 1e-9 && abs(own_gradient(Gt, 2, 1, xhat)) < 1e-9 && in_nash_set(Gt, xhat, 1e-9));
-check('budget rule (5.5): p^1(x0) = p^2(x0) = 0', abs(incentive(1, x0)) < 1e-9 && abs(incentive(2, x0)) < 1e-9);
+check('budget rule: p^1(x0) = p^2(x0) = 0', abs(incentive(1, x0)) < 1e-9 && abs(incentive(2, x0)) < 1e-9);
 
 %% 4. Simulate without and with the incentive
 tEnd = 10;                      % slow at the end: the incentive is scaled by sigma
@@ -82,18 +84,18 @@ budgetTotal = incentive(1, X1) + incentive(2, X1);
 
 loser = find([any(max(dJ0(1:2, :)) < tol), any(max(dJ0(3:4, :)) < tol)]);
 check('without incentive the trajectory is NOT weakly Pareto improving', ~weak(dJ0), ...
-      sprintf('agent(s) %s lose on both payoffs at some time', mat2str(loser)));
+      sprintf('player(s) %s lose on both payoffs at some time', mat2str(loser)));
 check('with incentive the trajectory is weakly Pareto improving', weak(dJ1));
 % With omega = 0, tilde J^i_1 itself never decreases, so no payoff vector can
-% become worse in both components later (Lemma 5.1): nobody is trapped.
-check('with incentive tilde J^i_1 never decreases (no trap, Lemma 5.1)', ...
+% become worse in both components later: nobody is trapped.
+check('with incentive tilde J^i_1 never decreases (no trap)', ...
       all(dJ1(1, :) >= tol) && all(dJ1(3, :) >= tol));
-check('budget rule (5.6): p^1 + p^2 <= 0 along the whole trajectory', all(budgetTotal <= 1e-9), ...
+check('budget rule: p^1 + p^2 <= 0 along the whole trajectory', all(budgetTotal <= 1e-9), ...
       sprintf('max p^1+p^2 = %.2e', max(budgetTotal)));
 check('incentivized trajectory converges to the target x_hat', norm(X1(:, end) - xhat) < 0.05, ...
       sprintf('end (%.2f, %.2f), distance to x_hat %.2f', X1(:, end), norm(X1(:, end) - xhat)));
 
-%% 5. Fig. 5.5(a): Pareto set of the four payoffs (maximizers of weighted sums)
+%% 5. Pareto set of the four payoffs (best states for every weighting of all four)
 P = [];
 for a = 0:0.05:1
     for b = 0:0.05:1 - a
@@ -118,7 +120,7 @@ plot(P(1, :), P(2, :), '.', 'Color', [0.45 0.65 0.25], 'MarkerSize', 6);
 h = plot_game(G, [-10 40], [-50 50]);
 legend([h, findobj(gca, 'Type', 'line', 'Marker', '.')'], ...
        {'BR^1_1', 'BR^1_2', 'BR^2_1', 'BR^2_2', 'Pareto set'}, 'Location', 'southeast');
-title('(a) Pareto set of the four payoffs (Fig. 5.5a)');
+title('(a) Pareto set of the four payoffs');
 
 subplot(2, 2, 2); hold on
 win = [-5 32 -18 12];
@@ -137,16 +139,16 @@ h2 = plot(X1(1, :), X1(2, :), 'k-', 'LineWidth', 2.2);
 plot(x0(1), x0(2), 'ko', 'MarkerFaceColor', 'k');
 plot(xhat(1), xhat(2), 'g*', 'MarkerSize', 10, 'LineWidth', 1.5);
 legend([h1 h2], {'original trajectory', 'incentivized trajectory'}, 'Location', 'northeast');
-title({'(b) orange: D_{bud}(\sigma);  magenta dashed: \partialD(U,x_0);  solid: \partialD(J_{sum},x_0)', ...
+title({'(b) orange: D_{bud}(\sigma);  mplayera dashed: \partialD(U,x_0);  solid: \partialD(J_{sum},x_0)', ...
        'lines and purple set: incentivized game;  green star: target state'});
 
 % Without incentive the money payoffs change ~50 times more than the others,
-% so they are shown divided by 10 (as in the thesis figure).
+% so they are shown divided by 10.
 labels = {{'J^1_1 / 10', 'J^1_2', 'J^2_1 / 10', 'J^2_2'}, {'J^1_1 + p^1', 'J^1_2', 'J^2_1 + p^2', 'J^2_2'}};
 scale = {[10 1 10 1], [1 1 1 1]};
 data = {{t0, J0}, {t1, J1}};
 names = {'(c) payoffs WITHOUT incentive: not weakly Pareto improving', ...
-         '(d) payoffs WITH incentive: every agent always gains on one payoff'};
+         '(d) payoffs WITH incentive: every player always gains on one payoff'};
 for p = 1:2
     subplot(2, 2, 2 + p); hold on
     tt = data{p}{1}; JJ = data{p}{2};
@@ -164,8 +166,8 @@ for p = 1:2
     legend(labels{p}, 'Location', 'southoutside', 'NumColumns', 3); box on
     title(names{p});
 end
-sgtitle('Chapter 5: incentive design with a budget constraint (\eta = (0.7, 4, 1, 2), \sigma = 0.05, \zeta = (0.3, 0.7))');
-save_figure(fig, 'ch5_incentive_design');
+sgtitle('Incentive design with a budget constraint (\eta = (0.7, 4, 1, 2), \sigma = 0.05, \zeta = (0.3, 0.7))');
+save_figure(fig, 'incentive_design');
 
 %% ------------------------------------------------------------------------
 function [J, dJ] = payoff_history(G, X)

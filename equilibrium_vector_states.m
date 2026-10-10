@@ -1,28 +1,28 @@
-%% Chapter 2 - Vector states: a triangular prism of weights maps onto X*(J)
-% Thesis: Example 2.10 and Fig. 2.4 (Theorem 2.4 with r_1 = 2, s_1 = 3).
+%% A player with two numbers and three goals: a prism of weights
+% Paper: Z. Guo, T. Hayakawa, "Topology of Nash equilibrium set with quadratic
+%        vector payoff functions", ACC 2024, https://doi.org/10.23919/ACC60939.2024.10644643
 %
-% Agent 1 controls a 2-dimensional state x^1 = [x^1_1; x^1_2] and has THREE
-% payoffs, so its weights live on a triangle (the simplex Delta^2).  Agent 2
-% controls a scalar x^2 and has two payoffs (weights on a segment, Delta^1).
-% All weights together form the prism Delta^2 x Delta^1.  Theorem 2.4 again
-% says the map  weights -> Nash point  is one-to-one and sends each of the
-% prism's 5 faces (3 rectangles + 2 triangles) onto a face of X*(J).
+% Player 1 chooses TWO numbers x^1 = [x^1_1; x^1_2] and has THREE payoffs, so
+% its weights (three numbers >= 0 summing to 1) live on a triangle.  Player 2
+% chooses one number x^2 and has two payoffs (weights on a segment).  All
+% weights together form a triangular prism.  As for three players, the map
+% weights -> equilibrium is one-to-one, and the prism's 5 faces
+% (3 rectangles + 2 triangles) become the 5 faces of the equilibrium set.
 
 clear; close all;
 addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));
-fprintf('\n== Chapter 2: vector states, prism of weights (Example 2.10, Fig. 2.4) ==\n');
+fprintf('\n== Player with two numbers and three goals: prism of weights ==\n');
 
-%% 1. The game: own gradients dJ^i_j/dx^i = M x + v, with x = [x^1_1; x^1_2; x^2]
+%% 1. The game: how each payoff changes when its player moves, M x + v, with x = [x^1_1; x^1_2; x^2]
 grad{1}{1} = struct('M', [-1 0 0.5; 0 -1 0],  'v', [0; 0]);
 grad{1}{2} = struct('M', [-1 0 0.5; 0 -2 0],  'v', [0; 5]);
 grad{1}{3} = struct('M', [-1 0 0;   0 -2 0.5], 'v', [6; 0]);
-% NOTE: the thesis text prints [-1, 0.5, -2] for agent 2.  The thesis figure
-% (all coordinates >= 0) is reproduced only with +1, as in the original
-% simulation code, so +1 is used here (see NOTES.md).
 grad{2}{1} = struct('M', [1 0.5 -2], 'v', 0);
 grad{2}{2} = struct('M', [1 0.5 -2], 'v', 6);
 
-%% 2. Lemma 2.2: choose each ROW of the Jacobian from any payoff -> same det sign
+%% 2. Condition 1: build 3x3 matrices by taking each gradient row from any
+% payoff; if all their determinants have the same sign, the set is bounded
+% and connected.
 d = [];
 for a = 1:3
     for b = 1:3
@@ -31,10 +31,10 @@ for a = 1:3
         end
     end
 end
-check('Lemma 2.2: all 18 row-wise determinants have the same sign', all(d > 0) || all(d < 0), ...
+check('condition 1: all 18 determinants have the same sign', all(d > 0) || all(d < 0), ...
       sprintf('range [%.2f, %.2f]', min(d), max(d)));
 
-%% 3. Sample the prism and map it to the Nash set
+%% 3. Sample the prism and map it to the equilibrium set
 n = 16;
 [U, V, W] = ndgrid(linspace(0, 1, n), linspace(0, 1, n), linspace(0, 1, n));
 keep = U + V <= 1 + 1e-12;                         % (u, v, 1-u-v) on the triangle
@@ -44,25 +44,26 @@ for k = 1:size(L, 2)
     X(:, k) = weighted_nash_point(grad, weights_of(L(:, k)));
 end
 
-% Theorem 2.4 rank condition: rank(dJ^1/dx^1) = s_1 - 1 = 2 and
-% rank(dJ^2/dx^2) = s_2 - 1 = 1 at every Nash point.
+% Condition 2 (makes the map one-to-one): at every equilibrium, player 1's
+% three gradient vectors span a plane (rank 2) and player 2's two own
+% gradients are not both zero (rank 1).
 ok = true;
 Lback = zeros(size(L));
 for k = 1:size(X, 2)
     G1 = [own_grad(grad, 1, 1, X(:, k)), own_grad(grad, 1, 2, X(:, k)), own_grad(grad, 1, 3, X(:, k))];  % 2-by-3
     G2 = [own_grad(grad, 2, 1, X(:, k)), own_grad(grad, 2, 2, X(:, k))];                                 % 1-by-2
     ok = ok && rank(G1, 1e-8) == 2 && rank(G2, 1e-8) == 1;
-    % Eq. (2.15): [Jacobian'; 1 1 1] lambda = [0; 0; 1] has a unique solution.
+    % Read the weights back: [gradients; 1 1 1] * lambda = [0; 0; 1] has one solution.
     lam1 = [G1; 1 1 1] \ [0; 0; 1];
     Lback(:, k) = [lam1(1); lam1(2); G2(2) / (G2(2) - G2(1))];
 end
-check('Theorem 2.4 rank condition holds at every sampled Nash point', ok);
-check('weights recovered from Nash points (map is one-to-one)', max(abs(Lback(:) - L(:))) < 1e-9, ...
+check('condition 2 holds at every sampled equilibrium', ok);
+check('weights recovered from equilibria (map is one-to-one)', max(abs(Lback(:) - L(:))) < 1e-9, ...
       sprintf('max error %.1e', max(abs(Lback(:) - L(:)))));
 
-% Coordinate ranges of the thesis figure: x^1_1 in [0,6], x^1_2 in [0,3], x^2 in [0,8].
+% Coordinate ranges of the published figure: x^1_1 in [0,6], x^1_2 in [0,3], x^2 in [0,8].
 rng = [min(X, [], 2), max(X, [], 2)];
-check('Nash set lies in the box shown in thesis Fig. 2.4', ...
+check('equilibrium set lies in the box of the published figure', ...
       all(rng(:, 1) > -1e-9) && all(rng(:, 2) <= [6; 3; 8] + 1e-9), ...
       sprintf('x^1_1 in [%.2f,%.2f], x^1_2 in [%.2f,%.2f], x^2 in [%.2f,%.2f]', rng'));
 
@@ -90,20 +91,20 @@ for panel = 1:2
     end
     view(-40, 25); grid on; axis tight
     if panel == 1
-        title('Weights: prism \Delta^2 \times \Delta^1');
+        title('All possible weights (a prism)');
         xlabel(''); ylabel(''); zlabel('\lambda^2_1');
         legend('Location', 'southoutside', 'NumColumns', 3);
     else
-        title('Nash set X^*(J): 5 faces \leftrightarrow 5 faces');
+        title('Equilibrium set: 5 faces \leftrightarrow 5 faces');
         xlabel('x^1_1'); ylabel('x^1_2'); zlabel('x^2');
     end
 end
-sgtitle('Chapter 2 (Example 2.10): same colour = same face');
-save_figure(fig, 'ch2_two_agents_prism');
+sgtitle('Player 1 with two numbers and three goals: same colour = same face');
+save_figure(fig, 'equilibrium_vector_states');
 
 %% Local helper functions
 function lam = weights_of(p)
-% Prism coordinates (u, v, w) -> weight vectors of the two agents.
+% Prism coordinates (u, v, w) -> weight vectors of the two players.
 lam = {[p(1), p(2), 1 - p(1) - p(2)], [p(3), 1 - p(3)]};
 end
 

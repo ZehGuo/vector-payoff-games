@@ -1,41 +1,43 @@
-%% Chapter 4 - When does selfish adjustment make everybody better off?
-% Thesis: Section 4.4 and Fig. 4.3 (Definition 5, Lemma 4.2, Theorem 4.3).
+%% Does everybody get better off along the way?
+% Paper: Z. Guo, T. Hayakawa, "Pareto improvement for noncooperative systems
+%        with vector-valued payoff functions", IEEE CDC 2024,
+%        https://doi.org/10.1109/CDC56724.2024.10886420
 %
-% Along a trajectory of the pseudo-gradient dynamics (3.8):
-%   * Pareto improving      : every payoff of every agent never decreases;
-%   * weakly Pareto improving: at every moment, each agent has AT LEAST ONE
+% Along a trajectory of the players' movement:
+%   * Pareto improving       : no payoff of any player ever decreases;
+%   * weakly Pareto improving: at every moment, each player has AT LEAST ONE
 %                              payoff that does not decrease.
-% An agent's own move never hurts itself (eq. (4.5)), so only the OTHER
-% agent's move can hurt it.  Gamma^i_j is the region where agent -i's move
-% does not decrease J^i_j (positive externality, eq. (4.6)).  It does not
-% depend on the unknown sensitivities alpha, so a system manager can compute it.
-%   * Gamma^i_1 = Gamma^i_2 = R^2 for both agents -> Pareto improving for any
-%     start and any alpha (Lemma 4.2, Corollary 4.5);
-%   * Gamma^i_1 U Gamma^i_2 = R^2 for both agents -> weakly Pareto improving
-%     for any start and any alpha (Theorem 4.3);
-%   * otherwise a trajectory that enters (Gamma^i_1 U Gamma^i_2)^c makes
-%     agent i lose on both payoffs at once.
+% A player's own move never hurts itself (it only moves to improve), so only
+% the OTHER player's move can hurt it.  Gamma^i_j is the region where the
+% other player's move does not decrease payoff J^i_j.  This region does not
+% depend on how fast the players move (alpha), so an outside observer who
+% knows only the payoffs can compute it.
+%   * Gamma^i_1 and Gamma^i_2 both cover the whole plane, for both players
+%       -> every trajectory is Pareto improving;
+%   * Gamma^i_1 and Gamma^i_2 together cover the whole plane, for both players
+%       -> every trajectory is weakly Pareto improving;
+%   * otherwise a trajectory that enters the uncovered region makes that
+%     player lose on both payoffs at once.
 
 clear; close all;
 addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));
-fprintf('\n== Chapter 4: Pareto improvement along trajectories (Fig. 4.3) ==\n');
+fprintf('\n== Does everybody get better off along the way? ==\n');
 
-%% The three examples of Section 4.4.  J^i_j(x) = 1/2 x'A^{ij}x + b^{ij}'x
-% (a) thesis parameters: NOT weakly Pareto improving
+%% Three examples.  J^i_j(x) = 1/2 x'A^{ij}x + b^{ij}'x
+% (a) NOT weakly Pareto improving
 ex(1).name = '(a) not weakly Pareto improving';
 ex(1).A = {[-4 -1; -1 -3], [-2 -1; -1 -10]; [-2 1; 1 -2], [-5 1; 1 -1]};
 ex(1).b = {[10; 22], [10; 78]; [8; 0], [5; 0]};
 ex(1).x0 = [7; 13];
-% The thesis does not list alpha for (a); this choice (agent 2 adjusts its
-% second payoff at half speed) reproduces the payoff curves of Fig. 4.3(a).
+% Speeds: player 2 adjusts its second payoff at half speed.
 ex(1).alpha = [1 1; 1 0.5];
 ex(1).window = [-3 11 -1 14];
 ex(1).expect = 'none';
 
-% (b) Pareto improving.  Own-gradient offsets as in the original simulation;
-% the cross offsets are rebuilt with the thesis construction (4.17) so that
-% each line L^i_j passes through the point where agent -i's two best-response
-% lines cross (the printed values do not satisfy this; see NOTES.md).
+% (b) Pareto improving.  Built so that, for each payoff J^i_j, the line where
+% the other player's move has no effect on J^i_j passes through the point
+% where the other player's two best-response lines cross.  Then the other
+% player can never hurt J^i_j.
 A = {[-2 1; 1 -3], [-4 -4; -4 -12]; [-7 1; 1 -2], [-3 -1; -1 -2]};
 xp1 = [A{1,1}(1,:); A{1,2}(1,:)] \ -[15; 30];    % BR^1_1 cross BR^1_2
 xp2 = [A{2,1}(2,:); A{2,2}(2,:)] \ -[-5; 0];     % BR^2_1 cross BR^2_2
@@ -48,7 +50,7 @@ ex(2).alpha = [];          % [] = default choice explained below
 ex(2).window = [-2 12 -6 6];
 ex(2).expect = 'pareto';
 
-% (c) thesis parameters: weakly Pareto improving
+% (c) weakly Pareto improving
 ex(3).name = '(c) weakly Pareto improving';
 ex(3).A = A;
 ex(3).b = {[5; 12], [30; 0]; [-20; 0], [20; 0]};
@@ -61,14 +63,14 @@ fig = figure('Position', [50 50 1350 720]);
 for k = 1:3
     G.A = ex(k).A;
     G.b = ex(k).b;
-    % Default sensitivities: alpha^i_1 = 1 and alpha^i_2 chosen so both payoffs
-    % pull equally hard at equal distance from their best-response lines (as
-    % in the original simulations).  Results (b), (c) hold for ANY alpha > 0.
+    % Default speeds: alpha^i_1 = 1 and alpha^i_2 chosen so both payoffs pull
+    % equally hard at equal distance from their best-response lines.
+    % The results of (b) and (c) hold for ANY speeds alpha > 0.
     G.alpha = [1, G.A{1,1}(1,1) / G.A{1,2}(1,1); 1, G.A{2,1}(2,2) / G.A{2,2}(2,2)];
     if ~isempty(ex(k).alpha), G.alpha = ex(k).alpha; end
     fprintf('\n-- %s --\n', ex(k).name);
 
-    %% 1. Regions of positive externality Gamma^i_j on a large grid (eq. (4.6))
+    %% 1. Regions Gamma^i_j (other player's move does not hurt J^i_j) on a large grid
     w = ex(k).window;
     [X1, X2] = meshgrid(linspace(-60, 60, 401));
     Xg = [X1(:)'; X2(:)'];
@@ -94,17 +96,17 @@ for k = 1:3
 
     switch ex(k).expect
         case 'none'
-            check('Theorem 4.3: no weights make Gamma^i_1 U Gamma^i_2 = R^2 (for both agents)', ~any(unionFull));
-            lose1 = t(max(dJ(1:2, :)) < tol);     % moments when agent 1 loses on both payoffs
+            check('Gamma^i_1 and Gamma^i_2 together do NOT cover the plane (both players)', ~any(unionFull));
+            lose1 = t(max(dJ(1:2, :)) < tol);     % moments when player 1 loses on both payoffs
             lose2 = t(max(dJ(3:4, :)) < tol);
-            check('trajectory is NOT weakly Pareto improving: each agent loses on both payoffs at some time', ...
+            check('trajectory is NOT weakly Pareto improving: each player loses on both payoffs at some time', ...
                   ~isempty(lose1) && ~isempty(lose2), ...
-                  sprintf('agent 2 first at t = %.2f, agent 1 from t = %.2f', min(lose2), min(lose1)));
+                  sprintf('player 2 first at t = %.2f, player 1 from t = %.2f', min(lose2), min(lose1)));
         case 'pareto'
-            check('Lemma 4.2: Gamma^i_j = R^2 for all i, j', all(full(:)));
+            check('every Gamma^i_j covers the whole plane', all(full(:)));
             check('trajectory is Pareto improving (all four payoffs rise)', isPareto);
         case 'weak'
-            check('Theorem 4.3: Gamma^i_1 U Gamma^i_2 = R^2 for both agents', all(unionFull));
+            check('Gamma^i_1 and Gamma^i_2 together cover the plane (both players)', all(unionFull));
             check('trajectory is weakly Pareto improving', isWeak);
             check('... but not Pareto improving (some payoff falls)', ~isPareto);
     end
@@ -113,7 +115,7 @@ for k = 1:3
     subplot(2, 3, k);
     [P1, P2] = meshgrid(linspace(w(1), w(2), 400), linspace(w(3), w(4), 400));
     gw = externality_regions(G, [P1(:)'; P2(:)']);
-    bad1 = reshape(~(gw(1,1,:) | gw(1,2,:)), size(P1));   % agent 1 can be hurt on both payoffs
+    bad1 = reshape(~(gw(1,1,:) | gw(1,2,:)), size(P1));   % player 1 can be hurt on both payoffs
     bad2 = reshape(~(gw(2,1,:) | gw(2,2,:)), size(P1));
     hold on
     image(P1(1,:), P2(:,1), repmat(reshape([0.45 0.45 0.45], 1, 1, 3), size(P1)), 'AlphaData', 0.55 * bad1);
@@ -134,19 +136,19 @@ for k = 1:3
     legend({'J^1_1', 'J^1_2', 'J^2_1', 'J^2_2'}, 'Location', 'best');
     box on
 end
-sgtitle({'Chapter 4: Pareto improvement along the trajectory', ...
-         ['\fontsize{9}dark grey: agent 1 can lose on both payoffs, light grey: same for agent 2, ' ...
-          'purple: X^*(J), black: trajectory from x_0']});
-save_figure(fig, 'ch4_pareto_improvement');
+sgtitle({'Does everybody get better off along the trajectory?', ...
+         ['\fontsize{9}dark grey: player 1 can lose on both payoffs, light grey: same for player 2, ' ...
+          'purple: equilibrium set, black: trajectory from x_0']});
+save_figure(fig, 'improvement_pareto');
 
 %% ------------------------------------------------------------------------
 function gam = externality_regions(G, X)
-% gam(i,j,n) is true when x = X(:,n) is in Gamma^i_j, i.e. the other agent's
-% move does not decrease J^i_j:  dJ^i_j/dx^{-i} * f^{-i}(x) >= 0  (eq. (4.6)).
+% gam(i,j,n) is true when x = X(:,n) is in Gamma^i_j, i.e. the other player's
+% move does not decrease J^i_j:  dJ^i_j/dx^{-i} * f^{-i}(x) >= 0.
 F = pseudo_gradient(G, X);
 gam = false(2, 2, size(X, 2));
 for i = 1:2
-    o = 3 - i;                                     % the other agent
+    o = 3 - i;                                     % the other player
     for j = 1:2
         cross = G.A{i,j}(o, :) * X + G.b{i,j}(o);  % dJ^i_j / dx^{-i}
         gam(i, j, :) = cross .* F(o, :) >= -1e-9;
