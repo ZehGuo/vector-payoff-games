@@ -19,7 +19,7 @@
 
 clear; close all;
 addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));
-fprintf('\n== Budget region D_bud(sigma) ==\n');
+fprintf('\n== Budget region ==\n');
 
 %% 1. Same game as improvement_trap.m, manager priorities eta, and w^1 = w^2 = 1
 A = {[-2 1; 1 -3], [-2 -1; -1 -10]; [-4 1; 1 -4], [-5 -1; -1 -2]};
@@ -59,49 +59,41 @@ isConcave = @(s) all(eig(s * HU - HJ) < 0);
 check('sigma = 0.3: inside of an ellipse; 0.45: hyperbola; 0.8: outside of an ellipse', ...
       isConvex(0.3) && ~isConvex(0.45) && ~isConcave(0.45) && isConcave(0.8));
 
-%% 3. D(U,x0) \ D(J_sum,x0) never meets D_bud(sigma), whatever sigma is
-% (there the manager would have to pay out money).
+%% 3. Where society gains (U >= U(x0)) but the players' goals lose in total
+% (J_sum < J_sum(x0)), the manager would have to pay: this area never meets
+% the budget region, whatever sigma is.
 [X1, X2] = meshgrid(linspace(-15, 45, 500), linspace(-25, 35, 500));
 X = [X1(:)'; X2(:)'];
-green = U(X) >= 0 & Jsum(X) < 0;          % D(U,x0) minus D(J_sum,x0)
+green = U(X) >= 0 & Jsum(X) < 0;          % society gains, players lose in total
 sigmas = [0.1 0.2 0.3 0.4 0.42 0.45 0.5 0.52 0.6 0.8 1 3 10];
 clash = false;
 for s = sigmas
     clash = clash || any(green & budget(X, s) <= 0);
 end
-check('D(U,x0) \ D(J_sum,x0) and D_bud(sigma) never overlap', ~clash, ...
+check('where society gains but players lose in total, the budget region never reaches', ~clash, ...
       sprintf('%d values of sigma', numel(sigmas)));
 
-%% 4. Figure
-groups = {linspace(0.1, 0.4, 7), linspace(0.42, 0.52, 6), linspace(0.6, 1, 5)};
-titles = {{'(a) weak incentive', sprintf('\\rm\\fontsize{9}\\sigma < %.4f: edge is an ellipse, region inside', sigmaSwitch(1))}, ...
-          {'(b) medium incentive', sprintf('\\rm\\fontsize{9}%.4f \\leq \\sigma \\leq %.4f: edge is a hyperbola', sigmaSwitch)}, ...
-          {'(c) strong incentive', sprintf('\\rm\\fontsize{9}\\sigma > %.4f: edge is an ellipse, region outside', sigmaSwitch(2))}};
+%% 4. Figure: the budget region for one value of sigma in each regime
+st = style();
+sigmaShow = [0.3, 0.47, 0.8];
+kind = {'inside of an ellipse', 'outer side of a hyperbola''s two branches', 'outside of an ellipse'};
 fig = figure('Position', [50 50 1400 520]);
+tl = tiledlayout(1, 3, 'TileSpacing', 'compact');
 for p = 1:3
-    subplot(1, 3, p); hold on
-    image(X1(1, :), X2(:, 1), repmat(reshape([0.55 0.80 0.60], 1, 1, 3), size(X1)), ...
-          'AlphaData', 0.7 * reshape(green, size(X1)));
+    nexttile; hold on
+    inBud = reshape(budget(X, sigmaShow(p)) <= 0, size(X1));
+    image(X1(1, :), X2(:, 1), repmat(reshape(st.orange, 1, 1, 3), size(X1)), 'AlphaData', 0.6 * inBud);
     set(gca, 'YDir', 'normal');
-    contour(X1, X2, reshape(U(X), size(X1)), [0 0], 'Color', [0.1 0.2 0.7], 'LineWidth', 2);
-    contour(X1, X2, reshape(Jsum(X), size(X1)), [0 0], 'Color', [0.85 0.1 0.1], 'LineWidth', 2);
-    cmap = parula(numel(groups{p}) + 2);
-    for k = 1:numel(groups{p})
-        contour(X1, X2, reshape(budget(X, groups{p}(k)), size(X1)), [0 0], '--', ...
-                'Color', cmap(k + 1, :), 'LineWidth', 1);
-    end
-    plot(xhat(1), xhat(2), 'kp', 'MarkerFaceColor', 'y', 'MarkerSize', 11);
-    plot(x0(1), x0(2), 'ko', 'MarkerFaceColor', 'k');
-    text(xhat(1) + 1.5, xhat(2) + 2, 'target', 'FontSize', 10);
+    contour(X1, X2, reshape(budget(X, sigmaShow(p)), size(X1)), [0 0], '-', 'Color', [0.8 0.45 0.1], 'LineWidth', 1.5);
+    plot(x0(1), x0(2), 'ko', 'MarkerFaceColor', 'k', 'MarkerSize', 7);
+    plot(xhat(1), xhat(2), 'kp', 'MarkerFaceColor', 'y', 'MarkerSize', 12);
     text(x0(1) + 1.5, x0(2) - 2.5, 'start', 'FontSize', 10);
+    text(xhat(1) + 1.5, xhat(2) + 2.5, 'target', 'FontSize', 10);
     xlabel('x^1'); ylabel('x^2'); axis([-15 45 -25 35]); box on
-    title(titles{p});
-    colormap(gca, cmap(2:end-1, :));
-    cb = colorbar('southoutside');
-    clim([groups{p}(1) groups{p}(end)]);
-    cb.Label.String = 'incentive strength \sigma of each dashed curve';
+    title({sprintf('(%c) \\sigma = %.2f', 'a' + p - 1, sigmaShow(p)), ['\rm' kind{p}]});
 end
-sgtitle({'Where can the manager afford the incentive?  Dashed: edge of the budget region for several \sigma', ...
-         ['\fontsize{9}inside blue: society better off than at the start;  inside red: the players'' goals in total better off;  ' ...
-          'green: society better off but players worse off in total, never affordable']});
+lgd = standard_legend({'budget', 'target'}, 2);
+lgd.Layout.Tile = 'south';
+title(tl, {'Budget region: where the manager pays nothing in total (p^1 + p^2 \leq 0)', ...
+           sprintf('\\fontsize{10}its shape changes at \\sigma = %.4f and \\sigma = %.4f', sigmaSwitch)}, 'FontSize', 14);
 save_figure(fig, 'incentive_budget');

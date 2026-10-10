@@ -77,11 +77,9 @@ check('face w_1 = 1 lies on the best-response plane of player 1, payoff 1', ...
 
 %% 4. Figure: cube faces (left) and their images in state space (right)
 % w_i is player i's weight on its payoff 1, so w_i = 0 means "only payoff 2".
-faceColors = [0.85 0.33 0.10; 0.93 0.69 0.13; 0.00 0.45 0.74; ...
-              0.30 0.75 0.93; 0.47 0.67 0.19; 0.49 0.18 0.56];
-faceNames = {'w_1 = 0 (player 1: only goal 2)', 'w_1 = 1 (player 1: only goal 1)', ...
-             'w_2 = 0 (player 2: only goal 2)', 'w_2 = 1 (player 2: only goal 1)', ...
-             'w_3 = 0 (player 3: only goal 2)', 'w_3 = 1 (player 3: only goal 1)'};
+% One clearly different colour per face (the face names are also written on them).
+faceColors = [0.93 0.55 0.25; 0.98 0.85 0.35; 0.35 0.55 0.90; ...
+              0.60 0.85 0.95; 0.55 0.78 0.40; 0.92 0.60 0.75];
 s = linspace(0, 1, 15);
 [S, T] = meshgrid(s, s);
 faces = cell(2, 6);                       % row 1: cube, row 2: equilibrium set
@@ -99,28 +97,31 @@ for f = 1:6
     end
     faces{2, f} = P;
 end
-view1 = [-35 25];
-[az, el] = matching_view(faces(1, :), faces(2, :), view1);   % show the same faces on the right
-
-fig = figure('Position', [100 100 1100 560]);
-for panel = 1:2
-    subplot(1, 2, panel); hold on
-    for f = 1:6
-        draw_face(faces{panel, f}, size(S), faceColors(f, :), faceNames{f});
-    end
-    grid on; axis equal tight
-    if panel == 1
-        view(view1);
-        xlabel('w_1'); ylabel('w_2'); zlabel('w_3');
-        title('All possible weights (a cube)');
-        legend('Location', 'southoutside', 'NumColumns', 2);
+labels = {'w_1 = 0', 'w_1 = 1', 'w_2 = 0', 'w_2 = 1', 'w_3 = 0', 'w_3 = 1'};
+% Top row: seen from the front; bottom row: seen from the opposite side, so
+% all six faces appear.  The right picture is turned so that it shows the
+% same faces as the left one.
+cubeViews = {[-35 25], [145 -25]};
+fig = figure('Position', [100 100 1100 950]);
+tl = tiledlayout(2, 2, 'TileSpacing', 'compact');
+for row = 1:2
+    [az, el] = matching_view(faces(1, :), faces(2, :), cubeViews{row});
+    nexttile;
+    draw_solid(faces(1, :), size(S), faceColors, labels, cubeViews{row});
+    xlabel('w_1'); ylabel('w_2'); zlabel('w_3');
+    nexttile;
+    draw_solid(faces(2, :), size(S), faceColors, labels, [az el]);
+    xlabel('x^1'); ylabel('x^2'); zlabel('x^3');
+    if row == 1
+        nexttile(1); title({'All possible weights (a cube)', '\rmseen from the front'});
+        nexttile(2); title({'Equilibrium set', '\rmthe same three faces'});
     else
-        view(az, el);
-        xlabel('x^1'); ylabel('x^2'); zlabel('x^3');
-        title('Equilibrium set: each face becomes a face');
+        nexttile(3); title('\rmseen from the other side');
+        nexttile(4); title('\rmthe same three faces');
     end
 end
-sgtitle({'Three players: same colour = same face', '\fontsize{9}(faces you cannot see are at the back in both pictures)'});
+title(tl, {'Three players: each face of the cube of weights becomes a face of the equilibrium set', ...
+           '\fontsize{10}w_i = weight of player i on its goal 1 (w_i = 0: player i cares only about goal 2)'}, 'FontSize', 14);
 save_figure(fig, 'equilibrium_three_players');
 
 %% Local helper functions
@@ -132,12 +133,4 @@ end
 function g = own_grad(grad, i, j, X)
 % Own gradient dJ^i_j/dx^i evaluated at the columns of X.
 g = grad{i}{j}.M * X + grad{i}{j}.v;
-end
-
-function draw_face(P, sz, color, name)
-% Draw one face as a coloured surface with a thin black outline.
-X = reshape(P(1, :), sz); Y = reshape(P(2, :), sz); Z = reshape(P(3, :), sz);
-surf(X, Y, Z, 'FaceColor', color, 'EdgeColor', 'none', 'FaceAlpha', 0.85, 'DisplayName', name);
-edge = @(M) [M(1, :), M(2:end, end)', M(end, end-1:-1:1), M(end-1:-1:1, 1)'];
-plot3(edge(X), edge(Y), edge(Z), 'k-', 'LineWidth', 0.6, 'HandleVisibility', 'off');
 end

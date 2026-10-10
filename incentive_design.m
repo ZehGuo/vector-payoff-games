@@ -95,81 +95,49 @@ check('budget rule: p^1 + p^2 <= 0 along the whole trajectory', all(budgetTotal 
 check('incentivized trajectory converges to the target x_hat', norm(X1(:, end) - xhat) < 0.05, ...
       sprintf('end (%.2f, %.2f), distance to x_hat %.2f', X1(:, end), norm(X1(:, end) - xhat)));
 
-%% 5. Pareto set of the four payoffs (best states for every weighting of all four)
-P = [];
-step = 0.02;
-for a = 0:step:1
-    for b = 0:step:1 - a
-        for c = 0:step:1 - a - b
-            wts = [a b; c 1 - a - b - c];
-            H = 0; g = 0;
-            for i = 1:2
-                for j = 1:2
-                    H = H + wts(i,j) * G.A{i,j};
-                    g = g + wts(i,j) * G.b{i,j};
-                end
-            end
-            P(:, end + 1) = -H \ g; %#ok<SAGROW>
-        end
-    end
-end
-
-%% 6. Figure
-fig = figure('Position', [50 50 1400 820]);
-subplot(2, 2, 1); hold on
-hp = plot(P(1, :), P(2, :), '.', 'Color', [0.45 0.70 0.30], 'MarkerSize', 4);
-plot_game(G, [-10 40], [-50 50]);
-ht = plot(xhat(1), xhat(2), 'kp', 'MarkerFaceColor', 'y', 'MarkerSize', 12);
-legend([hp, ht], {'efficient states', 'target of the manager'}, 'Location', 'southeast');
-title({'(a) without incentive: the efficient states (green)', 'lie away from the equilibrium set (purple)'});
-
-subplot(2, 2, 2); hold on
+%% 5. Figure: maps of the two paths (top) and how each goal changes (bottom)
+st = style();
 win = [-5 32 -18 12];
+fig = figure('Position', [50 50 1400 900]);
+tl = tiledlayout(2, 2, 'TileSpacing', 'compact');
+
+nexttile; hold on
+plot_game(G, win(1:2), win(3:4));
+axis(win);
+draw_path(X0, 0.3, G);
+plot(xhat(1), xhat(2), 'kp', 'MarkerFaceColor', 'y', 'MarkerSize', 13);
+title({'(a) WITHOUT incentive', '\rmthe players stop at an equilibrium away from the target'});
+
+nexttile; hold on
 [Y1, Y2] = meshgrid(linspace(win(1), win(2), 400), linspace(win(3), win(4), 400));
 Y = [Y1(:)'; Y2(:)'];
 inBud = incentive(1, Y) + incentive(2, Y) <= 0;
-image(Y1(1, :), Y2(:, 1), repmat(reshape([0.98 0.75 0.45], 1, 1, 3), size(Y1)), 'AlphaData', 0.6 * reshape(inBud, size(Y1)));
+image(Y1(1, :), Y2(:, 1), repmat(reshape(st.orange, 1, 1, 3), size(Y1)), 'AlphaData', 0.6 * reshape(inBud, size(Y1)));
 set(gca, 'YDir', 'normal');
 plot_game(Gt, win(1:2), win(3:4));
-h1 = plot(X0(1, :), X0(2, :), 'k--', 'LineWidth', 1.8);
-h2 = plot(X1(1, :), X1(2, :), 'k-', 'LineWidth', 2.2);
-plot(x0(1), x0(2), 'ko', 'MarkerFaceColor', 'k');
-plot(xhat(1), xhat(2), 'kp', 'MarkerFaceColor', 'y', 'MarkerSize', 12);
-legend([h1 h2], {'path without incentive', 'path with incentive'}, 'Location', 'northeast');
-title({'(b) with the incentive the players reach the target (star)', ...
-       '\rm\fontsize{9}orange: budget region;  lines and purple: the game with the incentive'});
+axis(win);
+draw_path(X1, 0.3, Gt);
+plot(xhat(1), xhat(2), 'kp', 'MarkerFaceColor', 'y', 'MarkerSize', 13);
+title({'(b) WITH incentive (lines and purple: the new game)', ...
+       '\rmthe target is now an equilibrium; the path reaches it inside the budget region'});
 
-% Without incentive the money payoffs change ~50 times more than the others,
+% Without incentive the money goals change ~50 times more than the others,
 % so they are shown divided by 10.
-labels = {{'J^1_1 / 10', 'J^1_2', 'J^2_1 / 10', 'J^2_2'}, {'J^1_1 + p^1', 'J^1_2', 'J^2_1 + p^2', 'J^2_2'}};
-scale = {[10 1 10 1], [1 1 1 1]};
-data = {{t0, J0}, {t1, J1}};
-names = {'(c) WITHOUT incentive: player 1 at times loses on both goals', ...
-         '(d) WITH incentive: every player always gains on at least one goal'};
-for p = 1:2
-    subplot(2, 2, 2 + p); hold on
-    tt = data{p}{1}; JJ = data{p}{2};
-    styles = {'-', '--', '-', '--'};
-    colors = {[0.85 0.15 0.15], [0.85 0.15 0.15], [0.10 0.45 0.85], [0.10 0.45 0.85]};
-    hl = gobjects(1, 4);
-    for r = 1:4
-        hl(r) = plot(tt, (JJ(r, :) - JJ(r, 1)) / scale{p}(r), styles{r}, 'Color', colors{r}, 'LineWidth', 1.6);
-    end
-    if p == 2
-        hl(5) = plot(tt, budgetTotal, ':', 'Color', [0.4 0.4 0.4], 'LineWidth', 2);
-        labels{2}{end + 1} = 'p^1 + p^2 (manager''s net payment)';
-    end
-    yline(0, 'k:', 'HandleVisibility', 'off');
-    if p == 1                   % shade the moments when player 1 loses on both goals
-        hs = shade_times(tt, max(dJ0(1:2, :)) < tol, [0.85 0.15 0.15]);
-        if ~isempty(hs), hl(end + 1) = hs; labels{1}{end + 1} = 'player 1 loses both'; end
-    end
-    xlabel('time t'); ylabel('change since the start');
-    legend(hl, labels{p}, 'Location', 'southoutside', 'NumColumns', 3); box on
-    title(names{p});
-end
-sgtitle({'Incentive: each player''s money goal is replaced by a share of society''s gain', ...
-         '\fontsize{9}strength \sigma = 0.05, shares \zeta_1 = 0.3 and \zeta_2 = 0.7'});
+nexttile;
+plot_goal_changes(G, t0, X0, [1 2], [10 1; 10 1]);
+title({'(c) WITHOUT incentive: player 1 loses both goals for a long time', ...
+       '\rm(goal 1 = money, shown divided by 10)'});
+
+nexttile; hold on
+plot(t1, budgetTotal, ':', 'Color', [0.4 0.4 0.4], 'LineWidth', 2);   % first, so the axis range includes it
+plot_goal_changes(Gt, t1, X1);
+title({'(d) WITH incentive: nobody ever loses both goals', ...
+       '\rm(goal 1 = money + incentive); the manager''s payment (grey) stays below zero'});
+
+lgd = standard_legend({'goals', 'set', 'path', 'loss1', 'loss2', 'target', 'budget', 'payment'}, 4);
+lgd.Layout.Tile = 'south';
+title(tl, {'Incentive: each player''s money goal is replaced by a share of society''s gain', ...
+           sprintf('\\fontsize{10}strength \\sigma = %.2f, shares \\zeta_1 = %.1f and \\zeta_2 = %.1f', sigma, zeta)}, 'FontSize', 14);
 save_figure(fig, 'incentive_design');
 
 %% ------------------------------------------------------------------------

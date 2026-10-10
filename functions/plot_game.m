@@ -12,12 +12,12 @@ hold on
 % Equilibrium set: shade every grid point that passes in_nash_set.
 [X1, X2] = meshgrid(linspace(xlims(1), xlims(2), 500), linspace(ylims(1), ylims(2), 500));
 mask = reshape(in_nash_set(G, [X1(:)'; X2(:)']), size(X1));
-purple = cat(3, 0.62 * ones(size(X1)), 0.40 * ones(size(X1)), 0.75 * ones(size(X1)));
-image(X1(1, :), X2(:, 1), purple, 'AlphaData', 0.75 * mask);
+st = style();
+image(X1(1, :), X2(:, 1), repmat(reshape(st.purple, 1, 1, 3), size(X1)), 'AlphaData', 0.75 * mask);
 set(gca, 'YDir', 'normal');
 
 styles = {'-', '--'};
-colors = {[0.85 0.15 0.15], [0.10 0.45 0.85]};
+colors = {st.red, st.blue};
 h = gobjects(1, 4);
 for j = 1:2
     % Player 1: row_1(A) x + b_1 = 0  ->  x^1 as a function of x^2

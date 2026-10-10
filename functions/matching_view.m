@@ -29,17 +29,3 @@ function c = camera_direction(az, el)
 % Unit vector from the plot towards the camera for view(az, el).
 c = [sind(az) * cosd(el); -cosd(az) * cosd(el); sind(el)];
 end
-
-function n = outward_normals(faces)
-% Normal of the best-fitting plane of each face, pointing away from the solid.
-allPts = cell2mat(faces);
-center = mean(allPts, 2);
-n = zeros(3, numel(faces));
-for f = 1:numel(faces)
-    P = faces{f};
-    m = mean(P, 2);
-    [~, ~, V] = svd((P - m)', 'econ');
-    n(:, f) = V(:, 3);
-    if n(:, f)' * (m - center) < 0, n(:, f) = -n(:, f); end
-end
-end

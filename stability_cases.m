@@ -66,22 +66,26 @@ function plot_case_family(cases, figTitle, fileName)
 % Analyse every example of one group and draw them side by side.
 fprintf('\n-- %s --\n', figTitle);
 nCases = numel(cases);
-fig = figure('Position', [50 50 380 * min(nCases, 3) 360 * ceil(nCases / 3)]);
+nCols = min(nCases, 3);
+fig = figure('Position', [50 50 400 * nCols 380 * ceil(nCases / 3) + 60]);
+tl = tiledlayout(ceil(nCases / 3), nCols, 'TileSpacing', 'compact');
 for k = 1:nCases
     c = cases{k};
     G = game_from_rows(c{1:8}, c{9});
     win = c{10};
-    subplot(ceil(nCases / 3), min(nCases, 3), k);
+    nexttile; hold on
     verdict = analyse_case(G, win, sprintf('(%c)', 'a' + k - 1));
     title(sprintf('(%c) %s', 'a' + k - 1, verdict));
 end
-sgtitle({figTitle, ['\fontsize{9}red = player 1, blue = player 2, solid = goal 1, dashed = goal 2, ' ...
-         'green dotted = switching lines, purple = equilibrium set, black = paths starting at the circles']});
+lgd = standard_legend({'goals', 'set', 'path', 'flow'});
+lgd.Layout.Tile = 'south';
+title(tl, figTitle, 'FontSize', 14);
 save_figure(fig, fileName);
 end
 
 function verdict = analyse_case(G, win, label)
-% Predict stability from the four determinants, simulate, and draw one panel.
+% Predict stability from the four determinants, check it by simulation,
+% and draw one panel with ONE example path.
 
 % --- Prediction from the theory ------------------------------------------
 d = zeros(2);
@@ -98,12 +102,14 @@ else
     verdict = 'unbounded';
 end
 
-% --- Vector field and equilibrium set -------------------------------------
+% --- Direction of motion (background) and equilibrium set ------------------
+st = style();
 [X1, X2] = meshgrid(linspace(win(1), win(2), 60), linspace(win(3), win(4), 60));
 F = pseudo_gradient(G, [X1(:)'; X2(:)']);
-plot_game(G, win(1:2), win(3:4), ~strcmp(verdict, 'unbounded'));
-hs = streamslice(X1, X2, reshape(F(1, :), size(X1)), reshape(F(2, :), size(X1)), 1.2);
-set(hs, 'Color', [0.55 0.6 0.75]);
+hs = streamslice(X1, X2, reshape(F(1, :), size(X1)), reshape(F(2, :), size(X1)), 1);
+set(hs, 'Color', st.flow);
+plot_game(G, win(1:2), win(3:4));
+axis(win);
 
 % Sample the equilibrium set finely (to measure distances to it).
 [S1, S2] = meshgrid(linspace(win(1), win(2), 700), linspace(win(3), win(4), 700));
@@ -117,37 +123,45 @@ rate = min(abs(G.alpha(:)' .* [G.A{1, 1}(1, 1), G.A{1, 2}(1, 1), G.A{2, 1}(2, 2)
 tEnd = 40 / rate;
 switch verdict
     case 'unbounded'
-        % Only illustrate: a few trajectories from the window corners region.
-        starts = [win(1) + 0.15 * (win(2) - win(1)) * [1 1 6 6]; win(3) + 0.15 * (win(4) - win(3)) * [1 6 1 6]];
-        for n = 1:size(starts, 2)
-            [~, Xt] = simulate_game(G, starts(:, n), tEnd / 4, 800);
-            plot(Xt(1, :), Xt(2, :), 'k-', 'LineWidth', 1.3);
-            plot(starts(1, n), starts(2, n), 'ko', 'MarkerFaceColor', 'w');
-        end
         % The set reaches arbitrarily far: test points on a huge circle.
         th = linspace(0, 2 * pi, 3600);
         farHit = any(in_nash_set(G, 1e4 * [cos(th); sin(th)]));
         check([label ' mixed determinant signs and the set reaches ||x|| = 1e4 (unbounded)'], farHit, ...
               sprintf('dets = %s', mat2str(d(:)', 3)));
+        % One example path from the upper left part of the window.
+        x0 = [win(1) + 0.15 * (win(2) - win(1)); win(3) + 0.9 * (win(4) - win(3))];
+        [~, Xt] = simulate_game(G, x0, tEnd / 4, 800);
+        draw_path(Xt);
     otherwise
-        % Start 12 points at distance ~ delta from the set, spread around it.
+        % Check: 12 points at distance ~ delta from the set, spread around it.
         delta = 0.03 * span;
         starts = ring_points(S, delta, 12);
-        dEnd = zeros(1, 12); dMax = zeros(1, 12);
+        dEnd = zeros(1, 12); dMax = zeros(1, 12); paths = cell(1, 12);
         for n = 1:12
             [~, Xt] = simulate_game(G, starts(:, n), tEnd, 1500, span);   % stop if it leaves the window
             dist = distance_to_set(Xt(:, 1:10:end), S);
             dEnd(n) = dist(end); dMax(n) = max(dist);
-            plot(Xt(1, :), Xt(2, :), 'k-', 'LineWidth', 1.3);
-            plot(starts(1, n), starts(2, n), 'ko', 'MarkerFaceColor', 'w', 'MarkerSize', 4);
+            paths{n} = Xt;
         end
         grid = 1.5 * span / 700;    % sampling resolution of the set
         if strcmp(verdict, 'stable')
             ok = all(dEnd < grid) && all(dMax < 3 * delta);
             msg = 'stable: all start near the set and converge to it';
+            % Draw one path that starts clearly away from the set.
+            far = ring_points(S, 0.18 * span, 8);
+            inside = far(1, :) > win(1) & far(1, :) < win(2) & far(2, :) > win(3) & far(2, :) < win(4);
+            far = far(:, inside);
+            [~, Xt] = simulate_game(G, far(:, 1), tEnd, 1500);
+            draw_path(Xt);
         else
             ok = any(dEnd > 5 * delta);
             msg = 'unstable: some trajectory starting near the set moves away';
+            % Draw the path that moves away the most.
+            [~, n] = max(dEnd);
+            Xt = paths{n};
+            out = find(Xt(1, :) < win(1) | Xt(1, :) > win(2) | Xt(2, :) < win(3) | Xt(2, :) > win(4), 1);
+            if ~isempty(out), Xt = Xt(:, 1:out); end     % draw only the part inside the window
+            draw_path(Xt, [0.3 0.7]);
         end
         check(sprintf('%s dets %s -> predicted %s; simulation agrees', label, mat2str(d(:)', 3), msg), ok, ...
               sprintf('start dist %.2f, end dist max %.3f, worst excursion %.2f', delta, max(dEnd), max(dMax)));

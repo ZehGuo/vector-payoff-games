@@ -26,7 +26,7 @@ fprintf('\n== Does everybody get better off along the way? ==\n');
 %% Three examples.  J^i_j(x) = 1/2 x'A^{ij}x + b^{ij}'x
 % (a) NOT weakly Pareto improving
 ex(1).name = '(a) not weakly Pareto improving';
-ex(1).plain = 'at times a player loses on both goals';
+ex(1).plain = 'each player at times loses both goals';
 ex(1).A = {[-4 -1; -1 -3], [-2 -1; -1 -10]; [-2 1; 1 -2], [-5 1; 1 -1]};
 ex(1).b = {[10; 22], [10; 78]; [8; 0], [5; 0]};
 ex(1).x0 = [7; 13];
@@ -54,7 +54,7 @@ ex(2).expect = 'pareto';
 
 % (c) weakly Pareto improving
 ex(3).name = '(c) weakly Pareto improving';
-ex(3).plain = 'each player always gains on at least one goal';
+ex(3).plain = 'some goals fall, but never both goals of a player';
 ex(3).A = A;
 ex(3).b = {[5; 12], [30; 0]; [-20; 0], [20; 0]};
 ex(3).x0 = [0; 3];
@@ -62,7 +62,8 @@ ex(3).alpha = [];
 ex(3).window = [-8 12 -4 8];
 ex(3).expect = 'weak';
 
-fig = figure('Position', [50 50 1350 720]);
+fig = figure('Position', [50 50 1350 800]);
+tl = tiledlayout(2, 3, 'TileSpacing', 'compact');
 for k = 1:3
     G.A = ex(k).A;
     G.b = ex(k).b;
@@ -114,41 +115,20 @@ for k = 1:3
             check('... but not Pareto improving (some payoff falls)', ~isPareto);
     end
 
-    %% 3. Plot: state space (top) and payoff values (bottom)
-    subplot(2, 3, k);
-    [P1, P2] = meshgrid(linspace(w(1), w(2), 400), linspace(w(3), w(4), 400));
-    gw = externality_regions(G, [P1(:)'; P2(:)']);
-    bad1 = reshape(~(gw(1,1,:) | gw(1,2,:)), size(P1));   % player 1 can be hurt on both payoffs
-    bad2 = reshape(~(gw(2,1,:) | gw(2,2,:)), size(P1));
-    hold on
-    image(P1(1,:), P2(:,1), repmat(reshape([0.45 0.45 0.45], 1, 1, 3), size(P1)), 'AlphaData', 0.55 * bad1);
-    image(P1(1,:), P2(:,1), repmat(reshape([0.75 0.75 0.75], 1, 1, 3), size(P1)), 'AlphaData', 0.55 * bad2);
+    %% 3. Plot: the path on the map (top) and how each goal changes (bottom)
+    nexttile(k); hold on
     plot_game(G, w(1:2), w(3:4));
-    plot(Xt(1, :), Xt(2, :), 'k-', 'LineWidth', 2);
-    plot(ex(k).x0(1), ex(k).x0(2), 'ko', 'MarkerFaceColor', 'k');
+    axis(w);
+    draw_path(Xt, [], G);          % light underlay: moments when a player loses both goals
     title({ex(k).name, ['\rm\fontsize{9}' ex(k).plain]});
 
-    subplot(2, 3, 3 + k); hold on
-    styles = {'-', '--', '-', '--'};
-    colors = {[0.85 0.15 0.15], [0.85 0.15 0.15], [0.10 0.45 0.85], [0.10 0.45 0.85]};
-    hl = gobjects(1, 4);
-    for r = 1:4
-        hl(r) = plot(t, J(r, :) - J(r, 1), styles{r}, 'Color', colors{r}, 'LineWidth', 1.5);
-    end
-    yline(0, 'k:', 'HandleVisibility', 'off');
-    % Shade the moments when a player loses on BOTH of its goals.
-    hs1 = shade_times(t, max(dJ(1:2, :)) < tol, [0.85 0.15 0.15]);
-    hs2 = shade_times(t, max(dJ(3:4, :)) < tol, [0.10 0.45 0.85]);
-    xlabel('time t'); ylabel('change since the start');
-    legend([hl, hs1, hs2], [{'J^1_1', 'J^1_2', 'J^2_1', 'J^2_2'}, ...
-            repmat({'player 1 loses both'}, 1, numel(hs1)), repmat({'player 2 loses both'}, 1, numel(hs2))], ...
-           'Location', 'best');
-    box on
+    nexttile(3 + k);
+    plot_goal_changes(G, t, Xt);
 end
-sgtitle({'Does everybody get better off along the trajectory?', ...
-         ['\fontsize{9}top: grey = where the other player''s move can lower both goals of a player (dark: player 1, light: player 2); ' ...
-          'black = path from the dot'], ...
-         '\fontsize{9}bottom: how each goal changes along the path; shaded = moments when a player loses on both goals'});
+lgd = standard_legend({'goals', 'set', 'path', 'loss1', 'loss2'}, 4);
+lgd.Layout.Tile = 'south';
+title(tl, {'Does everybody get better off along the path?', ...
+           '\fontsize{10}top: the path on the map;  bottom: how much each goal has changed since the start'}, 'FontSize', 14);
 save_figure(fig, 'improvement_pareto');
 
 %% ------------------------------------------------------------------------
