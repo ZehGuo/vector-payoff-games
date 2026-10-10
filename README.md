@@ -1,3 +1,5 @@
+**English** | [中文](README.zh-CN.md) | [日本語](README.ja.md)
+
 # Vector Payoff Games
 
 Simulations that show what happens in a game when **every player has several

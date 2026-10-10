@@ -1,3 +1,5 @@
+**English** | [中文](GUIDE.zh-CN.md) | [日本語](GUIDE.ja.md)
+
 # A beginner's tour
 
 This guide explains the ideas behind the scripts with pictures and as little
