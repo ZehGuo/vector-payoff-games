@@ -64,7 +64,7 @@ end
 check('all four determinants positive and payoffs concave', ...
       all(dt(:) > 0) && G.A{1,2}(1,1) < 0 && G.A{2,2}(2,2) < 0 && Gt.A{1,1}(1,1) < 0 && Gt.A{2,1}(2,2) < 0, ...
       sprintf('dets = %s', mat2str(dt(:)', 3)));
-% With omega = 0 the new best-response lines of payoff 1 pass through x_hat,
+% In this simplest design the new best-response lines of payoff 1 pass through x_hat,
 % so the target is an equilibrium of the game with incentives.
 check('x_hat is an equilibrium of the game with incentives', ...
       abs(own_gradient(Gt, 1, 1, xhat)) < 1e-9 && abs(own_gradient(Gt, 2, 1, xhat)) < 1e-9 && in_nash_set(Gt, xhat, 1e-9));
@@ -86,7 +86,7 @@ loser = find([any(max(dJ0(1:2, :)) < tol), any(max(dJ0(3:4, :)) < tol)]);
 check('without incentive the trajectory is NOT weakly Pareto improving', ~weak(dJ0), ...
       sprintf('player(s) %s lose on both payoffs at some time', mat2str(loser)));
 check('with incentive the trajectory is weakly Pareto improving', weak(dJ1));
-% With omega = 0, tilde J^i_1 itself never decreases, so no payoff vector can
+% In this simplest design, tilde J^i_1 itself never decreases, so no payoff vector can
 % become worse in both components later: nobody is trapped.
 check('with incentive tilde J^i_1 never decreases (no trap)', ...
       all(dJ1(1, :) >= tol) && all(dJ1(3, :) >= tol));
@@ -97,9 +97,10 @@ check('incentivized trajectory converges to the target x_hat', norm(X1(:, end) -
 
 %% 5. Pareto set of the four payoffs (best states for every weighting of all four)
 P = [];
-for a = 0:0.05:1
-    for b = 0:0.05:1 - a
-        for c = 0:0.05:1 - a - b
+step = 0.02;
+for a = 0:step:1
+    for b = 0:step:1 - a
+        for c = 0:step:1 - a - b
             wts = [a b; c 1 - a - b - c];
             H = 0; g = 0;
             for i = 1:2
@@ -116,11 +117,11 @@ end
 %% 6. Figure
 fig = figure('Position', [50 50 1400 820]);
 subplot(2, 2, 1); hold on
-plot(P(1, :), P(2, :), '.', 'Color', [0.45 0.65 0.25], 'MarkerSize', 6);
-h = plot_game(G, [-10 40], [-50 50]);
-legend([h, findobj(gca, 'Type', 'line', 'Marker', '.')'], ...
-       {'BR^1_1', 'BR^1_2', 'BR^2_1', 'BR^2_2', 'Pareto set'}, 'Location', 'southeast');
-title('(a) Pareto set of the four payoffs');
+hp = plot(P(1, :), P(2, :), '.', 'Color', [0.45 0.70 0.30], 'MarkerSize', 4);
+plot_game(G, [-10 40], [-50 50]);
+ht = plot(xhat(1), xhat(2), 'kp', 'MarkerFaceColor', 'y', 'MarkerSize', 12);
+legend([hp, ht], {'efficient states', 'target of the manager'}, 'Location', 'southeast');
+title({'(a) without incentive: the efficient states (green)', 'lie away from the equilibrium set (purple)'});
 
 subplot(2, 2, 2); hold on
 win = [-5 32 -18 12];
@@ -129,44 +130,46 @@ Y = [Y1(:)'; Y2(:)'];
 inBud = incentive(1, Y) + incentive(2, Y) <= 0;
 image(Y1(1, :), Y2(:, 1), repmat(reshape([0.98 0.75 0.45], 1, 1, 3), size(Y1)), 'AlphaData', 0.6 * reshape(inBud, size(Y1)));
 set(gca, 'YDir', 'normal');
-Jsum = payoff_value(G, 1, 1, Y) + payoff_value(G, 2, 1, Y);    % omega = 0
-contour(Y1, Y2, reshape(Ufun(Y) - Ufun(x0), size(Y1)), [0 0], 'm--', 'LineWidth', 1.5);
-contour(Y1, Y2, reshape(Jsum - (payoff_value(G, 1, 1, x0) + payoff_value(G, 2, 1, x0)), size(Y1)), ...
-        [0 0], 'm-', 'LineWidth', 1.5);
 plot_game(Gt, win(1:2), win(3:4));
 h1 = plot(X0(1, :), X0(2, :), 'k--', 'LineWidth', 1.8);
 h2 = plot(X1(1, :), X1(2, :), 'k-', 'LineWidth', 2.2);
 plot(x0(1), x0(2), 'ko', 'MarkerFaceColor', 'k');
-plot(xhat(1), xhat(2), 'g*', 'MarkerSize', 10, 'LineWidth', 1.5);
-legend([h1 h2], {'original trajectory', 'incentivized trajectory'}, 'Location', 'northeast');
-title({'(b) orange: D_{bud}(\sigma);  mplayera dashed: \partialD(U,x_0);  solid: \partialD(J_{sum},x_0)', ...
-       'lines and purple set: incentivized game;  green star: target state'});
+plot(xhat(1), xhat(2), 'kp', 'MarkerFaceColor', 'y', 'MarkerSize', 12);
+legend([h1 h2], {'path without incentive', 'path with incentive'}, 'Location', 'northeast');
+title({'(b) with the incentive the players reach the target (star)', ...
+       '\rm\fontsize{9}orange: budget region;  lines and purple: the game with the incentive'});
 
 % Without incentive the money payoffs change ~50 times more than the others,
 % so they are shown divided by 10.
 labels = {{'J^1_1 / 10', 'J^1_2', 'J^2_1 / 10', 'J^2_2'}, {'J^1_1 + p^1', 'J^1_2', 'J^2_1 + p^2', 'J^2_2'}};
 scale = {[10 1 10 1], [1 1 1 1]};
 data = {{t0, J0}, {t1, J1}};
-names = {'(c) payoffs WITHOUT incentive: not weakly Pareto improving', ...
-         '(d) payoffs WITH incentive: every player always gains on one payoff'};
+names = {'(c) WITHOUT incentive: player 1 at times loses on both goals', ...
+         '(d) WITH incentive: every player always gains on at least one goal'};
 for p = 1:2
     subplot(2, 2, 2 + p); hold on
     tt = data{p}{1}; JJ = data{p}{2};
     styles = {'-', '--', '-', '--'};
     colors = {[0.85 0.15 0.15], [0.85 0.15 0.15], [0.10 0.45 0.85], [0.10 0.45 0.85]};
+    hl = gobjects(1, 4);
     for r = 1:4
-        plot(tt, (JJ(r, :) - JJ(r, 1)) / scale{p}(r), styles{r}, 'Color', colors{r}, 'LineWidth', 1.6);
+        hl(r) = plot(tt, (JJ(r, :) - JJ(r, 1)) / scale{p}(r), styles{r}, 'Color', colors{r}, 'LineWidth', 1.6);
     end
     if p == 2
-        plot(tt, budgetTotal, ':', 'Color', [0.4 0.4 0.4], 'LineWidth', 2);
+        hl(5) = plot(tt, budgetTotal, ':', 'Color', [0.4 0.4 0.4], 'LineWidth', 2);
         labels{2}{end + 1} = 'p^1 + p^2 (manager''s net payment)';
     end
     yline(0, 'k:', 'HandleVisibility', 'off');
-    xlabel('time t'); ylabel('change since t = 0');
-    legend(labels{p}, 'Location', 'southoutside', 'NumColumns', 3); box on
+    if p == 1                   % shade the moments when player 1 loses on both goals
+        hs = shade_times(tt, max(dJ0(1:2, :)) < tol, [0.85 0.15 0.15]);
+        if ~isempty(hs), hl(end + 1) = hs; labels{1}{end + 1} = 'player 1 loses both'; end
+    end
+    xlabel('time t'); ylabel('change since the start');
+    legend(hl, labels{p}, 'Location', 'southoutside', 'NumColumns', 3); box on
     title(names{p});
 end
-sgtitle('Incentive design with a budget constraint (\eta = (0.7, 4, 1, 2), \sigma = 0.05, \zeta = (0.3, 0.7))');
+sgtitle({'Incentive: each player''s money goal is replaced by a share of society''s gain', ...
+         '\fontsize{9}strength \sigma = 0.05, shares \zeta_1 = 0.3 and \zeta_2 = 0.7'});
 save_figure(fig, 'incentive_design');
 
 %% ------------------------------------------------------------------------

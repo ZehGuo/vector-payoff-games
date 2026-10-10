@@ -8,7 +8,7 @@
 %   * weakly Pareto improving: at every moment, each player has AT LEAST ONE
 %                              payoff that does not decrease.
 % A player's own move never hurts itself (it only moves to improve), so only
-% the OTHER player's move can hurt it.  Gamma^i_j is the region where the
+% the OTHER player's move can hurt it.  The "safe region" Gamma^i_j is where the
 % other player's move does not decrease payoff J^i_j.  This region does not
 % depend on how fast the players move (alpha), so an outside observer who
 % knows only the payoffs can compute it.
@@ -26,6 +26,7 @@ fprintf('\n== Does everybody get better off along the way? ==\n');
 %% Three examples.  J^i_j(x) = 1/2 x'A^{ij}x + b^{ij}'x
 % (a) NOT weakly Pareto improving
 ex(1).name = '(a) not weakly Pareto improving';
+ex(1).plain = 'at times a player loses on both goals';
 ex(1).A = {[-4 -1; -1 -3], [-2 -1; -1 -10]; [-2 1; 1 -2], [-5 1; 1 -1]};
 ex(1).b = {[10; 22], [10; 78]; [8; 0], [5; 0]};
 ex(1).x0 = [7; 13];
@@ -42,6 +43,7 @@ A = {[-2 1; 1 -3], [-4 -4; -4 -12]; [-7 1; 1 -2], [-3 -1; -1 -2]};
 xp1 = [A{1,1}(1,:); A{1,2}(1,:)] \ -[15; 30];    % BR^1_1 cross BR^1_2
 xp2 = [A{2,1}(2,:); A{2,2}(2,:)] \ -[-5; 0];     % BR^2_1 cross BR^2_2
 ex(2).name = '(b) Pareto improving';
+ex(2).plain = 'no goal ever goes down';
 ex(2).A = A;
 ex(2).b = {[15; -A{1,1}(2,:) * xp2], [30; -A{1,2}(2,:) * xp2];
            [-A{2,1}(1,:) * xp1; -5], [-A{2,2}(1,:) * xp1; 0]};
@@ -52,6 +54,7 @@ ex(2).expect = 'pareto';
 
 % (c) weakly Pareto improving
 ex(3).name = '(c) weakly Pareto improving';
+ex(3).plain = 'each player always gains on at least one goal';
 ex(3).A = A;
 ex(3).b = {[5; 12], [30; 0]; [-20; 0], [20; 0]};
 ex(3).x0 = [0; 3];
@@ -77,7 +80,7 @@ for k = 1:3
     gam = externality_regions(G, Xg);
     full = squeeze(all(gam, 3));                               % Gamma^i_j = R^2 ?
     unionFull = [all(gam(1,1,:) | gam(1,2,:)), all(gam(2,1,:) | gam(2,2,:))];
-    fprintf('   Gamma^i_j = R^2 on the grid: [i=1: %d %d; i=2: %d %d]\n', full(1,:), full(2,:));
+    fprintf('   safe region covers the whole plane? [player 1: %d %d; player 2: %d %d]\n', full(1,:), full(2,:));
 
     %% 2. Simulate and look at how the four payoffs change in time
     [t, Xt] = simulate_game(G, ex(k).x0, 8, 4000);
@@ -96,17 +99,17 @@ for k = 1:3
 
     switch ex(k).expect
         case 'none'
-            check('Gamma^i_1 and Gamma^i_2 together do NOT cover the plane (both players)', ~any(unionFull));
+            check('the two safe regions of each player together do NOT cover the plane', ~any(unionFull));
             lose1 = t(max(dJ(1:2, :)) < tol);     % moments when player 1 loses on both payoffs
             lose2 = t(max(dJ(3:4, :)) < tol);
             check('trajectory is NOT weakly Pareto improving: each player loses on both payoffs at some time', ...
                   ~isempty(lose1) && ~isempty(lose2), ...
                   sprintf('player 2 first at t = %.2f, player 1 from t = %.2f', min(lose2), min(lose1)));
         case 'pareto'
-            check('every Gamma^i_j covers the whole plane', all(full(:)));
+            check('every safe region covers the whole plane', all(full(:)));
             check('trajectory is Pareto improving (all four payoffs rise)', isPareto);
         case 'weak'
-            check('Gamma^i_1 and Gamma^i_2 together cover the plane (both players)', all(unionFull));
+            check('the two safe regions of each player together cover the plane', all(unionFull));
             check('trajectory is weakly Pareto improving', isWeak);
             check('... but not Pareto improving (some payoff falls)', ~isPareto);
     end
@@ -123,22 +126,29 @@ for k = 1:3
     plot_game(G, w(1:2), w(3:4));
     plot(Xt(1, :), Xt(2, :), 'k-', 'LineWidth', 2);
     plot(ex(k).x0(1), ex(k).x0(2), 'ko', 'MarkerFaceColor', 'k');
-    title(ex(k).name);
+    title({ex(k).name, ['\rm\fontsize{9}' ex(k).plain]});
 
     subplot(2, 3, 3 + k); hold on
     styles = {'-', '--', '-', '--'};
     colors = {[0.85 0.15 0.15], [0.85 0.15 0.15], [0.10 0.45 0.85], [0.10 0.45 0.85]};
+    hl = gobjects(1, 4);
     for r = 1:4
-        plot(t, J(r, :) - J(r, 1), styles{r}, 'Color', colors{r}, 'LineWidth', 1.5);
+        hl(r) = plot(t, J(r, :) - J(r, 1), styles{r}, 'Color', colors{r}, 'LineWidth', 1.5);
     end
-    yline(0, 'k:');
-    xlabel('time t'); ylabel('J^i_j(x(t)) - J^i_j(x_0)');
-    legend({'J^1_1', 'J^1_2', 'J^2_1', 'J^2_2'}, 'Location', 'best');
+    yline(0, 'k:', 'HandleVisibility', 'off');
+    % Shade the moments when a player loses on BOTH of its goals.
+    hs1 = shade_times(t, max(dJ(1:2, :)) < tol, [0.85 0.15 0.15]);
+    hs2 = shade_times(t, max(dJ(3:4, :)) < tol, [0.10 0.45 0.85]);
+    xlabel('time t'); ylabel('change since the start');
+    legend([hl, hs1, hs2], [{'J^1_1', 'J^1_2', 'J^2_1', 'J^2_2'}, ...
+            repmat({'player 1 loses both'}, 1, numel(hs1)), repmat({'player 2 loses both'}, 1, numel(hs2))], ...
+           'Location', 'best');
     box on
 end
 sgtitle({'Does everybody get better off along the trajectory?', ...
-         ['\fontsize{9}dark grey: player 1 can lose on both payoffs, light grey: same for player 2, ' ...
-          'purple: equilibrium set, black: trajectory from x_0']});
+         ['\fontsize{9}top: grey = where the other player''s move can lower both goals of a player (dark: player 1, light: player 2); ' ...
+          'black = path from the dot'], ...
+         '\fontsize{9}bottom: how each goal changes along the path; shaded = moments when a player loses on both goals'});
 save_figure(fig, 'improvement_pareto');
 
 %% ------------------------------------------------------------------------

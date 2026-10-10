@@ -68,38 +68,52 @@ check('equilibrium set lies in the box of the published figure', ...
       sprintf('x^1_1 in [%.2f,%.2f], x^1_2 in [%.2f,%.2f], x^2 in [%.2f,%.2f]', rng'));
 
 %% 4. Figure: the 5 faces of the prism and their images
+% Player 1's three weights form the triangle at the bottom (each corner means
+% "only this goal"); player 2's weight on its goal 2 is the height.
 faceColors = [0.85 0.33 0.10; 0.93 0.69 0.13; 0.47 0.67 0.19; 0.00 0.45 0.74; 0.49 0.18 0.56];
-faceNames = {'\lambda^1_1 = 0', '\lambda^1_2 = 0', '\lambda^1_3 = 0', '\lambda^2_1 = 0', '\lambda^2_1 = 1'};
+faceNames = {'player 1 ignores goal 1', 'player 1 ignores goal 2', 'player 1 ignores goal 3', ...
+             'player 2: only goal 2', 'player 2: only goal 1'};
 s = linspace(0, 1, 25);
 [S, T] = meshgrid(s, s);
-fig = figure('Position', [100 100 1100 480]);
+faces = cell(2, 5);                        % row 1: prism, row 2: equilibrium set
+for f = 1:5
+    P = face_points(f, S, T);              % prism coordinates (u, v, w)
+    faces{1, f} = prism_to_plot(P);
+    Q = zeros(3, size(P, 2));
+    for k = 1:size(P, 2)
+        Q(:, k) = weighted_nash_point(grad, weights_of(P(:, k)));
+    end
+    faces{2, f} = Q;
+end
+view2 = [-40 25];                          % a clear view of the equilibrium set
+[az, el] = matching_view(faces(2, :), faces(1, :), view2);   % show the same faces on the left
+
+fig = figure('Position', [100 100 1100 560]);
 for panel = 1:2
     subplot(1, 2, panel); hold on
     for f = 1:5
-        P = face_points(f, S, T);                  % prism coordinates (u, v, w)
-        if panel == 1
-            Q = prism_to_plot(P);
-        else
-            Q = zeros(3, size(P, 2));
-            for k = 1:size(P, 2)
-                Q(:, k) = weighted_nash_point(grad, weights_of(P(:, k)));
-            end
-        end
-        surf(reshape(Q(1, :), size(S)), reshape(Q(2, :), size(S)), reshape(Q(3, :), size(S)), ...
-             'FaceColor', faceColors(f, :), 'EdgeColor', 'none', 'FaceAlpha', 0.75, ...
+        Q = faces{panel, f};
+        X = reshape(Q(1, :), size(S)); Y = reshape(Q(2, :), size(S)); Z = reshape(Q(3, :), size(S));
+        surf(X, Y, Z, 'FaceColor', faceColors(f, :), 'EdgeColor', 'none', 'FaceAlpha', 0.85, ...
              'DisplayName', faceNames{f});
+        edge = @(M) [M(1, :), M(2:end, end)', M(end, end-1:-1:1), M(end-1:-1:1, 1)'];
+        plot3(edge(X), edge(Y), edge(Z), 'k-', 'LineWidth', 0.6, 'HandleVisibility', 'off');
     end
-    view(-40, 25); grid on; axis tight
+    grid on; axis equal tight
     if panel == 1
+        view(az, el);
+        set(gca, 'XTick', [], 'YTick', []);
+        xlabel('player 1''s three weights (triangle)');
+        zlabel('player 2''s weight on goal 2');
         title('All possible weights (a prism)');
-        xlabel(''); ylabel(''); zlabel('\lambda^2_1');
-        legend('Location', 'southoutside', 'NumColumns', 3);
+        legend('Location', 'southoutside', 'NumColumns', 2);
     else
-        title('Equilibrium set: 5 faces \leftrightarrow 5 faces');
-        xlabel('x^1_1'); ylabel('x^1_2'); zlabel('x^2');
+        view(view2);
+        xlabel('x^1_1 (player 1, number 1)'); ylabel('x^1_2 (player 1, number 2)'); zlabel('x^2 (player 2)');
+        title('Equilibrium set: each face becomes a face');
     end
 end
-sgtitle('Player 1 with two numbers and three goals: same colour = same face');
+sgtitle({'Player 1 chooses two numbers and has three goals: same colour = same face', '\fontsize{9}(faces you cannot see are at the back in both pictures)'});
 save_figure(fig, 'equilibrium_vector_states');
 
 %% Local helper functions
@@ -125,5 +139,7 @@ end
 
 function Q = prism_to_plot(P)
 % Draw the triangle (u, v) as an equilateral triangle for a familiar picture.
-Q = [P(1, :) + 0.5 * P(2, :); sqrt(3) / 2 * P(2, :); P(3, :)];
+% Height = player 2's weight on goal 2, so that the picture is not upside
+% down compared with the equilibrium set.
+Q = [P(1, :) + 0.5 * P(2, :); sqrt(3) / 2 * P(2, :); 1 - P(3, :)];
 end

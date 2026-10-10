@@ -105,25 +105,30 @@ in1 = own_gradient(G, 1, 1, p2) * own_gradient(G, 1, 2, p2) <= 0;
 check('weights <-> equilibria is one-to-one', ~in1 && ~in2);
 
 %% 5. Figure: same colour = same weights.
+% Every second weight is drawn so that single dots stay visible.
 colorOf = @(a1, a2) [0.25 + 0.7 * a1(:), 0.35 * ones(numel(a1), 1), 0.25 + 0.7 * a2(:)];
-fig = figure('Position', [100 100 1050 430]);
+show = false(n); show(1:2:n, 1:2:n) = true;
+fig = figure('Position', [100 100 1050 560]);
+tl = tiledlayout(1, 2, 'TileSpacing', 'compact');
 
-subplot(1, 2, 1);
-scatter(A1(:), A2(:), 28, colorOf(A1, A2), 'filled', 's');
-axis square; xlim([0 1]); ylim([0 1]);
+nexttile; hold on
+scatter(A1(show), A2(show), 40, colorOf(A1(show), A2(show)), 'filled', 's');
+plot([0 1 0 1], [0 0 1 1], 'ko', 'MarkerFaceColor', 'k', 'MarkerSize', 7);
+axis square; xlim([-0.05 1.05]); ylim([-0.05 1.05]); box on
 xlabel('weight of firm 1 on profit');
 ylabel('weight of firm 2 on profit');
 title('All possible weights');
 
-subplot(1, 2, 2);
+nexttile;
 h = plot_game(G, [-0.5 10], [-0.5 10]);
-scatter(Xw(1, :), Xw(2, :), 14, colorOf(A1, A2), 'filled');
-plot(corner(1, :), corner(2, :), 'ko', 'MarkerFaceColor', 'k');
+scatter(Xw(1, show), Xw(2, show), 22, colorOf(A1(show), A2(show)), 'filled');
+hc = plot(corner(1, :), corner(2, :), 'ko', 'MarkerFaceColor', 'k', 'MarkerSize', 7);
 axis square;
 xlabel('x^1 (production of firm 1)'); ylabel('x^2 (production of firm 2)');
-title('Equilibrium region (purple) and weighted solutions (dots)');
-legend(h, {'best response of firm 1, profit', 'best response of firm 1, environment', ...
-           'best response of firm 2, profit', 'best response of firm 2, environment'}, ...
-       'Location', 'northeast');
-sgtitle('Each choice of weights gives one equilibrium; together they fill the region');
+title('Equilibrium region (purple) and weighted equilibria (dots)');
+legend([h, hc], {'best response of firm 1, profit', 'best response of firm 1, environment', ...
+                 'best response of firm 2, profit', 'best response of firm 2, environment', ...
+                 'black dots: each firm cares about one goal only'}, 'NumColumns', 2);
+lgd = legend; lgd.Layout.Tile = 'south';
+title(tl, 'Each choice of weights gives one equilibrium; together they fill the region', 'FontSize', 14);
 save_figure(fig, 'equilibrium_region');

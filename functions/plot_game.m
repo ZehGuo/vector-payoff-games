@@ -18,14 +18,15 @@ set(gca, 'YDir', 'normal');
 
 styles = {'-', '--'};
 colors = {[0.85 0.15 0.15], [0.10 0.45 0.85]};
-s = linspace(-1e3, 1e3, 2);   % long enough to cross any plot window
 h = gobjects(1, 4);
 for j = 1:2
     % Player 1: row_1(A) x + b_1 = 0  ->  x^1 as a function of x^2
     A = G.A{1, j}; b = G.b{1, j};
+    s = clip_range(-A(1, 2) / A(1, 1), -b(1) / A(1, 1), ylims, xlims);
     h(j) = plot(-(A(1, 2) * s + b(1)) / A(1, 1), s, styles{j}, 'Color', colors{1}, 'LineWidth', 1.4);
     % Player 2: row_2(A) x + b_2 = 0  ->  x^2 as a function of x^1
     A = G.A{2, j}; b = G.b{2, j};
+    s = clip_range(-A(2, 1) / A(2, 2), -b(2) / A(2, 2), xlims, ylims);
     h(2 + j) = plot(s, -(A(2, 1) * s + b(2)) / A(2, 2), styles{j}, 'Color', colors{2}, 'LineWidth', 1.4);
 end
 
@@ -43,4 +44,16 @@ end
 xlim(xlims); ylim(ylims);
 xlabel('x^1'); ylabel('x^2');
 box on
+end
+
+function s = clip_range(m, c, sLims, yLims)
+% Values s in sLims for which the line y = m*s + c stays inside yLims, so
+% the line is drawn only inside the plot window.
+if m == 0
+    s = sLims;
+    return
+end
+ends = sort(([yLims(1) yLims(2)] - c) / m);
+s = [max(sLims(1), ends(1)), min(sLims(2), ends(2))];
+if s(1) > s(2), s = [NaN NaN]; end
 end

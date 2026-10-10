@@ -71,24 +71,23 @@ d21 = sum((G.A{2,1} * P + G.b{2,1}) .* Fp, 1);
 d22 = sum((G.A{2,2} * P + G.b{2,2}) .* Fp, 1);
 bothDown = reshape(d21 < 0 & d22 < 0, size(P1));
 image(P1(1, :), P2(:, 1), repmat(reshape([0.95 0.55 0.75], 1, 1, 3), size(P1)), 'AlphaData', 0.6 * bothDown);
-contour(P1, P2, reshape(payoff_value(G, 2, 1, P), size(P1)), 15, ':', 'Color', [0.95 0.6 0.2]);
-contour(P1, P2, reshape(payoff_value(G, 2, 2, P), size(P1)), 15, ':', 'Color', [0.35 0.35 0.75]);
 plot_game(G, win(1:2), win(3:4));
 plot(X(1, :), X(2, :), 'k-', 'LineWidth', 2);
 plot(x0(1), x0(2), 'ko', 'MarkerFaceColor', 'k');
 plot(X(1, k2), X(2, k2), 'ks', 'MarkerFaceColor', 'y', 'MarkerSize', 8);
-title({'(a) trajectory avoids the pink region', '(where both payoffs of player 2 fall)'});
+xlabel('x^1'); ylabel('x^2');
+title({'(a) the path never enters the pink region,', 'where both goals of player 2 would fall at once'});
 
 subplot(1, 2, 2); hold on
-plot(t, J(3, :) - J(3, 1), '-', 'Color', [0.95 0.6 0.2], 'LineWidth', 1.8);
-plot(t, J(4, :) - J(4, 1), '-', 'Color', [0.35 0.35 0.75], 'LineWidth', 1.8);
-yline(0, 'k:');
-xline(t(k2), 'k--', sprintf('t_2 = %.2f', t(k2)));
-xlabel('time t'); ylabel('J^2_j(x(t)) - J^2_j(x_0)');
-legend({'J^2_1', 'J^2_2'}, 'Location', 'southeast');
-title({'(b) after t_2 both payoffs of player 2', 'are below their starting values'});
+plot(t, J(3, :) - J(3, 1), '-', 'Color', [0.10 0.45 0.85], 'LineWidth', 1.8);
+plot(t, J(4, :) - J(4, 1), '--', 'Color', [0.10 0.45 0.85], 'LineWidth', 1.8);
+yline(0, 'k:', 'HandleVisibility', 'off');
+xline(t(k2), 'k-', sprintf('t_2 = %.2f', t(k2)), 'HandleVisibility', 'off');
+xlabel('time t'); ylabel('change since the start');
+legend({'J^2_1 (player 2, goal 1)', 'J^2_2 (player 2, goal 2)'}, 'Location', 'southeast');
+title({'(b) still, from time t_2 on, both goals of player 2', 'are below where they started'});
 box on
-sgtitle({'Weakly Pareto improving, yet player 2 ends up worse off', ...
-         ['\fontsize{9}(a) red/blue dashed: best-response lines BR^1_2, BR^2_2; purple: equilibrium set; ' ...
-          'dotted: level curves of J^2_1 (orange) and J^2_2 (blue); yellow square: x(t_2)']});
+sgtitle({'The trap: at every moment player 2 gains on one goal, yet it ends up worse off', ...
+         ['\fontsize{9}(a) black: path from the dot; yellow square: position at time t_2; purple: equilibrium set; ' ...
+          'red/blue lines: best-response lines of player 1/2']});
 save_figure(fig, 'improvement_trap');

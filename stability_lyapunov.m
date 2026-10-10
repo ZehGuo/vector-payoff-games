@@ -53,9 +53,10 @@ for j1 = 1:2
         fprintf('   tilde A_(%d,%d) = %s\n', j1, j2, mat2str(At{j1, j2}, 4));
     end
 end
-% As stated in the paper: x0 lies in D_(2,2) and eta(x0) = (2.2, 7.325).
+% As stated in the paper: at x0 both players follow their payoff 2 (region D_(2,2))
+% and eta(x0) = (2.2, 7.325).
 [~, branch0] = pseudo_gradient(G, x0);
-check('x0 lies in D_(2,2) and eta(x0) = (2.2, 7.325), as stated in the paper', ...
+check('at x0 both players follow payoff 2, and eta(x0) = (2.2, 7.325), as stated in the paper', ...
       isequal(branch0', [2 2]) && norm(transform(G, x0) - [2.2; 7.325]) < 1e-12);
 
 %% 3. Lyapunov certificate: solve the LMIs
@@ -118,13 +119,14 @@ win = [-2 14 -6 10];
 Y = [Y1(:)'; Y2(:)'];
 Fy = pseudo_gradient(G, Y);
 hs = streamslice(Y1, Y2, reshape(Fy(1,:), size(Y1)), reshape(Fy(2,:), size(Y1)), 1);
-set(hs, 'Color', [0.7 0.85 0.65]);
+set(hs, 'Color', [0.55 0.6 0.75]);
 contour(Y1, Y2, reshape(V(transform(G, Y)), size(Y1)), levels, 'k:', 'LineWidth', 1);
 plot_game(G, win(1:2), win(3:4));
-plot(X(1, :), X(2, :), '-', 'Color', [0 0.55 0.2], 'LineWidth', 2.2);
+plot(X(1, :), X(2, :), 'k-', 'LineWidth', 2.2);
 plot(x0(1), x0(2), 'ko', 'MarkerFaceColor', 'k');
 axis equal; axis(win);
-title({'(a) original system: trajectory x(t), equilibrium set (purple),', 'dotted: level sets of V(\eta(x))'});
+xlabel('x^1'); ylabel('x^2');
+title({'(a) original coordinates', 'purple: equilibrium set;  dotted: energy levels'});
 
 subplot(1, 2, 2); hold on
 win2 = [-4 8 -4 8];
@@ -133,19 +135,19 @@ Z = [Z1(:)'; Z2(:)'];
 Fz = zeros(size(Z));
 for k = 1:size(Z, 2), Fz(:, k) = transformed_field(Z(:, k), At); end
 hs = streamslice(Z1, Z2, reshape(Fz(1,:), size(Z1)), reshape(Fz(2,:), size(Z1)), 1);
-set(hs, 'Color', [0.7 0.85 0.65]);
+set(hs, 'Color', [0.55 0.6 0.75]);
 contour(Z1, Z2, reshape(V(Z), size(Z1)), levels, 'k:', 'LineWidth', 1);
 xline(0, 'k-'); yline(0, 'k-');
-h1 = plot(eta(1, :), eta(2, :), '-', 'Color', [0 0.55 0.2], 'LineWidth', 2.2);
-h2 = plot(Xt(1, :), Xt(2, :), '--', 'Color', [0 0.3 0.1], 'LineWidth', 1.8);
+h1 = plot(eta(1, :), eta(2, :), 'k-', 'LineWidth', 2.2);
+h2 = plot(Xt(1, :), Xt(2, :), '--', 'Color', [0.9 0.5 0.1], 'LineWidth', 1.8);
 plot(eta(1, 1), eta(2, 1), 'ko', 'MarkerFaceColor', 'k');
-legend([h1 h2], {'$\eta(x(t))$: image of the original trajectory', ...
-                 '$\tilde{x}(t)$: transformed piecewise-linear system'}, ...
-       'Location', 'southwest', 'Interpreter', 'latex');
+legend([h1 h2], {'the path from (a), seen in the new coordinates', ...
+                 'simplified model (linear in each quarter)'}, ...
+       'Location', 'southwest');
 axis equal; axis(win2);
-xlabel('$\tilde{x}_1$', 'Interpreter', 'latex'); ylabel('$\tilde{x}_2$', 'Interpreter', 'latex');
-title({'(b) transformed state: the equilibrium set collapses to the origin,', 'dotted: level sets of the Lyapunov function V'});
-sgtitle('A coordinate change turns stability of a SET into stability of a POINT');
+xlabel('z^1 (player 1''s distance to its line)'); ylabel('z^2 (player 2''s distance to its line)');
+title({'(b) new coordinates: the whole equilibrium set', 'becomes the single point (0, 0)'});
+sgtitle({'A change of coordinates turns a region into a point', '\fontsize{9}black: simulated path from the black dot; the energy (dotted levels) never increases along it'});
 save_figure(fig, 'stability_lyapunov');
 
 %% ------------------------------------------------------------------------

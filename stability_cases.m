@@ -75,8 +75,8 @@ for k = 1:nCases
     verdict = analyse_case(G, win, sprintf('(%c)', 'a' + k - 1));
     title(sprintf('(%c) %s', 'a' + k - 1, verdict));
 end
-sgtitle({figTitle, ['\fontsize{9}red = player 1, blue = player 2, solid = payoff 1, dashed = payoff 2, ' ...
-         'green dotted = switching lines, purple = equilibrium set, black = simulated trajectories']});
+sgtitle({figTitle, ['\fontsize{9}red = player 1, blue = player 2, solid = goal 1, dashed = goal 2, ' ...
+         'green dotted = switching lines, purple = equilibrium set, black = paths starting at the circles']});
 save_figure(fig, fileName);
 end
 

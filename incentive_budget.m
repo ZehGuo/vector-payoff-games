@@ -74,10 +74,10 @@ check('D(U,x0) \ D(J_sum,x0) and D_bud(sigma) never overlap', ~clash, ...
 
 %% 4. Figure
 groups = {linspace(0.1, 0.4, 7), linspace(0.42, 0.52, 6), linspace(0.6, 1, 5)};
-titles = {sprintf('(a) 0 < \\sigma < %.4f: inside of ellipses', sigmaSwitch(1)), ...
-          sprintf('(b) %.4f \\leq \\sigma \\leq %.4f: hyperbolas', sigmaSwitch), ...
-          sprintf('(c) \\sigma > %.4f: outside of ellipses', sigmaSwitch(2))};
-fig = figure('Position', [50 50 1400 440]);
+titles = {{'(a) weak incentive', sprintf('\\rm\\fontsize{9}\\sigma < %.4f: edge is an ellipse, region inside', sigmaSwitch(1))}, ...
+          {'(b) medium incentive', sprintf('\\rm\\fontsize{9}%.4f \\leq \\sigma \\leq %.4f: edge is a hyperbola', sigmaSwitch)}, ...
+          {'(c) strong incentive', sprintf('\\rm\\fontsize{9}\\sigma > %.4f: edge is an ellipse, region outside', sigmaSwitch(2))}};
+fig = figure('Position', [50 50 1400 520]);
 for p = 1:3
     subplot(1, 3, p); hold on
     image(X1(1, :), X2(:, 1), repmat(reshape([0.55 0.80 0.60], 1, 1, 3), size(X1)), ...
@@ -90,16 +90,18 @@ for p = 1:3
         contour(X1, X2, reshape(budget(X, groups{p}(k)), size(X1)), [0 0], '--', ...
                 'Color', cmap(k + 1, :), 'LineWidth', 1);
     end
-    plot(xhat(1), xhat(2), 'b*', 'MarkerSize', 8);
-    plot(x0(1), x0(2), 'ro', 'MarkerFaceColor', 'r');
-    text(xhat(1) + 1, xhat(2) + 2, '$\hat{x}^*$', 'Interpreter', 'latex', 'FontSize', 13);
-    text(x0(1) + 1, x0(2) - 2.5, '$x_0$', 'Interpreter', 'latex', 'FontSize', 13);
+    plot(xhat(1), xhat(2), 'kp', 'MarkerFaceColor', 'y', 'MarkerSize', 11);
+    plot(x0(1), x0(2), 'ko', 'MarkerFaceColor', 'k');
+    text(xhat(1) + 1.5, xhat(2) + 2, 'target', 'FontSize', 10);
+    text(x0(1) + 1.5, x0(2) - 2.5, 'start', 'FontSize', 10);
     xlabel('x^1'); ylabel('x^2'); axis([-15 45 -25 35]); box on
     title(titles{p});
     colormap(gca, cmap(2:end-1, :));
     cb = colorbar('southoutside');
     clim([groups{p}(1) groups{p}(end)]);
-    cb.Label.String = '\sigma (dashed curves: boundary of D_{bud}(\sigma))';
+    cb.Label.String = 'incentive strength \sigma of each dashed curve';
 end
-sgtitle({'Budget region: blue = boundary of D(U,x_0), red = boundary of D(J_{sum},x_0), green = D(U,x_0) minus D(J_{sum},x_0)'});
+sgtitle({'Where can the manager afford the incentive?  Dashed: edge of the budget region for several \sigma', ...
+         ['\fontsize{9}inside blue: society better off than at the start;  inside red: the players'' goals in total better off;  ' ...
+          'green: society better off but players worse off in total, never affordable']});
 save_figure(fig, 'incentive_budget');
