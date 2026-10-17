@@ -45,6 +45,10 @@
 
 各脚本共用的小函数在 [`functions/`](functions/) 中。代码注释为英文。
 
+## 扩展（新结果，尚未发表）
+
+文件夹 [`extensions/`](extensions/README.md) 收录超出下列论文的新结果，与上面已发表的内容分开，不改动它们。目前有：[N 个参与者时均衡集的稳定性](extensions/n_agent_stability/README.md)（仅英文，尚未经过同行评审）。
+
 ## 论文
 
 各脚本背后的思路发表于以下论文；每个脚本开头也写明了对应的论文。

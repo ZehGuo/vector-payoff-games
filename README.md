@@ -56,6 +56,14 @@ You can also run a single script, for example `improvement_trap`.
 
 Small helper functions shared by the scripts are in [`functions/`](functions/).
 
+## Extensions (new, not yet published)
+
+The folder [`extensions/`](extensions/README.md) contains new results that go
+beyond the papers below. They are kept separate from the published content
+above, which they do not change. Currently:
+[stability of the equilibrium set for N players](extensions/n_agent_stability/README.md)
+(English only, not yet peer reviewed).
+
 ## Papers
 
 The ideas behind each script are published in these papers; the matching
