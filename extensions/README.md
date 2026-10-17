@@ -7,7 +7,7 @@ not changed by anything here.
 
 | Extension | What it adds | Status |
 |---|---|---|
-| [`n_agent_stability/`](n_agent_stability/README.md) | Stability of the equilibrium set for **N players**: a new coordinate change (vertex coordinates), a reduction to $2^N$ small systems, and tests that do not depend on the players' speeds. Simulations for 2 and 3 players. | New, not yet peer reviewed |
+| [`n_agent_stability/`](n_agent_stability/README.md) | Stability of the equilibrium set for **N players**: a new coordinate change (vertex coordinates), a reduction to $`2^N`$ small systems, and tests that do not depend on the players' speeds. Simulations for 2 and 3 players. | New, not yet peer reviewed |
 
 ## Layout of an extension
 
